@@ -11,13 +11,13 @@ const elementClass: Record<string, string> = {
 export const Route = createFileRoute("/signs")({
   head: () => ({
     meta: [
-      { title: "The Zodiac Signs — Observatory No. 9" },
+      { title: "The Zodiac Signs — Zodiac17" },
       {
         name: "description",
         content:
           "All twelve zodiac signs, the planet that rules each one, and the part of the body it governs.",
       },
-      { property: "og:title", content: "The Zodiac Signs — Observatory No. 9" },
+      { property: "og:title", content: "The Zodiac Signs — Zodiac17" },
       {
         property: "og:description",
         content: "Each zodiac sign, its ruling planet, and the body it rules.",

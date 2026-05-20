@@ -5,13 +5,13 @@ import { TransitCard } from "@/components/TransitCard";
 export const Route = createFileRoute("/transits")({
   head: () => ({
     meta: [
-      { title: "Active Transits — Observatory No. 9" },
+      { title: "Active Transits — Zodiac17" },
       {
         name: "description",
         content:
           "Every active planetary transit, with windows, themes, and a detailed reading of what to expect.",
       },
-      { property: "og:title", content: "Active Transits — Observatory No. 9" },
+      { property: "og:title", content: "Active Transits — Zodiac17" },
       {
         property: "og:description",
         content: "Every active planetary transit with full readings and planet visuals.",

@@ -4,13 +4,13 @@ import { planets, planetImage } from "@/data/planets";
 export const Route = createFileRoute("/library")({
   head: () => ({
     meta: [
-      { title: "Planet Library — Observatory No. 9" },
+      { title: "Planet Library — Zodiac17" },
       {
         name: "description",
         content:
           "Portraits and meanings of every planet, luminary, and node that shapes a transit.",
       },
-      { property: "og:title", content: "Planet Library — Observatory No. 9" },
+      { property: "og:title", content: "Planet Library — Zodiac17" },
       {
         property: "og:description",
         content:
