@@ -7,6 +7,10 @@ export type House = {
   keyword: string;
   rules: string;
   description: string;
+  lifeArea: string;
+  internal: string[];
+  external: string[];
+  balancedBy: number;
 };
 
 export const houses: House[] = [
