@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransitsRouteImport } from './routes/transits'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TransitsSlugRouteImport } from './routes/transits.$slug'
 
 const TransitsRoute = TransitsRouteImport.update({
   id: '/transits',
@@ -22,31 +23,39 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TransitsSlugRoute = TransitsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => TransitsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/transits': typeof TransitsRoute
+  '/transits': typeof TransitsRouteWithChildren
+  '/transits/$slug': typeof TransitsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/transits': typeof TransitsRoute
+  '/transits': typeof TransitsRouteWithChildren
+  '/transits/$slug': typeof TransitsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/transits': typeof TransitsRoute
+  '/transits': typeof TransitsRouteWithChildren
+  '/transits/$slug': typeof TransitsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/transits'
+  fullPaths: '/' | '/transits' | '/transits/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/transits'
-  id: '__root__' | '/' | '/transits'
+  to: '/' | '/transits' | '/transits/$slug'
+  id: '__root__' | '/' | '/transits' | '/transits/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  TransitsRoute: typeof TransitsRoute
+  TransitsRoute: typeof TransitsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +74,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/transits/$slug': {
+      id: '/transits/$slug'
+      path: '/$slug'
+      fullPath: '/transits/$slug'
+      preLoaderRoute: typeof TransitsSlugRouteImport
+      parentRoute: typeof TransitsRoute
+    }
   }
 }
 
+interface TransitsRouteChildren {
+  TransitsSlugRoute: typeof TransitsSlugRoute
+}
+
+const TransitsRouteChildren: TransitsRouteChildren = {
+  TransitsSlugRoute: TransitsSlugRoute,
+}
+
+const TransitsRouteWithChildren = TransitsRoute._addFileChildren(
+  TransitsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  TransitsRoute: TransitsRoute,
+  TransitsRoute: TransitsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
