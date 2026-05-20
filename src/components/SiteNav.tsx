@@ -25,6 +25,20 @@ export function SiteNav() {
               Transits
             </Link>
             <Link
+              to="/signs"
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              activeProps={{ className: "text-foreground" }}
+            >
+              Signs
+            </Link>
+            <Link
+              to="/houses"
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              activeProps={{ className: "text-foreground" }}
+            >
+              Houses
+            </Link>
+            <Link
               to="/library"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               activeProps={{ className: "text-foreground" }}
