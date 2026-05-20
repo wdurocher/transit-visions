@@ -122,8 +122,9 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen flex flex-col bg-background text-foreground selection:bg-primary/30">
+        <div className="fixed inset-0 star-field pointer-events-none z-0" aria-hidden="true" />
         <SiteNav />
-        <main className="flex-1">
+        <main className="flex-1 relative z-10">
           <Outlet />
         </main>
         <SiteFooter />
