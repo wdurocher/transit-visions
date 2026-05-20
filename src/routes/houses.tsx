@@ -38,9 +38,9 @@ function HousesPage() {
           </p>
         </header>
 
-        <div className="grid md:grid-cols-2 gap-px bg-border rounded-lg overflow-hidden ring-1 ring-border">
+        <div className="grid md:grid-cols-2 gap-3">
           {houses.map((h) => (
-            <article key={h.number} className="bg-background p-8">
+            <article key={h.number} className="bg-background p-8 border border-primary/30 rounded-lg">
               <div className="flex items-baseline justify-between mb-6">
                 <div className="flex items-baseline gap-4">
                   <span className="font-serif text-4xl italic text-primary leading-none">
