@@ -9,6 +9,10 @@ export type ZodiacSign = {
   bodyParts: string;
   keyword: string;
   description: string;
+  purpose: string;
+  balanced: string[];
+  overEmphasized: string[];
+  underEmphasized: string[];
 };
 
 export const signs: ZodiacSign[] = [
@@ -23,6 +27,11 @@ export const signs: ZodiacSign[] = [
     keyword: "I am",
     description:
       "The first spark. Aries is the impulse before the plan — the willingness to begin without a guarantee. Headaches and fevers belong to this sign; so does courage that arrives before fear can catch up.",
+    purpose:
+      "Growing self-awareness and confidence by pressing your own will into the world.",
+    balanced: ["self-aware", "assertive", "initiating", "daring", "direct", "active", "independent"],
+    overEmphasized: ["self-serving", "aggressive", "impatient", "combative", "overbearing", "rash", "reckless"],
+    underEmphasized: ["passive", "passive-aggressive", "fearful", "victimized", "apprehensive", "self-denying"],
   },
   {
     name: "Taurus",
@@ -35,6 +44,11 @@ export const signs: ZodiacSign[] = [
     keyword: "I have",
     description:
       "Slow weight. Taurus is the body settling into the chair, the meal eaten without hurry, the voice that doesn't strain. Throat issues and laryngitis live here. So does the gift of saying exactly the right thing, slowly.",
+    purpose:
+      "Building self-reliance and enjoyment of your values through hands-on work with the natural world.",
+    balanced: ["self-reliant", "resourceful", "grateful", "sensual", "abundant", "supportive", "frugal"],
+    overEmphasized: ["materialistic", "possessive", "stubborn", "self-indulgent", "lazy", "greedy", "spendthrift"],
+    underEmphasized: ["ascetic", "austere", "miserly", "stingy", "stark", "wasteful", "anti-material"],
   },
   {
     name: "Gemini",
@@ -47,6 +61,11 @@ export const signs: ZodiacSign[] = [
     keyword: "I think",
     description:
       "The double. Gemini is breath and speech — the lungs taking in the world, the hands moving while the mouth talks. Nervous exhaustion and shoulder tension are its symptoms. Quickness is its gift.",
+    purpose:
+      "Mapping the rational side of life by talking with, listening to, and learning from others.",
+    balanced: ["inquisitive", "curious", "sociable", "communicative", "practical", "flexible", "lighthearted"],
+    overEmphasized: ["nosy", "impatient", "nervous", "flighty", "high-strung", "fickle", "over-talkative"],
+    underEmphasized: ["deceptive", "anti-social", "disinterested", "indifferent", "vague", "withdrawn"],
   },
   {
     name: "Cancer",
@@ -59,6 +78,11 @@ export const signs: ZodiacSign[] = [
     keyword: "I feel",
     description:
       "The carrier. Cancer rules the chest — what we hold close, what we nourish. Digestion lives here, both the literal kind and the emotional. When the inner life isn't processed, the stomach often takes the call.",
+    purpose:
+      "Welcoming your feelings and sentiments by caring for and nurturing others.",
+    balanced: ["receptive", "accepting", "nurturing", "caring", "gentle", "protective", "reflective"],
+    overEmphasized: ["brooding", "hypersensitive", "smothering", "overly concerned", "stuck in the past"],
+    underEmphasized: ["withdrawn", "defensive", "disconnected", "cold", "detached", "uncaring", "reclusive"],
   },
   {
     name: "Leo",
@@ -71,6 +95,11 @@ export const signs: ZodiacSign[] = [
     keyword: "I will",
     description:
       "The radiant center. Leo is the heart — both the pump and the courage. The spine, too: the structure that lets you stand up straight in front of a room. Heart conditions and back pain are its old vocabulary.",
+    purpose:
+      "Expressing who you are through creativity, play, and sharing yourself openly with others.",
+    balanced: ["self-expressive", "creative", "playful", "self-assured", "loving", "generous", "passionate"],
+    overEmphasized: ["self-centered", "arrogant", "melodramatic", "demanding", "boastful", "attention-seeking"],
+    underEmphasized: ["self-rejecting", "apprehensive", "withholding", "lackluster", "despondent", "drab"],
   },
   {
     name: "Virgo",
@@ -83,6 +112,11 @@ export const signs: ZodiacSign[] = [
     keyword: "I analyze",
     description:
       "The fine sorter. Virgo rules what breaks food down and decides what to keep — the gut, the intestines, the spleen. Anxiety surfaces here as IBS, as the stomach knot. Discernment is the gift; over-discernment, the wound.",
+    purpose:
+      "Refining your skills by improving yourself, your environment, and the people you serve.",
+    balanced: ["bettering", "improving", "organizing", "enhancing", "growing", "assisting", "helpful"],
+    overEmphasized: ["perfectionistic", "controlling", "nitpicky", "obsessive", "workaholic"],
+    underEmphasized: ["deteriorating", "stagnating", "disorganized", "careless", "depreciating", "disdaining"],
   },
   {
     name: "Libra",
@@ -95,6 +129,11 @@ export const signs: ZodiacSign[] = [
     keyword: "I balance",
     description:
       "The scales. Libra rules the kidneys — the body's filter, the keeper of balance. The lower back, too: the literal axis of the body. When equilibrium fails, this is where it shows.",
+    purpose:
+      "Keeping balance and mutuality through conscientious action inside relationships.",
+    balanced: ["conscientious", "moral", "cooperative", "fair", "just", "agreeable", "harmonious"],
+    overEmphasized: ["overly agreeable", "dependent", "giving power away", "selfless", "self-depreciating"],
+    underEmphasized: ["indecisive", "passive", "unconcerned", "morally gray", "uninvolved", "straddling"],
   },
   {
     name: "Scorpio",
@@ -108,6 +147,11 @@ export const signs: ZodiacSign[] = [
     keyword: "I desire",
     description:
       "The depth. Scorpio rules the parts of the body that handle elimination and creation — pelvis, reproductive organs, colon. The places that operate in the dark, that hold and release. Transformation, literally and otherwise.",
+    purpose:
+      "Exposing the truth through deep involvements and penetrating the hidden layers of life.",
+    balanced: ["transparent", "honest", "vulnerable", "penetrating", "bonding", "open", "non-attached"],
+    overEmphasized: ["over-exposing", "grim", "cruel", "vindictive", "lustful", "disregarding"],
+    underEmphasized: ["secretive", "suspicious", "possessive", "mistrusting", "spiteful", "power-seeking", "overly attached"],
   },
   {
     name: "Ophiuchus",
@@ -120,6 +164,11 @@ export const signs: ZodiacSign[] = [
     keyword: "I heal",
     description:
       "The thirteenth sign. Ophiuchus — the Serpent Bearer — is recognized in sidereal traditions as a brief constellation the sun crosses between Scorpio and Sagittarius. Its association is with the physician archetype: poison turned medicine, wounds turned wisdom. Treated here as the reference includes it, alongside the twelve.",
+    purpose:
+      "Healing yourself and others by redeeming the physical body and the instinctual nature.",
+    balanced: ["regenerated", "spirited", "transmuted", "revived", "renewed", "life-connected"],
+    overEmphasized: ["purely instinctual", "mind-identified", "destructive", "sadistic", "enslaving the material"],
+    underEmphasized: ["fearful", "guilt-ridden", "tempestuous", "desirous", "empty", "wanting to be ruled"],
   },
   {
     name: "Sagittarius",
@@ -132,6 +181,11 @@ export const signs: ZodiacSign[] = [
     keyword: "I seek",
     description:
       "The traveler. Sagittarius rules the hips and thighs — the engine of long stride, the muscles you need to actually go somewhere. The liver, too: filter for excess. Sciatica is the warning when the journey has been pushed too hard.",
+    purpose:
+      "Exploring life and its meaning by expanding mind, body, and spirit toward new horizons.",
+    balanced: ["adventurous", "philosophical", "open-minded", "optimistic", "freedom-loving", "purposeful"],
+    overEmphasized: ["self-righteous", "preachy", "dogmatic", "condescending", "excessive", "impractical"],
+    underEmphasized: ["closed-minded", "adrift", "aimless", "restraining", "pessimistic", "doubtful", "inhibited"],
   },
   {
     name: "Capricorn",
@@ -144,6 +198,11 @@ export const signs: ZodiacSign[] = [
     keyword: "I build",
     description:
       "The architect. Capricorn rules the skeletal system — bones, joints, knees, the structures that carry everything else. Arthritis and stiffness are its old companions. Endurance is its gift; rigidity, its caution.",
+    purpose:
+      "Building a lasting legacy through discipline, patience, and steady perseverance.",
+    balanced: ["responsible", "committed", "hard-working", "mature", "determined", "dedicated", "persistent"],
+    overEmphasized: ["harsh", "rigid", "overcautious", "inhibited", "cold", "detached", "success-obsessed"],
+    underEmphasized: ["impatient", "faint-hearted", "uncommitted", "defeatist", "negligent", "immature", "irresponsible"],
   },
   {
     name: "Aquarius",
@@ -157,6 +216,11 @@ export const signs: ZodiacSign[] = [
     keyword: "I know",
     description:
       "The current. Aquarius rules circulation — the way ideas, blood, and electricity move through a system. Ankles and calves are its territory. Sudden cramps and circulatory issues belong here, alongside genius and revolution.",
+    purpose:
+      "Changing the world through original ideas and the steady push of social transformation.",
+    balanced: ["progressive", "inventive", "humanitarian", "unconventional", "eccentric", "visionary"],
+    overEmphasized: ["rebellious", "radical", "dictating", "fanatical", "extreme", "chaotic", "deviant"],
+    underEmphasized: ["undisciplined", "impractical", "detached", "impersonal", "aloof", "disorganized", "anti-social"],
   },
   {
     name: "Pisces",
@@ -170,6 +234,11 @@ export const signs: ZodiacSign[] = [
     keyword: "I dream",
     description:
       "The dissolution. Pisces rules the feet — the part of the body that touches the ground we walk on — and the lymphatic system, the body's quiet drainage. Foot pain, swelling, and dreaminess are its signs.",
+    purpose:
+      "Seeking and finding peace by surrendering into the ebb and flow of life itself.",
+    balanced: ["intuitive", "present", "tranquil", "trusting", "mindful", "empathic", "compassionate"],
+    overEmphasized: ["unconscious", "ungrounded", "delusional", "escapist", "fantasy-bound", "mindless"],
+    underEmphasized: ["faithless", "hopeless", "apathetic", "callous", "nihilistic", "over-thinking", "stressed"],
   },
 ];
 

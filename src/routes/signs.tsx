@@ -89,6 +89,42 @@ function SignsPage() {
                 {s.description}
               </p>
 
+              <div className="mb-6">
+                <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground mb-2">
+                  Life purpose
+                </p>
+                <p className="text-sm text-foreground/90 italic leading-relaxed">
+                  {s.purpose}
+                </p>
+              </div>
+
+              <dl className="mb-6 space-y-3 text-sm">
+                <div>
+                  <dt className="text-[10px] font-mono uppercase tracking-[0.25em] text-emerald-500 mb-1">
+                    Balanced
+                  </dt>
+                  <dd className="text-foreground/90 leading-relaxed">
+                    {s.balanced.join(", ")}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-[10px] font-mono uppercase tracking-[0.25em] text-amber-500 mb-1">
+                    Over-emphasized
+                  </dt>
+                  <dd className="text-muted-foreground leading-relaxed">
+                    {s.overEmphasized.join(", ")}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-[10px] font-mono uppercase tracking-[0.25em] text-indigo-400 mb-1">
+                    Under-emphasized
+                  </dt>
+                  <dd className="text-muted-foreground leading-relaxed">
+                    {s.underEmphasized.join(", ")}
+                  </dd>
+                </div>
+              </dl>
+
               <div className="mt-auto pt-6 border-t border-border space-y-3 text-sm">
                 <div className="flex justify-between gap-4">
                   <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground shrink-0">
