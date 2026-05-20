@@ -61,9 +61,9 @@ function SignsPage() {
         </header>
 
         {/* Element / modality legend */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border rounded-lg overflow-hidden ring-1 ring-border mb-16">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-16">
           {(Object.keys(elementMeaning) as Array<keyof typeof elementMeaning>).map((el) => (
-            <div key={el} className="bg-background p-5">
+            <div key={el} className="bg-background p-5 border border-primary/30 rounded-lg">
               <p
                 className={`text-[10px] font-mono uppercase tracking-[0.25em] mb-1 ${elementClass[el]}`}
               >
@@ -74,9 +74,9 @@ function SignsPage() {
           ))}
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border rounded-lg overflow-hidden ring-1 ring-border">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {signs.map((s, i) => (
-            <article key={s.name} className="bg-background p-8 flex flex-col h-full">
+            <article key={s.name} className="bg-background p-8 flex flex-col h-full border border-primary/30 rounded-lg">
               <div className="flex items-start justify-between mb-6">
                 <div>
                   <div className="flex items-end gap-3 mb-3">
@@ -197,9 +197,9 @@ function SignsPage() {
               follow solar terms, so they don't line up exactly with calendar months.
             </p>
           </header>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-px bg-border rounded-lg overflow-hidden ring-1 ring-border">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             {chineseZodiac.map((c) => (
-              <div key={c.animal} className="bg-background p-5 flex items-center gap-4">
+              <div key={c.animal} className="bg-background p-5 flex items-center gap-4 border border-primary/30 rounded-lg">
                 <span className="text-3xl" aria-hidden>
                   {c.emoji}
                 </span>
