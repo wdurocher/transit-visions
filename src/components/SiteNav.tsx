@@ -18,10 +18,9 @@ const primaryLinks: NavLink[] = [
 const moreLinks: NavLink[] = [
   { to: "/library", label: "Library" },
   { to: "/chart", label: "Read Chart" },
-  { to: "/learn/read-chart", label: "How To" },
   { to: "/learn/sidereal", label: "Sidereal" },
   { to: "/cycles/saturn-taurus", label: "Cycles" },
-  { to: "/about", label: "Method" },
+  { to: "/about", label: "Info" },
 ];
 const allLinks: NavLink[] = [...primaryLinks, ...moreLinks];
 

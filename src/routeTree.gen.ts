@@ -19,7 +19,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TransitsIndexRouteImport } from './routes/transits.index'
 import { Route as TransitsSlugRouteImport } from './routes/transits.$slug'
 import { Route as LearnSiderealRouteImport } from './routes/learn.sidereal'
-import { Route as LearnReadChartRouteImport } from './routes/learn.read-chart'
 import { Route as CyclesSaturnTaurusRouteImport } from './routes/cycles.saturn-taurus'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -72,11 +71,6 @@ const LearnSiderealRoute = LearnSiderealRouteImport.update({
   path: '/learn/sidereal',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LearnReadChartRoute = LearnReadChartRouteImport.update({
-  id: '/learn/read-chart',
-  path: '/learn/read-chart',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CyclesSaturnTaurusRoute = CyclesSaturnTaurusRouteImport.update({
   id: '/cycles/saturn-taurus',
   path: '/cycles/saturn-taurus',
@@ -92,7 +86,6 @@ export interface FileRoutesByFullPath {
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/cycles/saturn-taurus': typeof CyclesSaturnTaurusRoute
-  '/learn/read-chart': typeof LearnReadChartRoute
   '/learn/sidereal': typeof LearnSiderealRoute
   '/transits/$slug': typeof TransitsSlugRoute
   '/transits/': typeof TransitsIndexRoute
@@ -106,7 +99,6 @@ export interface FileRoutesByTo {
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/cycles/saturn-taurus': typeof CyclesSaturnTaurusRoute
-  '/learn/read-chart': typeof LearnReadChartRoute
   '/learn/sidereal': typeof LearnSiderealRoute
   '/transits/$slug': typeof TransitsSlugRoute
   '/transits': typeof TransitsIndexRoute
@@ -121,7 +113,6 @@ export interface FileRoutesById {
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/cycles/saturn-taurus': typeof CyclesSaturnTaurusRoute
-  '/learn/read-chart': typeof LearnReadChartRoute
   '/learn/sidereal': typeof LearnSiderealRoute
   '/transits/$slug': typeof TransitsSlugRoute
   '/transits/': typeof TransitsIndexRoute
@@ -137,7 +128,6 @@ export interface FileRouteTypes {
     | '/signs'
     | '/sitemap.xml'
     | '/cycles/saturn-taurus'
-    | '/learn/read-chart'
     | '/learn/sidereal'
     | '/transits/$slug'
     | '/transits/'
@@ -151,7 +141,6 @@ export interface FileRouteTypes {
     | '/signs'
     | '/sitemap.xml'
     | '/cycles/saturn-taurus'
-    | '/learn/read-chart'
     | '/learn/sidereal'
     | '/transits/$slug'
     | '/transits'
@@ -165,7 +154,6 @@ export interface FileRouteTypes {
     | '/signs'
     | '/sitemap.xml'
     | '/cycles/saturn-taurus'
-    | '/learn/read-chart'
     | '/learn/sidereal'
     | '/transits/$slug'
     | '/transits/'
@@ -180,7 +168,6 @@ export interface RootRouteChildren {
   SignsRoute: typeof SignsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   CyclesSaturnTaurusRoute: typeof CyclesSaturnTaurusRoute
-  LearnReadChartRoute: typeof LearnReadChartRoute
   LearnSiderealRoute: typeof LearnSiderealRoute
   TransitsSlugRoute: typeof TransitsSlugRoute
   TransitsIndexRoute: typeof TransitsIndexRoute
@@ -258,13 +245,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearnSiderealRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/learn/read-chart': {
-      id: '/learn/read-chart'
-      path: '/learn/read-chart'
-      fullPath: '/learn/read-chart'
-      preLoaderRoute: typeof LearnReadChartRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/cycles/saturn-taurus': {
       id: '/cycles/saturn-taurus'
       path: '/cycles/saturn-taurus'
@@ -284,7 +264,6 @@ const rootRouteChildren: RootRouteChildren = {
   SignsRoute: SignsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   CyclesSaturnTaurusRoute: CyclesSaturnTaurusRoute,
-  LearnReadChartRoute: LearnReadChartRoute,
   LearnSiderealRoute: LearnSiderealRoute,
   TransitsSlugRoute: TransitsSlugRoute,
   TransitsIndexRoute: TransitsIndexRoute,
@@ -292,13 +271,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
