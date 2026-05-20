@@ -17,6 +17,7 @@ import { Route as HousesRouteImport } from './routes/houses'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TransitsSlugRouteImport } from './routes/transits.$slug'
+import { Route as CyclesSaturnTaurusRouteImport } from './routes/cycles.saturn-taurus'
 
 const TransitsRoute = TransitsRouteImport.update({
   id: '/transits',
@@ -58,6 +59,11 @@ const TransitsSlugRoute = TransitsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => TransitsRoute,
 } as any)
+const CyclesSaturnTaurusRoute = CyclesSaturnTaurusRouteImport.update({
+  id: '/cycles/saturn-taurus',
+  path: '/cycles/saturn-taurus',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transits': typeof TransitsRouteWithChildren
+  '/cycles/saturn-taurus': typeof CyclesSaturnTaurusRoute
   '/transits/$slug': typeof TransitsSlugRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transits': typeof TransitsRouteWithChildren
+  '/cycles/saturn-taurus': typeof CyclesSaturnTaurusRoute
   '/transits/$slug': typeof TransitsSlugRoute
 }
 export interface FileRoutesById {
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transits': typeof TransitsRouteWithChildren
+  '/cycles/saturn-taurus': typeof CyclesSaturnTaurusRoute
   '/transits/$slug': typeof TransitsSlugRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/signs'
     | '/sitemap.xml'
     | '/transits'
+    | '/cycles/saturn-taurus'
     | '/transits/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
     | '/signs'
     | '/sitemap.xml'
     | '/transits'
+    | '/cycles/saturn-taurus'
     | '/transits/$slug'
   id:
     | '__root__'
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/signs'
     | '/sitemap.xml'
     | '/transits'
+    | '/cycles/saturn-taurus'
     | '/transits/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -131,6 +143,7 @@ export interface RootRouteChildren {
   SignsRoute: typeof SignsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TransitsRoute: typeof TransitsRouteWithChildren
+  CyclesSaturnTaurusRoute: typeof CyclesSaturnTaurusRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -191,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TransitsSlugRouteImport
       parentRoute: typeof TransitsRoute
     }
+    '/cycles/saturn-taurus': {
+      id: '/cycles/saturn-taurus'
+      path: '/cycles/saturn-taurus'
+      fullPath: '/cycles/saturn-taurus'
+      preLoaderRoute: typeof CyclesSaturnTaurusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -214,6 +234,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignsRoute: SignsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TransitsRoute: TransitsRouteWithChildren,
+  CyclesSaturnTaurusRoute: CyclesSaturnTaurusRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
