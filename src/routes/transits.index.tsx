@@ -30,8 +30,8 @@ function TransitsPage() {
       <section className="relative py-24 overflow-hidden border-b border-border">
         <div className="absolute inset-0 star-field pointer-events-none" />
         <div className="max-w-6xl mx-auto px-6 relative">
-          <div className="flex flex-col lg:flex-row items-end gap-16">
-            <div className="flex-1 animate-dawn">
+          <div className="flex flex-col lg:flex-row items-center lg:items-end gap-16 text-center lg:text-left">
+            <div className="flex-1 animate-dawn flex flex-col items-center lg:items-start">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card/50 ring-1 ring-border text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-8">
                 <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
                 Live Sky Position
@@ -39,7 +39,7 @@ function TransitsPage() {
               <h1 className="text-5xl md:text-7xl font-serif text-balance leading-none mb-8 text-foreground italic">
                 {featured.title}
               </h1>
-              <p className="max-w-[56ch] text-lg text-muted-foreground text-pretty mb-10">
+              <p className="max-w-[56ch] text-lg text-muted-foreground text-pretty mb-10 mx-auto lg:mx-0">
                 {featured.long}
               </p>
               <div className="flex items-center gap-4">
