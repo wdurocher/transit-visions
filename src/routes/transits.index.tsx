@@ -40,7 +40,7 @@ function TransitsPage() {
                 {featured.title}
               </h1>
               <p className="max-w-[56ch] text-lg text-muted-foreground text-pretty mb-10 mx-auto lg:mx-0">
-                {featured.long}
+                {featured.long.split("\n\n")[0]}
               </p>
               <div className="flex items-center gap-4">
                 <Link
