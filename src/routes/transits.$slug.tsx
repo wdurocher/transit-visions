@@ -44,7 +44,8 @@ export const Route = createFileRoute("/transits/$slug")({
 });
 
 function TransitDetail() {
-  const { transit: t } = Route.useLoaderData();
+  const data = Route.useLoaderData() as { transit: Transit };
+  const t = data.transit;
   const related = transits.filter((x) => x.slug !== t.slug).slice(0, 3);
 
   return (
