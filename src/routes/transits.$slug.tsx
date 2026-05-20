@@ -1,10 +1,10 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { transits } from "@/data/transits";
+import { transits, type Transit } from "@/data/transits";
 import { PlanetOrb } from "@/components/PlanetOrb";
 import { TransitCard } from "@/components/TransitCard";
 
 export const Route = createFileRoute("/transits/$slug")({
-  loader: ({ params }) => {
+  loader: ({ params }): { transit: Transit } => {
     const t = transits.find((x) => x.slug === params.slug);
     if (!t) throw notFound();
     return { transit: t };
