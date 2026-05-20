@@ -7,6 +7,7 @@ import venusImg from "@/assets/venus.jpg";
 import moonImg from "@/assets/moon.jpg";
 import neptuneImg from "@/assets/neptune.jpg";
 import sunImg from "@/assets/sun.jpg";
+import plutoImg from "@/assets/pluto.jpg";
 
 export type Transit = {
   slug: string;
@@ -34,6 +35,7 @@ export const planetImages: Record<string, string> = {
   Moon: moonImg,
   Neptune: neptuneImg,
   Sun: sunImg,
+  Pluto: plutoImg,
 };
 
 export const transits: Transit[] = [
@@ -118,7 +120,7 @@ export const transits: Transit[] = [
       { area: "Work", note: "You see the politics underneath your industry more clearly. Don't react yet — observe." },
       { area: "Self", note: "Old roles you played in groups feel costume-like. Let them go without drama." },
     ],
-    image: neptuneImg,
+    image: plutoImg,
     color: "#7a5a9b",
   },
   {
