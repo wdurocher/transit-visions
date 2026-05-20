@@ -1,13 +1,21 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type NavLink = { to: string; label: string; exact?: boolean };
-const links: NavLink[] = [
+const primaryLinks: NavLink[] = [
   { to: "/", label: "Ephemeris", exact: true },
   { to: "/transits", label: "Transits" },
   { to: "/signs", label: "Signs" },
   { to: "/houses", label: "Houses" },
+];
+const moreLinks: NavLink[] = [
   { to: "/library", label: "Library" },
   { to: "/chart", label: "Read Chart" },
   { to: "/learn/read-chart", label: "How To" },
@@ -15,6 +23,7 @@ const links: NavLink[] = [
   { to: "/cycles/saturn-taurus", label: "Cycles" },
   { to: "/about", label: "Method" },
 ];
+const allLinks: NavLink[] = [...primaryLinks, ...moreLinks];
 
 export function SiteNav() {
   const [open, setOpen] = useState(false);
@@ -26,7 +35,7 @@ export function SiteNav() {
             Zodiac17
           </Link>
           <div className="hidden md:flex items-center gap-6">
-            {links.map((l) => (
+            {primaryLinks.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
@@ -37,6 +46,20 @@ export function SiteNav() {
                 {l.label}
               </Link>
             ))}
+            <DropdownMenu>
+              <DropdownMenuTrigger className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors outline-none">
+                More <ChevronDown className="size-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                {moreLinks.map((l) => (
+                  <DropdownMenuItem key={l.to} asChild>
+                    <Link to={l.to} className="w-full cursor-pointer">
+                      {l.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -63,7 +86,7 @@ export function SiteNav() {
       {open ? (
         <div className="md:hidden border-t border-border bg-background">
           <div className="max-w-6xl mx-auto px-6 py-3 flex flex-col">
-            {links.map((l) => (
+            {allLinks.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
