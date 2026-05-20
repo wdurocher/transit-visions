@@ -3,9 +3,9 @@ export type ZodiacSign = {
   glyph: string;
   dates: string;
   element: "Fire" | "Earth" | "Air" | "Water";
-  modality: "Cardinal" | "Fixed" | "Mutable";
+  modality: "Cardinal" | "Fixed" | "Mutable" | "—";
   ruler: string;
-  classicalRuler?: string;
+  modernRuler?: string;
   bodyParts: string;
   keyword: string;
   description: string;
@@ -102,12 +102,24 @@ export const signs: ZodiacSign[] = [
     dates: "Oct 23 — Nov 21",
     element: "Water",
     modality: "Fixed",
-    ruler: "Pluto",
-    classicalRuler: "Mars",
+    ruler: "Mars",
+    modernRuler: "Pluto",
     bodyParts: "Reproductive organs, pelvis, colon, bladder",
     keyword: "I desire",
     description:
       "The depth. Scorpio rules the parts of the body that handle elimination and creation — pelvis, reproductive organs, colon. The places that operate in the dark, that hold and release. Transformation, literally and otherwise.",
+  },
+  {
+    name: "Ophiuchus",
+    glyph: "⛎",
+    dates: "Nov 30 — Dec 17",
+    element: "Water",
+    modality: "—",
+    ruler: "Mars",
+    bodyParts: "Spine, central nervous system, regenerative tissue",
+    keyword: "I heal",
+    description:
+      "The thirteenth sign. Ophiuchus — the Serpent Bearer — is recognized in sidereal traditions as a brief constellation the sun crosses between Scorpio and Sagittarius. Its association is with the physician archetype: poison turned medicine, wounds turned wisdom. Treated here as the reference includes it, alongside the twelve.",
   },
   {
     name: "Sagittarius",
@@ -139,8 +151,8 @@ export const signs: ZodiacSign[] = [
     dates: "Jan 20 — Feb 18",
     element: "Air",
     modality: "Fixed",
-    ruler: "Uranus",
-    classicalRuler: "Saturn",
+    ruler: "Saturn",
+    modernRuler: "Uranus",
     bodyParts: "Calves, ankles, circulatory system",
     keyword: "I know",
     description:
@@ -152,8 +164,8 @@ export const signs: ZodiacSign[] = [
     dates: "Feb 19 — Mar 20",
     element: "Water",
     modality: "Mutable",
-    ruler: "Neptune",
-    classicalRuler: "Jupiter",
+    ruler: "Jupiter",
+    modernRuler: "Neptune",
     bodyParts: "Feet, lymphatic system, pineal gland",
     keyword: "I dream",
     description:
@@ -168,7 +180,7 @@ export const elementMeaning: Record<ZodiacSign["element"], string> = {
   Water: "Feeling, memory, depth",
 };
 
-export const modalityMeaning: Record<ZodiacSign["modality"], string> = {
+export const modalityMeaning: Record<"Cardinal" | "Fixed" | "Mutable", string> = {
   Cardinal: "Initiates the season — the move that starts things.",
   Fixed: "Holds the season — the move that keeps things stable.",
   Mutable: "Ends the season — the move that adapts and dissolves.",
