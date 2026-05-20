@@ -9,17 +9,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 type NavLink = { to: string; label: string; exact?: boolean };
-const primaryLinks: NavLink[] = [
-  { to: "/transits", label: "Transits" },
-  { to: "/signs", label: "Signs" },
-  { to: "/houses", label: "Houses" },
-];
+const primaryLinks: NavLink[] = [];
 const moreLinks: NavLink[] = [
-  { to: "/library", label: "Planets" },
   { to: "/compatibility", label: "Compatibility" },
+  { to: "/signs", label: "Signs" },
+  { to: "/library", label: "Planets" },
+  { to: "/transits", label: "Transits" },
+  { to: "/houses", label: "Houses" },
   { to: "/learn/sidereal", label: "Sidereal" },
-  { to: "/cycles/saturn-taurus", label: "Advanced Info" },
   { to: "/about", label: "Info" },
+  { to: "/cycles/saturn-taurus", label: "Advanced Info" },
 ];
 const allLinks: NavLink[] = [...primaryLinks, ...moreLinks];
 

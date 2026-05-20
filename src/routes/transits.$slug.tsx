@@ -127,9 +127,9 @@ function TransitDetail() {
             </div>
           </article>
 
-          <aside className="space-y-px bg-border rounded-lg overflow-hidden ring-1 ring-border h-fit">
+          <aside className="space-y-5 h-fit">
             {t.affects.map((a) => (
-              <div key={a.area} className="bg-background p-6">
+              <div key={a.area} className="bg-background p-6 border-2 border-deep-orange rounded-lg">
                 <h3 className="text-xs font-mono uppercase tracking-widest text-primary mb-2">
                   {a.area}
                 </h3>
@@ -144,9 +144,11 @@ function TransitDetail() {
       <section className="py-20 bg-card/30 ring-1 ring-border">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-2xl font-serif italic mb-10">Other active transits</h2>
-          <div className="grid md:grid-cols-3 gap-px bg-border rounded-lg overflow-hidden ring-1 ring-border">
+          <div className="grid md:grid-cols-3 gap-5">
             {related.map((r) => (
-              <TransitCard key={r.slug} t={r} />
+              <div key={r.slug} className="border-2 border-deep-orange rounded-lg overflow-hidden">
+                <TransitCard t={r} />
+              </div>
             ))}
           </div>
         </div>
