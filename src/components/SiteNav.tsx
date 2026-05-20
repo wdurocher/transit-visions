@@ -2,14 +2,15 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
-const links = [
+type NavLink = { to: string; label: string; exact?: boolean };
+const links: NavLink[] = [
   { to: "/", label: "Ephemeris", exact: true },
   { to: "/transits", label: "Transits" },
   { to: "/signs", label: "Signs" },
   { to: "/houses", label: "Houses" },
   { to: "/library", label: "Library" },
   { to: "/about", label: "Method" },
-] as const;
+];
 
 export function SiteNav() {
   const [open, setOpen] = useState(false);
