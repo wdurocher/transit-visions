@@ -4,6 +4,7 @@ import { Search } from "lucide-react";
 import {
   states,
   popularCities,
+  topStateCities,
   chineseZodiacForYear,
   westernSignForDate,
   yearOf,
@@ -31,7 +32,28 @@ export const Route = createFileRoute("/compatibility")({
 
 function CompatibilityPage() {
   const [query, setQuery] = useState("");
-  const all = useMemo<Place[]>(() => [...states, ...popularCities], []);
+  const all = useMemo<Place[]>(() => {
+    const seen = new Set<string>();
+    const out: Place[] = [];
+    for (const p of [...states, ...popularCities, ...topStateCities]) {
+      const key = `${p.kind}-${p.name}-${p.state ?? ""}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(p);
+    }
+    return out;
+  }, []);
+
+  const citiesByState = useMemo(() => {
+    const map = new Map<string, Place[]>();
+    for (const c of topStateCities) {
+      if (!c.state) continue;
+      const list = map.get(c.state) ?? [];
+      list.push(c);
+      map.set(c.state, list);
+    }
+    return map;
+  }, []);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -111,6 +133,31 @@ function CompatibilityPage() {
               {states.map((p) => (
                 <PlaceCard key={p.name} place={p} />
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Top 3 cities per state */}
+        {!query && (
+          <div className="mt-16">
+            <h2 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-5">
+              Top Three Cities · Every State
+            </h2>
+            <div className="space-y-10">
+              {states.map((s) => {
+                const cities = citiesByState.get(s.name) ?? [];
+                if (cities.length === 0) return null;
+                return (
+                  <div key={s.name}>
+                    <h3 className="text-xl font-serif italic mb-4">{s.name}</h3>
+                    <div className="grid md:grid-cols-2 gap-5">
+                      {cities.map((c) => (
+                        <PlaceCard key={`${c.state}-${c.name}`} place={c} />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
