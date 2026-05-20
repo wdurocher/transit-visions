@@ -9,6 +9,10 @@ export type ZodiacSign = {
   bodyParts: string;
   keyword: string;
   description: string;
+  purpose: string;
+  balanced: string[];
+  overEmphasized: string[];
+  underEmphasized: string[];
 };
 
 export const signs: ZodiacSign[] = [
