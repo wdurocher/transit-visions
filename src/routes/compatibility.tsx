@@ -1,0 +1,173 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { Search } from "lucide-react";
+import {
+  states,
+  popularCities,
+  chineseZodiacForYear,
+  westernSignForDate,
+  yearOf,
+  type Place,
+} from "@/data/places";
+
+export const Route = createFileRoute("/compatibility")({
+  head: () => ({
+    meta: [
+      { title: "State & City Compatibility — Zodiac17" },
+      {
+        name: "description",
+        content:
+          "Every U.S. state and major city by founding date, capital, Chinese zodiac year, and Western zodiac sign.",
+      },
+      { property: "og:title", content: "State & City Compatibility — Zodiac17" },
+      {
+        property: "og:description",
+        content: "Founding dates, capitals, and zodiac signs for every U.S. state and city.",
+      },
+    ],
+  }),
+  component: CompatibilityPage,
+});
+
+function CompatibilityPage() {
+  const [query, setQuery] = useState("");
+  const all = useMemo<Place[]>(() => [...states, ...popularCities], []);
+
+  const results = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    return all
+      .filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          (p.state ?? "").toLowerCase().includes(q) ||
+          (p.capital ?? "").toLowerCase().includes(q),
+      )
+      .slice(0, 12);
+  }, [all, query]);
+
+  return (
+    <section className="py-24">
+      <div className="max-w-6xl mx-auto px-6">
+        <header className="mb-12 border-b border-border pb-10">
+          <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-6">
+            Place & Sign
+          </p>
+          <h1 className="text-5xl md:text-6xl font-serif italic text-balance leading-none mb-6">
+            Compatibility
+          </h1>
+          <p className="max-w-[62ch] text-lg text-muted-foreground text-pretty">
+            Every U.S. state and a selection of its largest cities — by the date they were
+            founded, the Chinese zodiac year that ruled that year, and the Western sign that
+            ruled that day.
+          </p>
+        </header>
+
+        {/* Search */}
+        <div className="mb-10">
+          <label className="relative block">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search a state or city…"
+              className="w-full bg-background border-2 border-primary/60 rounded-lg pl-11 pr-4 py-3 text-base outline-none focus:border-primary transition-colors"
+            />
+          </label>
+
+          {query && (
+            <div className="mt-4 grid gap-3">
+              {results.length === 0 ? (
+                <p className="text-sm text-muted-foreground px-2">No matches.</p>
+              ) : (
+                results.map((p) => <PlaceCard key={`${p.kind}-${p.name}`} place={p} />)
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Popular cities */}
+        {!query && (
+          <div className="mb-16">
+            <h2 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-5">
+              Ten Most Popular Cities
+            </h2>
+            <div className="grid md:grid-cols-2 gap-5">
+              {popularCities.map((p) => (
+                <PlaceCard key={p.name} place={p} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* All 50 states */}
+        {!query && (
+          <div>
+            <h2 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-5">
+              The Fifty States
+            </h2>
+            <div className="grid md:grid-cols-2 gap-5">
+              {states.map((p) => (
+                <PlaceCard key={p.name} place={p} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function PlaceCard({ place }: { place: Place }) {
+  const year = yearOf(place.foundedOn);
+  const chinese = chineseZodiacForYear(year);
+  const western = westernSignForDate(place.foundedOn);
+
+  return (
+    <article className="bg-background p-6 border-2 border-primary/60 rounded-lg">
+      <div className="flex items-baseline justify-between mb-4 gap-4">
+        <h3 className="text-2xl font-serif italic">{place.name}</h3>
+        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground shrink-0">
+          {place.kind === "state" ? "State" : place.state}
+        </span>
+      </div>
+
+      <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+        {place.capital && (
+          <>
+            <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+              Capital
+            </dt>
+            <dd className="text-foreground">{place.capital}</dd>
+          </>
+        )}
+        <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+          Founded
+        </dt>
+        <dd className="text-foreground">{place.foundedLabel}</dd>
+
+        <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+          Year
+        </dt>
+        <dd className="text-foreground">{year}</dd>
+
+        <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+          Chinese
+        </dt>
+        <dd className="text-foreground">
+          <span className="mr-2">{chinese.emoji}</span>
+          {chinese.animal}
+        </dd>
+
+        <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+          Western
+        </dt>
+        <dd className="text-foreground">
+          <span className="mr-2 text-primary">{western.glyph}</span>
+          {western.name}
+        </dd>
+      </dl>
+    </article>
+  );
+}

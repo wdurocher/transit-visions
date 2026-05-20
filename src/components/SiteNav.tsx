@@ -16,6 +16,7 @@ const primaryLinks: NavLink[] = [
 ];
 const moreLinks: NavLink[] = [
   { to: "/library", label: "Planets" },
+  { to: "/compatibility", label: "Compatibility" },
   { to: "/learn/sidereal", label: "Sidereal" },
   { to: "/cycles/saturn-taurus", label: "Advanced Info" },
   { to: "/about", label: "Info" },
