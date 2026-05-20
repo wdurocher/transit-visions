@@ -8,6 +8,21 @@ const elementClass: Record<string, string> = {
   Water: "text-indigo-400",
 };
 
+const chineseZodiac: { animal: string; emoji: string; range: string }[] = [
+  { animal: "Tiger", emoji: "🐅", range: "Feb 4 — Mar 5" },
+  { animal: "Rabbit", emoji: "🐇", range: "Mar 6 — Apr 4" },
+  { animal: "Dragon", emoji: "🐉", range: "Apr 5 — May 5" },
+  { animal: "Snake", emoji: "🐍", range: "May 6 — Jun 5" },
+  { animal: "Horse", emoji: "🐎", range: "Jun 6 — Jul 6" },
+  { animal: "Goat", emoji: "🐐", range: "Jul 7 — Aug 7" },
+  { animal: "Monkey", emoji: "🐒", range: "Aug 8 — Sep 7" },
+  { animal: "Rooster", emoji: "🐓", range: "Sep 8 — Oct 7" },
+  { animal: "Dog", emoji: "🐕", range: "Oct 8 — Nov 6" },
+  { animal: "Pig", emoji: "🐖", range: "Nov 7 — Dec 6" },
+  { animal: "Rat", emoji: "🐀", range: "Dec 7 — Jan 5" },
+  { animal: "Ox", emoji: "🐂", range: "Jan 6 — Feb 3" },
+];
+
 export const Route = createFileRoute("/signs")({
   head: () => ({
     meta: [
