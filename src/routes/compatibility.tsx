@@ -58,14 +58,21 @@ function CompatibilityPage() {
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
+    // If the query matches a state name, show that state first followed by
+    // its cities. Otherwise show only the cities whose name matches.
+    const stateMatch = states.find((s) => s.name.toLowerCase() === q);
+    const statePrefix = states.find((s) => s.name.toLowerCase().startsWith(q));
+    const targetState = stateMatch ?? statePrefix;
+    if (targetState) {
+      const cities = all.filter(
+        (p) => p.kind === "city" && p.state === targetState.name,
+      );
+      return [targetState, ...cities];
+    }
+    // City-only search: exact or substring match on the city name.
     return all
-      .filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          (p.state ?? "").toLowerCase().includes(q) ||
-          (p.capital ?? "").toLowerCase().includes(q),
-      )
-      .slice(0, 12);
+      .filter((p) => p.kind === "city" && p.name.toLowerCase().includes(q))
+      .slice(0, 20);
   }, [all, query]);
 
   return (
@@ -99,11 +106,13 @@ function CompatibilityPage() {
           </label>
 
           {query && (
-            <div className="mt-4 grid gap-3">
+            <div className="mt-4 grid gap-5">
               {results.length === 0 ? (
                 <p className="text-sm text-muted-foreground px-2">No matches.</p>
               ) : (
-                results.map((p) => <PlaceCard key={`${p.kind}-${p.name}`} place={p} />)
+                results.map((p) => (
+                  <PlaceCard key={`${p.kind}-${p.state ?? ""}-${p.name}`} place={p} />
+                ))
               )}
             </div>
           )}
@@ -137,11 +146,11 @@ function CompatibilityPage() {
           </div>
         )}
 
-        {/* Top 3 cities per state */}
+        {/* Top 10 cities per state */}
         {!query && (
           <div className="mt-16">
             <h2 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-5">
-              Top Three Cities · Every State
+              Top Ten Cities · Every State
             </h2>
             <div className="space-y-10">
               {states.map((s) => {
