@@ -97,7 +97,7 @@ export const transits: Transit[] = [
       { area: "Education", note: "Old curricula crack. Self-teaching and short courses gain ground." },
       { area: "Mind", note: "You may feel mentally restless. Build one steady thinking practice (writing, reading, walks)." },
     ],
-    image: jupiterImg,
+    image: uranusImg,
     color: "#9bb8d4",
   },
   {
