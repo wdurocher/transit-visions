@@ -75,6 +75,11 @@ function LibraryPage() {
                 <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-primary mb-4">
                   {p.epithet}
                 </p>
+                {p.rulesDay ? (
+                  <p className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-3">
+                    Rules <span className="text-foreground">{p.rulesDay}</span>
+                  </p>
+                ) : null}
                 <p className="text-sm text-foreground mb-3 italic">{p.essence}</p>
                 <p className="text-sm text-muted-foreground text-pretty mb-6 leading-relaxed">
                   {p.meaning}
