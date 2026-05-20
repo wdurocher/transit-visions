@@ -12,6 +12,8 @@ export type PlanetEntry = {
   shows: string[];
   /** Experience tags */
   experiences: string[];
+  /** Day of the week this planet rules, if any */
+  rulesDay?: string;
   /** Optional gradient fallback when no image exists */
   fallback: string;
   image?: string;
