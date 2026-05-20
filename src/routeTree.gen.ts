@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TransitsRouteImport } from './routes/transits'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignsRouteImport } from './routes/signs'
 import { Route as LibraryRouteImport } from './routes/library'
@@ -17,16 +16,12 @@ import { Route as HousesRouteImport } from './routes/houses'
 import { Route as ChartRouteImport } from './routes/chart'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TransitsIndexRouteImport } from './routes/transits.index'
 import { Route as TransitsSlugRouteImport } from './routes/transits.$slug'
 import { Route as LearnSiderealRouteImport } from './routes/learn.sidereal'
 import { Route as LearnReadChartRouteImport } from './routes/learn.read-chart'
 import { Route as CyclesSaturnTaurusRouteImport } from './routes/cycles.saturn-taurus'
 
-const TransitsRoute = TransitsRouteImport.update({
-  id: '/transits',
-  path: '/transits',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -62,6 +57,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TransitsIndexRoute = TransitsIndexRouteImport.update({
+  id: '/transits/',
+  path: '/transits/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TransitsSlugRoute = TransitsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -91,11 +91,11 @@ export interface FileRoutesByFullPath {
   '/library': typeof LibraryRoute
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/transits': typeof TransitsRouteWithChildren
   '/cycles/saturn-taurus': typeof CyclesSaturnTaurusRoute
   '/learn/read-chart': typeof LearnReadChartRoute
   '/learn/sidereal': typeof LearnSiderealRoute
   '/transits/$slug': typeof TransitsSlugRoute
+  '/transits/': typeof TransitsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -105,11 +105,11 @@ export interface FileRoutesByTo {
   '/library': typeof LibraryRoute
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/transits': typeof TransitsRouteWithChildren
   '/cycles/saturn-taurus': typeof CyclesSaturnTaurusRoute
   '/learn/read-chart': typeof LearnReadChartRoute
   '/learn/sidereal': typeof LearnSiderealRoute
   '/transits/$slug': typeof TransitsSlugRoute
+  '/transits': typeof TransitsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -120,11 +120,11 @@ export interface FileRoutesById {
   '/library': typeof LibraryRoute
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/transits': typeof TransitsRouteWithChildren
   '/cycles/saturn-taurus': typeof CyclesSaturnTaurusRoute
   '/learn/read-chart': typeof LearnReadChartRoute
   '/learn/sidereal': typeof LearnSiderealRoute
   '/transits/$slug': typeof TransitsSlugRoute
+  '/transits/': typeof TransitsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -136,11 +136,11 @@ export interface FileRouteTypes {
     | '/library'
     | '/signs'
     | '/sitemap.xml'
-    | '/transits'
     | '/cycles/saturn-taurus'
     | '/learn/read-chart'
     | '/learn/sidereal'
     | '/transits/$slug'
+    | '/transits/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -150,11 +150,11 @@ export interface FileRouteTypes {
     | '/library'
     | '/signs'
     | '/sitemap.xml'
-    | '/transits'
     | '/cycles/saturn-taurus'
     | '/learn/read-chart'
     | '/learn/sidereal'
     | '/transits/$slug'
+    | '/transits'
   id:
     | '__root__'
     | '/'
@@ -164,11 +164,11 @@ export interface FileRouteTypes {
     | '/library'
     | '/signs'
     | '/sitemap.xml'
-    | '/transits'
     | '/cycles/saturn-taurus'
     | '/learn/read-chart'
     | '/learn/sidereal'
     | '/transits/$slug'
+    | '/transits/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -179,21 +179,14 @@ export interface RootRouteChildren {
   LibraryRoute: typeof LibraryRoute
   SignsRoute: typeof SignsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  TransitsRoute: typeof TransitsRouteWithChildren
   CyclesSaturnTaurusRoute: typeof CyclesSaturnTaurusRoute
   LearnReadChartRoute: typeof LearnReadChartRoute
   LearnSiderealRoute: typeof LearnSiderealRoute
+  TransitsIndexRoute: typeof TransitsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/transits': {
-      id: '/transits'
-      path: '/transits'
-      fullPath: '/transits'
-      preLoaderRoute: typeof TransitsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -243,6 +236,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/transits/': {
+      id: '/transits/'
+      path: '/transits'
+      fullPath: '/transits/'
+      preLoaderRoute: typeof TransitsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/transits/$slug': {
       id: '/transits/$slug'
       path: '/$slug'
@@ -274,18 +274,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface TransitsRouteChildren {
-  TransitsSlugRoute: typeof TransitsSlugRoute
-}
-
-const TransitsRouteChildren: TransitsRouteChildren = {
-  TransitsSlugRoute: TransitsSlugRoute,
-}
-
-const TransitsRouteWithChildren = TransitsRoute._addFileChildren(
-  TransitsRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -294,11 +282,21 @@ const rootRouteChildren: RootRouteChildren = {
   LibraryRoute: LibraryRoute,
   SignsRoute: SignsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
-  TransitsRoute: TransitsRouteWithChildren,
   CyclesSaturnTaurusRoute: CyclesSaturnTaurusRoute,
   LearnReadChartRoute: LearnReadChartRoute,
   LearnSiderealRoute: LearnSiderealRoute,
+  TransitsIndexRoute: TransitsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
