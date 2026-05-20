@@ -10,7 +10,6 @@ import {
 
 type NavLink = { to: string; label: string; exact?: boolean };
 const primaryLinks: NavLink[] = [
-  { to: "/", label: "Ephemeris / Live Transits", exact: true },
   { to: "/transits", label: "Transits" },
   { to: "/signs", label: "Signs" },
   { to: "/houses", label: "Houses" },
