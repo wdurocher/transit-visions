@@ -60,14 +60,24 @@ function SignsPage() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border rounded-lg overflow-hidden ring-1 ring-border">
-          {signs.map((s) => (
+          {signs.map((s, i) => (
             <article key={s.name} className="bg-background p-8 flex flex-col h-full">
               <div className="flex items-start justify-between mb-6">
                 <div>
-                  <div className="font-serif text-5xl text-primary leading-none mb-3">
-                    {s.glyph}
+                  <div className="flex items-end gap-3 mb-3">
+                    <span className="font-serif text-5xl text-primary leading-none">
+                      {s.glyph}
+                    </span>
+                    <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground pb-1">
+                      No. {String(i + 1).padStart(2, "0")}
+                    </span>
                   </div>
-                  <h2 className="text-2xl font-serif italic">{s.name}</h2>
+                  <h2 className="text-2xl font-serif italic">
+                    <span className="text-muted-foreground mr-2 not-italic font-mono text-base">
+                      {i + 1}.
+                    </span>
+                    {s.name}
+                  </h2>
                   <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground mt-1">
                     {s.dates}
                   </p>
