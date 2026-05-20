@@ -1,4 +1,4 @@
-// @ts-expect-error - library has no types
+// @ts-ignore - library has no types
 import { Origin, Horoscope } from "circular-natal-horoscope-js";
 
 export type ChartInput = {
