@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransitsRouteImport } from './routes/transits'
+import { Route as LibraryRouteImport } from './routes/library'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TransitsSlugRouteImport } from './routes/transits.$slug'
 
 const TransitsRoute = TransitsRouteImport.update({
   id: '/transits',
   path: '/transits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -31,30 +37,34 @@ const TransitsSlugRoute = TransitsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/library': typeof LibraryRoute
   '/transits': typeof TransitsRouteWithChildren
   '/transits/$slug': typeof TransitsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/library': typeof LibraryRoute
   '/transits': typeof TransitsRouteWithChildren
   '/transits/$slug': typeof TransitsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/library': typeof LibraryRoute
   '/transits': typeof TransitsRouteWithChildren
   '/transits/$slug': typeof TransitsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/transits' | '/transits/$slug'
+  fullPaths: '/' | '/library' | '/transits' | '/transits/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/transits' | '/transits/$slug'
-  id: '__root__' | '/' | '/transits' | '/transits/$slug'
+  to: '/' | '/library' | '/transits' | '/transits/$slug'
+  id: '__root__' | '/' | '/library' | '/transits' | '/transits/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LibraryRoute: typeof LibraryRoute
   TransitsRoute: typeof TransitsRouteWithChildren
 }
 
@@ -65,6 +75,13 @@ declare module '@tanstack/react-router' {
       path: '/transits'
       fullPath: '/transits'
       preLoaderRoute: typeof TransitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -98,8 +115,19 @@ const TransitsRouteWithChildren = TransitsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LibraryRoute: LibraryRoute,
   TransitsRoute: TransitsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
