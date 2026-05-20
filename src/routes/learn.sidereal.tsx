@@ -195,7 +195,7 @@ function SiderealPage() {
           </p>
           <p className="text-sm text-muted-foreground leading-relaxed">
             Once you've picked a system, the{" "}
-            <Link to="/learn/read-chart" className="underline hover:text-foreground">
+            <Link to="/about" className="underline hover:text-foreground">
               birth chart guide
             </Link>{" "}
             walks you through reading it. The{" "}
