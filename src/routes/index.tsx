@@ -1,27 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Link } from "@tanstack/react-router";
-import { transits, featuredTransit } from "@/data/transits";
-import { TransitCard } from "@/components/TransitCard";
-import { PlanetOrb } from "@/components/PlanetOrb";
-import telescopeImg from "@/assets/telescope.jpg";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Zodiac17 — Today's Sky & Active Transits" },
-      {
-        name: "description",
-        content:
-          "Today's planetary transits, what they mean for the weeks ahead, and the planets behind them — visualized.",
-      },
-      { property: "og:title", content: "Zodiac17 — Today's Sky" },
-      {
-        property: "og:description",
-        content: "Live planetary transits explained, with portraits of every planet.",
-      },
-    ],
-  }),
-  component: Index,
+  beforeLoad: () => {
+    throw redirect({ to: "/transits" });
+  },
 });
 
 function Index() {
