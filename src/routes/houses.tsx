@@ -40,7 +40,7 @@ function HousesPage() {
 
         <div className="grid md:grid-cols-2 gap-5">
           {houses.map((h) => (
-            <article key={h.number} className="bg-background p-8 border-2 border-primary/60 rounded-lg">
+            <article key={h.number} className="bg-background p-8 border-2 border-deep-orange rounded-lg">
               <div className="flex items-baseline justify-between mb-6">
                 <div className="flex items-baseline gap-4">
                   <span className="font-serif text-4xl italic text-primary leading-none">

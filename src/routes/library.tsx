@@ -45,7 +45,7 @@ function LibraryPage() {
             return (
               <article
                 key={p.name}
-                className="bg-background p-8 flex flex-col border-2 border-primary/60 rounded-lg"
+                className="bg-background p-8 flex flex-col border-2 border-deep-orange rounded-lg"
               >
                 <div className="flex items-start justify-between mb-8">
                   <div

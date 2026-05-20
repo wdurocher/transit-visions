@@ -101,7 +101,7 @@ function CompatibilityPage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search a state or city…"
-              className="w-full bg-background border-2 border-primary/60 rounded-lg pl-11 pr-4 py-3 text-base outline-none focus:border-primary transition-colors"
+              className="w-full bg-background border-2 border-deep-orange rounded-lg pl-11 pr-4 py-3 text-base outline-none focus:border-primary transition-colors"
             />
           </label>
 
@@ -184,7 +184,7 @@ function PlaceCard({ place }: { place: Place }) {
   const incWestern = place.kind === "city" && place.incorporatedOn ? westernSignForDate(place.incorporatedOn) : null;
 
   return (
-    <article className="bg-background p-6 border-2 border-primary/60 rounded-lg">
+    <article className="bg-background p-6 border-2 border-deep-orange rounded-lg">
       <div className="flex items-baseline justify-between mb-4 gap-4">
         <h3 className="text-2xl font-serif italic">{place.name}</h3>
         <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground shrink-0">
