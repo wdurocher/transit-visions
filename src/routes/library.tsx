@@ -1,16 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { planetImages } from "@/data/transits";
-
-const planets: { name: string; epithet: string; meaning: string }[] = [
-  { name: "Mercury", epithet: "The Messenger", meaning: "Thought, language, exchange, transit itself." },
-  { name: "Venus", epithet: "The Beloved", meaning: "Affection, value, beauty, what we draw close." },
-  { name: "Mars", epithet: "The Warrior", meaning: "Drive, action, anger, the willingness to start." },
-  { name: "Jupiter", epithet: "The Benefic", meaning: "Expansion, meaning, luck, the larger story." },
-  { name: "Saturn", epithet: "The Architect", meaning: "Structure, time, discipline, consequence." },
-  { name: "Neptune", epithet: "The Dreamer", meaning: "Dissolution, dream, longing, the mystic blur." },
-  { name: "Moon", epithet: "The Mirror", meaning: "Mood, body, memory, the inner tide." },
-  { name: "Saturn", epithet: "The Architect II", meaning: "Foundation, slow time, the test of what holds." },
-];
+import { planets, planetImage } from "@/data/planets";
 
 export const Route = createFileRoute("/library")({
   head: () => ({
@@ -18,17 +7,21 @@ export const Route = createFileRoute("/library")({
       { title: "Planet Library — Observatory No. 9" },
       {
         name: "description",
-        content: "Portraits and meanings of every planet that shapes a transit.",
+        content:
+          "Portraits and meanings of every planet, luminary, and node that shapes a transit.",
       },
       { property: "og:title", content: "Planet Library — Observatory No. 9" },
-      { property: "og:description", content: "Portraits and meanings of every classical planet." },
+      {
+        property: "og:description",
+        content:
+          "Sun, Moon, Mercury through Pluto, Chiron, and the lunar Nodes — what each body governs.",
+      },
     ],
   }),
   component: LibraryPage,
 });
 
 function LibraryPage() {
-  const unique = Array.from(new Map(planets.map((p) => [p.name, p])).values());
   return (
     <section className="py-24">
       <div className="max-w-6xl mx-auto px-6">
@@ -39,35 +32,94 @@ function LibraryPage() {
           <h1 className="text-5xl md:text-6xl font-serif italic text-balance leading-none mb-6">
             Portraits of the Planets
           </h1>
-          <p className="max-w-[60ch] text-lg text-muted-foreground text-pretty">
-            Each body in the sky carries a meaning the ancients spent centuries refining. Hover
-            over any portrait to read its dominion.
+          <p className="max-w-[64ch] text-lg text-muted-foreground text-pretty">
+            Each body in the sky carries a meaning the ancients spent centuries refining. From the
+            radiant Sun to the slow turn of Pluto, here is what each planet, luminary, and node
+            governs in a chart and a transit.
           </p>
         </header>
 
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-12">
-          {unique.map((p) => {
-            const img = planetImages[p.name];
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border rounded-lg overflow-hidden ring-1 ring-border">
+          {planets.map((p) => {
+            const img = planetImage(p.name);
             return (
-              <Link
+              <article
                 key={p.name}
-                to="/transits"
-                className="group flex flex-col items-center text-center"
+                className="bg-background p-8 flex flex-col"
               >
-                <div className="size-48 md:size-56 mb-6 rounded-full overflow-hidden bg-card ring-1 ring-border transition-transform group-hover:scale-[1.03]">
-                  {img ? (
-                    <img src={img} alt={p.name} loading="lazy" className="size-full object-cover" />
-                  ) : null}
+                <div className="flex items-start justify-between mb-8">
+                  <div
+                    className="size-20 rounded-full ring-1 ring-border overflow-hidden bg-card"
+                    aria-hidden
+                  >
+                    {img ? (
+                      <img
+                        src={img}
+                        alt=""
+                        loading="lazy"
+                        className="size-full object-cover"
+                      />
+                    ) : (
+                      <div
+                        className="size-full"
+                        style={{ backgroundImage: p.fallback }}
+                      />
+                    )}
+                  </div>
+                  <span className="font-serif text-3xl text-primary leading-none">
+                    {p.glyph}
+                  </span>
                 </div>
+
                 <h2 className="text-2xl font-serif italic mb-1">{p.name}</h2>
-                <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-primary mb-3">
+                <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-primary mb-4">
                   {p.epithet}
                 </p>
-                <p className="text-sm text-muted-foreground max-w-[28ch]">{p.meaning}</p>
-              </Link>
+                <p className="text-sm text-foreground mb-3 italic">{p.essence}</p>
+                <p className="text-sm text-muted-foreground text-pretty mb-6 leading-relaxed">
+                  {p.meaning}
+                </p>
+
+                <div className="mt-auto pt-5 border-t border-border">
+                  <p className="text-[10px] font-mono uppercase tracking-widest text-primary mb-3">
+                    Experiences
+                  </p>
+                  <ul className="flex flex-wrap gap-1.5">
+                    {p.experiences.map((e) => (
+                      <li
+                        key={e}
+                        className="px-2 py-0.5 rounded-full text-[11px] bg-card ring-1 ring-border text-muted-foreground"
+                      >
+                        {e}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
             );
           })}
         </div>
+
+        <p className="mt-12 text-xs text-muted-foreground">
+          Rephrased from{" "}
+          <a
+            href="https://masteringthezodiac.com/pdfs/astrology-planet-meanings.pdf"
+            target="_blank"
+            rel="noreferrer"
+            className="underline hover:text-foreground"
+          >
+            Mastering the Zodiac · Planet Meanings
+          </a>
+          . See also the{" "}
+          <Link to="/signs" className="underline hover:text-foreground">
+            sign meanings
+          </Link>{" "}
+          and{" "}
+          <Link to="/houses" className="underline hover:text-foreground">
+            house meanings
+          </Link>
+          .
+        </p>
       </div>
     </section>
   );
