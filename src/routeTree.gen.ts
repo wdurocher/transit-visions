@@ -13,6 +13,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignsRouteImport } from './routes/signs'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as HousesRouteImport } from './routes/houses'
+import { Route as CompatibilityRouteImport } from './routes/compatibility'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TransitsIndexRouteImport } from './routes/transits.index'
@@ -38,6 +39,11 @@ const LibraryRoute = LibraryRouteImport.update({
 const HousesRoute = HousesRouteImport.update({
   id: '/houses',
   path: '/houses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompatibilityRoute = CompatibilityRouteImport.update({
+  id: '/compatibility',
+  path: '/compatibility',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -74,6 +80,7 @@ const CyclesSaturnTaurusRoute = CyclesSaturnTaurusRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/compatibility': typeof CompatibilityRoute
   '/houses': typeof HousesRoute
   '/library': typeof LibraryRoute
   '/signs': typeof SignsRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/compatibility': typeof CompatibilityRoute
   '/houses': typeof HousesRoute
   '/library': typeof LibraryRoute
   '/signs': typeof SignsRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/compatibility': typeof CompatibilityRoute
   '/houses': typeof HousesRoute
   '/library': typeof LibraryRoute
   '/signs': typeof SignsRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/compatibility'
     | '/houses'
     | '/library'
     | '/signs'
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/compatibility'
     | '/houses'
     | '/library'
     | '/signs'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/compatibility'
     | '/houses'
     | '/library'
     | '/signs'
@@ -150,6 +162,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  CompatibilityRoute: typeof CompatibilityRoute
   HousesRoute: typeof HousesRoute
   LibraryRoute: typeof LibraryRoute
   SignsRoute: typeof SignsRoute
@@ -188,6 +201,13 @@ declare module '@tanstack/react-router' {
       path: '/houses'
       fullPath: '/houses'
       preLoaderRoute: typeof HousesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compatibility': {
+      id: '/compatibility'
+      path: '/compatibility'
+      fullPath: '/compatibility'
+      preLoaderRoute: typeof CompatibilityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -238,6 +258,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  CompatibilityRoute: CompatibilityRoute,
   HousesRoute: HousesRoute,
   LibraryRoute: LibraryRoute,
   SignsRoute: SignsRoute,
@@ -250,3 +271,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
