@@ -39,13 +39,13 @@ function LibraryPage() {
           </p>
         </header>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {planets.map((p) => {
             const img = planetImage(p.name);
             return (
               <article
                 key={p.name}
-                className="bg-background p-8 flex flex-col border border-primary/30 rounded-lg"
+                className="bg-background p-8 flex flex-col border-2 border-primary/60 rounded-lg"
               >
                 <div className="flex items-start justify-between mb-8">
                   <div
