@@ -91,6 +91,7 @@ function TransitDetail() {
                 src={t.image}
                 alt={`${t.planet} portrait`}
                 loading="eager"
+                fit={t.planet === "Saturn" ? "contain" : "cover"}
                 className="size-72 md:size-80"
               />
             </div>
