@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { transits } from "@/data/transits";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { transits, featuredTransit } from "@/data/transits";
 import { TransitCard } from "@/components/TransitCard";
+import { PlanetOrb } from "@/components/PlanetOrb";
 
 export const Route = createFileRoute("/transits/")({
   head: () => ({
@@ -22,7 +23,47 @@ export const Route = createFileRoute("/transits/")({
 });
 
 function TransitsPage() {
+  const featured = featuredTransit;
   return (
+    <>
+      {/* Live Sky Position hero */}
+      <section className="relative py-24 overflow-hidden border-b border-border">
+        <div className="absolute inset-0 star-field pointer-events-none" />
+        <div className="max-w-6xl mx-auto px-6 relative">
+          <div className="flex flex-col lg:flex-row items-end gap-16">
+            <div className="flex-1 animate-dawn">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card/50 ring-1 ring-border text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-8">
+                <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
+                Live Sky Position
+              </div>
+              <h1 className="text-5xl md:text-7xl font-serif text-balance leading-none mb-8 text-foreground italic">
+                {featured.title}
+              </h1>
+              <p className="max-w-[56ch] text-lg text-muted-foreground text-pretty mb-10">
+                {featured.long}
+              </p>
+              <div className="flex items-center gap-4">
+                <Link
+                  to="/transits/$slug"
+                  params={{ slug: featured.slug }}
+                  className="h-10 px-6 inline-flex items-center text-sm font-medium bg-foreground text-background rounded ring-1 ring-foreground/20 transition-transform hover:scale-[1.02]"
+                >
+                  Read Interpretation
+                </Link>
+              </div>
+            </div>
+            <div className="lg:w-[40%] flex justify-center animate-dawn">
+              <PlanetOrb
+                src={featured.image}
+                alt={`${featured.planet} portrait`}
+                loading="eager"
+                className="size-64 md:size-96"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
     <section className="py-24">
       <div className="max-w-6xl mx-auto px-6">
         <header className="mb-16 border-b border-border pb-10">
@@ -45,5 +86,6 @@ function TransitsPage() {
         </div>
       </div>
     </section>
+    </>
   );
 }
