@@ -208,6 +208,15 @@ function PlaceCard({ place }: { place: Place }) {
         </dt>
         <dd className="text-foreground">{year}</dd>
 
+        {place.kind === "city" && place.incorporatedLabel && (
+          <>
+            <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+              Incorporated
+            </dt>
+            <dd className="text-foreground">{place.incorporatedLabel}</dd>
+          </>
+        )}
+
         <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
           Chinese
         </dt>
