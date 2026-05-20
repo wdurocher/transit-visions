@@ -176,9 +176,12 @@ function CompatibilityPage() {
 }
 
 function PlaceCard({ place }: { place: Place }) {
-  const year = yearOf(place.foundedOn);
-  const chinese = chineseZodiacForYear(year);
-  const western = westernSignForDate(place.foundedOn);
+  const foundedChinese = chineseZodiacForYear(yearOf(place.foundedOn));
+  const foundedWestern = westernSignForDate(place.foundedOn);
+
+  const incYear = place.kind === "city" && place.incorporatedOn ? yearOf(place.incorporatedOn) : null;
+  const incChinese = incYear ? chineseZodiacForYear(incYear) : null;
+  const incWestern = place.kind === "city" && place.incorporatedOn ? westernSignForDate(place.incorporatedOn) : null;
 
   return (
     <article className="bg-background p-6 border-2 border-primary/60 rounded-lg">
@@ -189,49 +192,44 @@ function PlaceCard({ place }: { place: Place }) {
         </span>
       </div>
 
-      <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+      <dl className="space-y-2 text-sm">
         {place.capital && (
-          <>
+          <div className="flex justify-between items-center">
             <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
               Capital
             </dt>
             <dd className="text-foreground">{place.capital}</dd>
-          </>
+          </div>
         )}
-        <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
-          Founded
-        </dt>
-        <dd className="text-foreground">{place.foundedLabel}</dd>
-
-        <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
-          Year
-        </dt>
-        <dd className="text-foreground">{year}</dd>
+        <div className="flex justify-between items-center">
+          <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+            Founded
+          </dt>
+          <dd className="text-foreground flex items-center gap-2 flex-wrap">
+            {place.foundedLabel}
+            <span className="inline-flex items-center gap-1 text-xs bg-primary/10 rounded px-1.5 py-0.5">
+              <span>{foundedChinese.emoji}</span>
+              <span className="text-primary">{foundedWestern.glyph}</span>
+            </span>
+          </dd>
+        </div>
 
         {place.kind === "city" && place.incorporatedLabel && (
-          <>
+          <div className="flex justify-between items-center">
             <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
               Incorporated
             </dt>
-            <dd className="text-foreground">{place.incorporatedLabel}</dd>
-          </>
+            <dd className="text-foreground flex items-center gap-2 flex-wrap">
+              {place.incorporatedLabel}
+              {incChinese && incWestern && (
+                <span className="inline-flex items-center gap-1 text-xs bg-primary/10 rounded px-1.5 py-0.5">
+                  <span>{incChinese.emoji}</span>
+                  <span className="text-primary">{incWestern.glyph}</span>
+                </span>
+              )}
+            </dd>
+          </div>
         )}
-
-        <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
-          Chinese
-        </dt>
-        <dd className="text-foreground">
-          <span className="mr-2">{chinese.emoji}</span>
-          {chinese.animal}
-        </dd>
-
-        <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
-          Western
-        </dt>
-        <dd className="text-foreground">
-          <span className="mr-2 text-primary">{western.glyph}</span>
-          {western.name}
-        </dd>
       </dl>
     </article>
   );
