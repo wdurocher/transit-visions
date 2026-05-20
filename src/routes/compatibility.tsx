@@ -176,8 +176,7 @@ function CompatibilityPage() {
 }
 
 function PlaceCard({ place }: { place: Place }) {
-  const year = yearOf(place.foundedOn);
-  const foundedChinese = chineseZodiacForYear(year);
+  const foundedChinese = chineseZodiacForYear(yearOf(place.foundedOn));
   const foundedWestern = westernSignForDate(place.foundedOn);
 
   const incYear = place.kind === "city" && place.incorporatedOn ? yearOf(place.incorporatedOn) : null;
