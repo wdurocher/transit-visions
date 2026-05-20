@@ -4,13 +4,13 @@ import { houses } from "@/data/houses";
 export const Route = createFileRoute("/houses")({
   head: () => ({
     meta: [
-      { title: "The Twelve Houses — Observatory No. 9" },
+      { title: "The Twelve Houses — Zodiac17" },
       {
         name: "description",
         content:
           "A guide to the twelve houses of the astrological chart — what each one rules, its natural sign, ruler, and the part of life it governs.",
       },
-      { property: "og:title", content: "The Twelve Houses — Observatory No. 9" },
+      { property: "og:title", content: "The Twelve Houses — Zodiac17" },
       {
         property: "og:description",
         content: "What each of the twelve astrological houses rules and means.",

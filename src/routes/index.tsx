@@ -8,13 +8,13 @@ import telescopeImg from "@/assets/telescope.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Observatory No. 9 — Today's Sky & Active Transits" },
+      { title: "Zodiac17 — Today's Sky & Active Transits" },
       {
         name: "description",
         content:
           "Today's planetary transits, what they mean for the weeks ahead, and the planets behind them — visualized.",
       },
-      { property: "og:title", content: "Observatory No. 9 — Today's Sky" },
+      { property: "og:title", content: "Zodiac17 — Today's Sky" },
       {
         property: "og:description",
         content: "Live planetary transits explained, with portraits of every planet.",

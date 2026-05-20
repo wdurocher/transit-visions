@@ -19,7 +19,7 @@ export function SiteNav() {
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <div className="flex items-center gap-8 min-w-0">
           <Link to="/" className="font-serif italic text-2xl tracking-tight text-foreground">
-            Observatory No. 9
+            Zodiac17
           </Link>
           <div className="hidden md:flex items-center gap-6">
             {links.map((l) => (

@@ -4,13 +4,13 @@ import { planets, planetImage } from "@/data/planets";
 export const Route = createFileRoute("/library")({
   head: () => ({
     meta: [
-      { title: "Planet Library — Observatory No. 9" },
+      { title: "Planet Library — Zodiac17" },
       {
         name: "description",
         content:
           "Portraits and meanings of every planet, luminary, and node that shapes a transit.",
       },
-      { property: "og:title", content: "Planet Library — Observatory No. 9" },
+      { property: "og:title", content: "Planet Library — Zodiac17" },
       {
         property: "og:description",
         content:
@@ -79,6 +79,20 @@ function LibraryPage() {
                 <p className="text-sm text-muted-foreground text-pretty mb-6 leading-relaxed">
                   {p.meaning}
                 </p>
+
+                <div className="mb-6">
+                  <p className="text-[10px] font-mono uppercase tracking-widest text-primary mb-3">
+                    What it shows in a chart
+                  </p>
+                  <ul className="space-y-1.5 text-sm text-foreground/90">
+                    {p.shows.map((s) => (
+                      <li key={s} className="flex gap-2 leading-snug">
+                        <span className="text-primary mt-1.5 size-1 rounded-full bg-primary shrink-0" aria-hidden />
+                        <span>{s}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
                 <div className="mt-auto pt-5 border-t border-border">
                   <p className="text-[10px] font-mono uppercase tracking-widest text-primary mb-3">

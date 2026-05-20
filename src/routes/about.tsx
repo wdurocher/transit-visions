@@ -3,13 +3,13 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "Method — Observatory No. 9" },
+      { title: "Method — Zodiac17" },
       {
         name: "description",
         content:
-          "How Observatory No. 9 reads the sky: tropical zodiac, modern psychological astrology, and a respect for the bodies themselves.",
+          "How Zodiac17 reads the sky: tropical zodiac, modern psychological astrology, and a respect for the bodies themselves.",
       },
-      { property: "og:title", content: "Method — Observatory No. 9" },
+      { property: "og:title", content: "Method — Zodiac17" },
       {
         property: "og:description",
         content: "Our approach to reading planetary transits.",
@@ -29,7 +29,7 @@ function AboutPage() {
         </h1>
 
         <p className="text-lg text-muted-foreground leading-relaxed text-pretty">
-          Observatory No. 9 is a quiet, modern almanac of planetary transits. We use the{" "}
+          Zodiac17 is a quiet, modern almanac of planetary transits. We use the{" "}
           <em>tropical zodiac</em> — the same one Hellenistic astrologers worked with — and
           interpret each transit through a psychological lens: not prediction, but a description
           of the field a planet creates while it crosses a sign.

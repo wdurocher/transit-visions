@@ -63,7 +63,7 @@
 
 :root {
   --radius: 0.625rem;
-  /* Observatory No. 9 — deep astral black with brass accents */
+  /* Zodiac17 — deep astral black with brass accents */
   --background: oklch(0.08 0.004 280);
   --foreground: oklch(0.92 0.003 280);
   --card: oklch(0.18 0.005 280);

@@ -74,10 +74,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Observatory No. 9 — Astrology Transits & Planet Visuals" },
+      { title: "Zodiac17 — Astrology Transits & Planet Visuals" },
       { name: "description", content: "A celestial almanac of current planetary transits, what they mean, and the planets behind them." },
-      { name: "author", content: "Observatory No. 9" },
-      { property: "og:title", content: "Observatory No. 9 — Astrology Transits" },
+      { name: "author", content: "Zodiac17" },
+      { property: "og:title", content: "Zodiac17 — Astrology Transits" },
       { property: "og:description", content: "Track current transits, read their interpretation, and see the planets that drive them." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

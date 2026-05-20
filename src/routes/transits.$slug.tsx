@@ -14,9 +14,9 @@ export const Route = createFileRoute("/transits/$slug")({
     if (!t) return { meta: [{ title: "Transit not found" }] };
     return {
       meta: [
-        { title: `${t.title} — Observatory No. 9` },
+        { title: `${t.title} — Zodiac17` },
         { name: "description", content: t.short },
-        { property: "og:title", content: `${t.title} — Observatory No. 9` },
+        { property: "og:title", content: `${t.title} — Zodiac17` },
         { property: "og:description", content: t.short },
         { property: "og:image", content: t.image },
         { name: "twitter:image", content: t.image },
