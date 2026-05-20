@@ -9,6 +9,8 @@ const links: NavLink[] = [
   { to: "/signs", label: "Signs" },
   { to: "/houses", label: "Houses" },
   { to: "/library", label: "Library" },
+  { to: "/learn/read-chart", label: "Read Chart" },
+  { to: "/learn/sidereal", label: "Sidereal" },
   { to: "/cycles/saturn-taurus", label: "Cycles" },
   { to: "/about", label: "Method" },
 ];

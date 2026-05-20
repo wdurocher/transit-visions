@@ -17,6 +17,8 @@ import { Route as HousesRouteImport } from './routes/houses'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TransitsSlugRouteImport } from './routes/transits.$slug'
+import { Route as LearnSiderealRouteImport } from './routes/learn.sidereal'
+import { Route as LearnReadChartRouteImport } from './routes/learn.read-chart'
 import { Route as CyclesSaturnTaurusRouteImport } from './routes/cycles.saturn-taurus'
 
 const TransitsRoute = TransitsRouteImport.update({
@@ -59,6 +61,16 @@ const TransitsSlugRoute = TransitsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => TransitsRoute,
 } as any)
+const LearnSiderealRoute = LearnSiderealRouteImport.update({
+  id: '/learn/sidereal',
+  path: '/learn/sidereal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnReadChartRoute = LearnReadChartRouteImport.update({
+  id: '/learn/read-chart',
+  path: '/learn/read-chart',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CyclesSaturnTaurusRoute = CyclesSaturnTaurusRouteImport.update({
   id: '/cycles/saturn-taurus',
   path: '/cycles/saturn-taurus',
@@ -74,6 +86,8 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transits': typeof TransitsRouteWithChildren
   '/cycles/saturn-taurus': typeof CyclesSaturnTaurusRoute
+  '/learn/read-chart': typeof LearnReadChartRoute
+  '/learn/sidereal': typeof LearnSiderealRoute
   '/transits/$slug': typeof TransitsSlugRoute
 }
 export interface FileRoutesByTo {
@@ -85,6 +99,8 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transits': typeof TransitsRouteWithChildren
   '/cycles/saturn-taurus': typeof CyclesSaturnTaurusRoute
+  '/learn/read-chart': typeof LearnReadChartRoute
+  '/learn/sidereal': typeof LearnSiderealRoute
   '/transits/$slug': typeof TransitsSlugRoute
 }
 export interface FileRoutesById {
@@ -97,6 +113,8 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transits': typeof TransitsRouteWithChildren
   '/cycles/saturn-taurus': typeof CyclesSaturnTaurusRoute
+  '/learn/read-chart': typeof LearnReadChartRoute
+  '/learn/sidereal': typeof LearnSiderealRoute
   '/transits/$slug': typeof TransitsSlugRoute
 }
 export interface FileRouteTypes {
@@ -110,6 +128,8 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/transits'
     | '/cycles/saturn-taurus'
+    | '/learn/read-chart'
+    | '/learn/sidereal'
     | '/transits/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -121,6 +141,8 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/transits'
     | '/cycles/saturn-taurus'
+    | '/learn/read-chart'
+    | '/learn/sidereal'
     | '/transits/$slug'
   id:
     | '__root__'
@@ -132,6 +154,8 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/transits'
     | '/cycles/saturn-taurus'
+    | '/learn/read-chart'
+    | '/learn/sidereal'
     | '/transits/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -144,6 +168,8 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TransitsRoute: typeof TransitsRouteWithChildren
   CyclesSaturnTaurusRoute: typeof CyclesSaturnTaurusRoute
+  LearnReadChartRoute: typeof LearnReadChartRoute
+  LearnSiderealRoute: typeof LearnSiderealRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -204,6 +230,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TransitsSlugRouteImport
       parentRoute: typeof TransitsRoute
     }
+    '/learn/sidereal': {
+      id: '/learn/sidereal'
+      path: '/learn/sidereal'
+      fullPath: '/learn/sidereal'
+      preLoaderRoute: typeof LearnSiderealRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn/read-chart': {
+      id: '/learn/read-chart'
+      path: '/learn/read-chart'
+      fullPath: '/learn/read-chart'
+      preLoaderRoute: typeof LearnReadChartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cycles/saturn-taurus': {
       id: '/cycles/saturn-taurus'
       path: '/cycles/saturn-taurus'
@@ -235,6 +275,8 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TransitsRoute: TransitsRouteWithChildren,
   CyclesSaturnTaurusRoute: CyclesSaturnTaurusRoute,
+  LearnReadChartRoute: LearnReadChartRoute,
+  LearnSiderealRoute: LearnSiderealRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
