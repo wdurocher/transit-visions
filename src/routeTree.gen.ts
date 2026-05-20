@@ -13,7 +13,6 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignsRouteImport } from './routes/signs'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as HousesRouteImport } from './routes/houses'
-import { Route as ChartRouteImport } from './routes/chart'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TransitsIndexRouteImport } from './routes/transits.index'
@@ -39,11 +38,6 @@ const LibraryRoute = LibraryRouteImport.update({
 const HousesRoute = HousesRouteImport.update({
   id: '/houses',
   path: '/houses',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ChartRoute = ChartRouteImport.update({
-  id: '/chart',
-  path: '/chart',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -80,7 +74,6 @@ const CyclesSaturnTaurusRoute = CyclesSaturnTaurusRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/chart': typeof ChartRoute
   '/houses': typeof HousesRoute
   '/library': typeof LibraryRoute
   '/signs': typeof SignsRoute
@@ -93,7 +86,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/chart': typeof ChartRoute
   '/houses': typeof HousesRoute
   '/library': typeof LibraryRoute
   '/signs': typeof SignsRoute
@@ -107,7 +99,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/chart': typeof ChartRoute
   '/houses': typeof HousesRoute
   '/library': typeof LibraryRoute
   '/signs': typeof SignsRoute
@@ -122,7 +113,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
-    | '/chart'
     | '/houses'
     | '/library'
     | '/signs'
@@ -135,7 +125,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
-    | '/chart'
     | '/houses'
     | '/library'
     | '/signs'
@@ -148,7 +137,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
-    | '/chart'
     | '/houses'
     | '/library'
     | '/signs'
@@ -162,7 +150,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  ChartRoute: typeof ChartRoute
   HousesRoute: typeof HousesRoute
   LibraryRoute: typeof LibraryRoute
   SignsRoute: typeof SignsRoute
@@ -201,13 +188,6 @@ declare module '@tanstack/react-router' {
       path: '/houses'
       fullPath: '/houses'
       preLoaderRoute: typeof HousesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/chart': {
-      id: '/chart'
-      path: '/chart'
-      fullPath: '/chart'
-      preLoaderRoute: typeof ChartRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -258,7 +238,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  ChartRoute: ChartRoute,
   HousesRoute: HousesRoute,
   LibraryRoute: LibraryRoute,
   SignsRoute: SignsRoute,
