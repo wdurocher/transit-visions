@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransitsRouteImport } from './routes/transits'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -18,6 +19,11 @@ import { Route as TransitsSlugRouteImport } from './routes/transits.$slug'
 const TransitsRoute = TransitsRouteImport.update({
   id: '/transits',
   path: '/transits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LibraryRoute = LibraryRouteImport.update({
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/library': typeof LibraryRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transits': typeof TransitsRouteWithChildren
   '/transits/$slug': typeof TransitsSlugRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/library': typeof LibraryRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transits': typeof TransitsRouteWithChildren
   '/transits/$slug': typeof TransitsSlugRoute
 }
@@ -60,21 +68,42 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/library': typeof LibraryRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transits': typeof TransitsRouteWithChildren
   '/transits/$slug': typeof TransitsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/library' | '/transits' | '/transits/$slug'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/library'
+    | '/sitemap.xml'
+    | '/transits'
+    | '/transits/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/library' | '/transits' | '/transits/$slug'
-  id: '__root__' | '/' | '/about' | '/library' | '/transits' | '/transits/$slug'
+  to:
+    | '/'
+    | '/about'
+    | '/library'
+    | '/sitemap.xml'
+    | '/transits'
+    | '/transits/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/library'
+    | '/sitemap.xml'
+    | '/transits'
+    | '/transits/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   LibraryRoute: typeof LibraryRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TransitsRoute: typeof TransitsRouteWithChildren
 }
 
@@ -85,6 +114,13 @@ declare module '@tanstack/react-router' {
       path: '/transits'
       fullPath: '/transits'
       preLoaderRoute: typeof TransitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/library': {
@@ -134,8 +170,19 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   LibraryRoute: LibraryRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TransitsRoute: TransitsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
