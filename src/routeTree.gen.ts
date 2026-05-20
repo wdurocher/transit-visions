@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransitsRouteImport } from './routes/transits'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SignsRouteImport } from './routes/signs'
 import { Route as LibraryRouteImport } from './routes/library'
+import { Route as HousesRouteImport } from './routes/houses'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TransitsSlugRouteImport } from './routes/transits.$slug'
@@ -26,9 +28,19 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignsRoute = SignsRouteImport.update({
+  id: '/signs',
+  path: '/signs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LibraryRoute = LibraryRouteImport.update({
   id: '/library',
   path: '/library',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HousesRoute = HousesRouteImport.update({
+  id: '/houses',
+  path: '/houses',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -50,7 +62,9 @@ const TransitsSlugRoute = TransitsSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/houses': typeof HousesRoute
   '/library': typeof LibraryRoute
+  '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transits': typeof TransitsRouteWithChildren
   '/transits/$slug': typeof TransitsSlugRoute
@@ -58,7 +72,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/houses': typeof HousesRoute
   '/library': typeof LibraryRoute
+  '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transits': typeof TransitsRouteWithChildren
   '/transits/$slug': typeof TransitsSlugRoute
@@ -67,7 +83,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/houses': typeof HousesRoute
   '/library': typeof LibraryRoute
+  '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transits': typeof TransitsRouteWithChildren
   '/transits/$slug': typeof TransitsSlugRoute
@@ -77,7 +95,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/houses'
     | '/library'
+    | '/signs'
     | '/sitemap.xml'
     | '/transits'
     | '/transits/$slug'
@@ -85,7 +105,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/houses'
     | '/library'
+    | '/signs'
     | '/sitemap.xml'
     | '/transits'
     | '/transits/$slug'
@@ -93,7 +115,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/houses'
     | '/library'
+    | '/signs'
     | '/sitemap.xml'
     | '/transits'
     | '/transits/$slug'
@@ -102,7 +126,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  HousesRoute: typeof HousesRoute
   LibraryRoute: typeof LibraryRoute
+  SignsRoute: typeof SignsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TransitsRoute: typeof TransitsRouteWithChildren
 }
@@ -123,11 +149,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/signs': {
+      id: '/signs'
+      path: '/signs'
+      fullPath: '/signs'
+      preLoaderRoute: typeof SignsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/library': {
       id: '/library'
       path: '/library'
       fullPath: '/library'
       preLoaderRoute: typeof LibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/houses': {
+      id: '/houses'
+      path: '/houses'
+      fullPath: '/houses'
+      preLoaderRoute: typeof HousesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -169,7 +209,9 @@ const TransitsRouteWithChildren = TransitsRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  HousesRoute: HousesRoute,
   LibraryRoute: LibraryRoute,
+  SignsRoute: SignsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TransitsRoute: TransitsRouteWithChildren,
 }
