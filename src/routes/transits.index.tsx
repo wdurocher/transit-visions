@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { transits } from "@/data/transits";
 import { TransitCard } from "@/components/TransitCard";
 
-export const Route = createFileRoute("/transits")({
+export const Route = createFileRoute("/transits/")({
   head: () => ({
     meta: [
       { title: "Active Transits — Zodiac17" },
