@@ -103,7 +103,11 @@ function TransitDetail() {
         <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-[2fr_1fr] gap-16">
           <article className="space-y-8">
             <h2 className="text-3xl font-serif italic">What happens during this transit</h2>
-            <p className="text-lg text-muted-foreground leading-relaxed text-pretty">{t.long}</p>
+            <div className="space-y-5 text-lg text-muted-foreground leading-relaxed text-pretty">
+              {t.long.split("\n\n").map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
+            </div>
 
             <div className="pt-6 border-t border-border">
               <h3 className="text-sm font-mono uppercase tracking-widest text-primary mb-4">
