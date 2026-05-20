@@ -96,10 +96,9 @@ function SignsPage() {
                   </span>
                   <span className="text-foreground text-right">
                     {s.ruler}
-                    {s.classicalRuler ? (
+                    {s.modernRuler ? (
                       <span className="text-muted-foreground italic">
-                        {" "}
-                        · classical: {s.classicalRuler}
+                        {" "}· modern: {s.modernRuler}
                       </span>
                     ) : null}
                   </span>
@@ -115,7 +114,7 @@ function SignsPage() {
                     Mode
                   </span>
                   <span className="text-foreground text-right italic">
-                    {modalityMeaning[s.modality]}
+                    {s.modality === "—" ? "—" : modalityMeaning[s.modality]}
                   </span>
                 </div>
               </div>
