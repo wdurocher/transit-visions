@@ -10,15 +10,15 @@ import {
 
 type NavLink = { to: string; label: string; exact?: boolean };
 const primaryLinks: NavLink[] = [
-  { to: "/", label: "Ephemeris", exact: true },
+  { to: "/", label: "Ephemeris / Live Transits", exact: true },
   { to: "/transits", label: "Transits" },
   { to: "/signs", label: "Signs" },
   { to: "/houses", label: "Houses" },
 ];
 const moreLinks: NavLink[] = [
-  { to: "/library", label: "Library" },
+  { to: "/library", label: "Planets" },
   { to: "/learn/sidereal", label: "Sidereal" },
-  { to: "/cycles/saturn-taurus", label: "Cycles" },
+  { to: "/cycles/saturn-taurus", label: "Advanced Info" },
   { to: "/about", label: "Info" },
 ];
 const allLinks: NavLink[] = [...primaryLinks, ...moreLinks];
