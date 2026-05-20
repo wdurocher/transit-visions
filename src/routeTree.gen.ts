@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransitsRouteImport } from './routes/transits'
 import { Route as LibraryRouteImport } from './routes/library'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TransitsSlugRouteImport } from './routes/transits.$slug'
 
@@ -22,6 +23,11 @@ const TransitsRoute = TransitsRouteImport.update({
 const LibraryRoute = LibraryRouteImport.update({
   id: '/library',
   path: '/library',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,12 +43,14 @@ const TransitsSlugRoute = TransitsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/library': typeof LibraryRoute
   '/transits': typeof TransitsRouteWithChildren
   '/transits/$slug': typeof TransitsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/library': typeof LibraryRoute
   '/transits': typeof TransitsRouteWithChildren
   '/transits/$slug': typeof TransitsSlugRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/library': typeof LibraryRoute
   '/transits': typeof TransitsRouteWithChildren
   '/transits/$slug': typeof TransitsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/library' | '/transits' | '/transits/$slug'
+  fullPaths: '/' | '/about' | '/library' | '/transits' | '/transits/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/library' | '/transits' | '/transits/$slug'
-  id: '__root__' | '/' | '/library' | '/transits' | '/transits/$slug'
+  to: '/' | '/about' | '/library' | '/transits' | '/transits/$slug'
+  id: '__root__' | '/' | '/about' | '/library' | '/transits' | '/transits/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   LibraryRoute: typeof LibraryRoute
   TransitsRoute: typeof TransitsRouteWithChildren
 }
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       path: '/library'
       fullPath: '/library'
       preLoaderRoute: typeof LibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -115,6 +132,7 @@ const TransitsRouteWithChildren = TransitsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   LibraryRoute: LibraryRoute,
   TransitsRoute: TransitsRouteWithChildren,
 }
