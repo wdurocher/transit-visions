@@ -80,7 +80,7 @@ function Index() {
           <div className="flex items-end justify-between mb-12 border-b border-border pb-8">
             <h2 className="text-3xl font-serif text-balance leading-tight">Active Transits</h2>
             <span className="text-xs font-mono text-muted-foreground tracking-tighter">
-              CURRENT EPOCH: 2460341.5 JD
+              MAY 19, 2026 · JD 2461180.5
             </span>
           </div>
 
