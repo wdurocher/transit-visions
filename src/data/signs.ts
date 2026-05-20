@@ -180,7 +180,7 @@ export const elementMeaning: Record<ZodiacSign["element"], string> = {
   Water: "Feeling, memory, depth",
 };
 
-export const modalityMeaning: Record<ZodiacSign["modality"], string> = {
+export const modalityMeaning: Record<"Cardinal" | "Fixed" | "Mutable", string> = {
   Cardinal: "Initiates the season — the move that starts things.",
   Fixed: "Holds the season — the move that keeps things stable.",
   Mutable: "Ends the season — the move that adapts and dissolves.",
