@@ -3,15 +3,16 @@ type Props = {
   alt: string;
   className?: string;
   loading?: "eager" | "lazy";
+  fit?: "cover" | "contain";
 };
 
-export function PlanetOrb({ src, alt, className, loading = "lazy" }: Props) {
+export function PlanetOrb({ src, alt, className, loading = "lazy", fit = "cover" }: Props) {
   return (
     <div className={`relative ${className ?? ""}`}>
       <div className="absolute inset-0 animate-orbital border border-border rounded-full scale-150 pointer-events-none" />
       <div className="absolute inset-0 [animation-direction:reverse] animate-orbital border border-border/40 rounded-full scale-[1.8] pointer-events-none" />
       <div className="relative z-10 size-full rounded-full overflow-hidden bg-card outline outline-1 -outline-offset-1 outline-border">
-        <img src={src} alt={alt} loading={loading} className="size-full object-cover" />
+        <img src={src} alt={alt} loading={loading} className={`size-full ${fit === "contain" ? "object-contain" : "object-cover"}`} />
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import saturnImg from "@/assets/saturn.jpg";
 import jupiterImg from "@/assets/jupiter.jpg";
+import uranusImg from "@/assets/uranus.jpg";
 import marsImg from "@/assets/mars.jpg";
 import mercuryImg from "@/assets/mercury.jpg";
 import venusImg from "@/assets/venus.jpg";
@@ -26,6 +27,7 @@ export type Transit = {
 export const planetImages: Record<string, string> = {
   Saturn: saturnImg,
   Jupiter: jupiterImg,
+  Uranus: uranusImg,
   Mars: marsImg,
   Mercury: mercuryImg,
   Venus: venusImg,
