@@ -59,7 +59,38 @@ function HousesPage() {
                 {h.keyword}
               </p>
               <p className="text-sm text-foreground/80 mb-4">{h.rules}</p>
-              <p className="text-sm text-muted-foreground leading-relaxed">{h.description}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">{h.description}</p>
+
+              <div className="mb-5">
+                <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground mb-1">
+                  Area of life
+                </p>
+                <p className="text-sm text-foreground/90 italic leading-relaxed">{h.lifeArea}</p>
+              </div>
+
+              <dl className="space-y-3 text-sm border-t border-border pt-5">
+                <div>
+                  <dt className="text-[10px] font-mono uppercase tracking-[0.25em] text-primary mb-1">
+                    Internal
+                  </dt>
+                  <dd className="text-foreground/85 leading-relaxed">{h.internal.join(", ")}</dd>
+                </div>
+                <div>
+                  <dt className="text-[10px] font-mono uppercase tracking-[0.25em] text-primary mb-1">
+                    External
+                  </dt>
+                  <dd className="text-foreground/85 leading-relaxed">{h.external.join(", ")}</dd>
+                </div>
+                <div>
+                  <dt className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground mb-1">
+                    Balanced by
+                  </dt>
+                  <dd className="text-muted-foreground leading-relaxed italic">
+                    the {h.balancedBy}
+                    {h.balancedBy === 1 ? "st" : h.balancedBy === 2 ? "nd" : h.balancedBy === 3 ? "rd" : "th"} house
+                  </dd>
+                </div>
+              </dl>
             </article>
           ))}
         </div>
