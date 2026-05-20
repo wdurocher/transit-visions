@@ -25,6 +25,7 @@ const g = (a: string, b: string) =>
 export const planets: PlanetEntry[] = [
   {
     name: "Sun",
+    rulesDay: "Sunday",
     glyph: "☉",
     epithet: "The Luminary",
     essence: "Outward awareness and vital life-force.",
@@ -41,6 +42,7 @@ export const planets: PlanetEntry[] = [
   },
   {
     name: "Moon",
+    rulesDay: "Monday",
     glyph: "☽",
     epithet: "The Mirror",
     essence: "Inner awareness and the body's intelligence.",
@@ -57,6 +59,7 @@ export const planets: PlanetEntry[] = [
   },
   {
     name: "Mercury",
+    rulesDay: "Wednesday",
     glyph: "☿",
     epithet: "The Messenger",
     essence: "Interactive learning and exchange.",
@@ -73,6 +76,7 @@ export const planets: PlanetEntry[] = [
   },
   {
     name: "Venus",
+    rulesDay: "Friday",
     glyph: "♀",
     epithet: "The Beloved",
     essence: "What we draw close, value, and enjoy.",
@@ -89,6 +93,7 @@ export const planets: PlanetEntry[] = [
   },
   {
     name: "Mars",
+    rulesDay: "Tuesday",
     glyph: "♂",
     epithet: "The Warrior",
     essence: "Self-determined action and drive.",
@@ -105,6 +110,7 @@ export const planets: PlanetEntry[] = [
   },
   {
     name: "Jupiter",
+    rulesDay: "Thursday",
     glyph: "♃",
     epithet: "The Benefic",
     essence: "Expansive worldview and possibility.",
@@ -121,6 +127,7 @@ export const planets: PlanetEntry[] = [
   },
   {
     name: "Saturn",
+    rulesDay: "Saturday",
     glyph: "♄",
     epithet: "The Architect",
     essence: "Structure, time, and earned mastery.",
