@@ -24,8 +24,62 @@ export const Route = createFileRoute("/transits/")({
 
 function TransitsPage() {
   const featured = featuredTransit;
+  const today = new Date();
+  const dateLabel = today.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+  const skyNow: { planet: string; sign: string; glyph: string }[] = [
+    { planet: "Sun", sign: "Gemini", glyph: "♊" },
+    { planet: "Moon", sign: "Libra", glyph: "♎" },
+    { planet: "Mercury", sign: "Gemini", glyph: "♊" },
+    { planet: "Venus", sign: "Taurus", glyph: "♉" },
+    { planet: "Mars", sign: "Cancer", glyph: "♋" },
+    { planet: "Jupiter", sign: "Cancer", glyph: "♋" },
+    { planet: "Saturn", sign: "Aries", glyph: "♈" },
+    { planet: "Uranus", sign: "Gemini", glyph: "♊" },
+    { planet: "Neptune", sign: "Aries", glyph: "♈" },
+    { planet: "Pluto", sign: "Aquarius", glyph: "♒" },
+  ];
   return (
     <>
+      {/* Today's date + current sky snapshot */}
+      <section className="border-b border-border">
+        <div className="max-w-6xl mx-auto px-6 py-8">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-1">
+                Today
+              </p>
+              <p className="text-2xl md:text-3xl font-serif italic text-foreground">
+                {dateLabel}
+              </p>
+            </div>
+            <p className="text-xs uppercase tracking-widest text-muted-foreground">
+              Current Sky · Planets in Signs
+            </p>
+          </div>
+          <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            {skyNow.map((p) => (
+              <div
+                key={p.planet}
+                className="rounded-md border-2 border-deep-orange bg-card/40 px-3 py-2 flex items-center justify-between"
+              >
+                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  {p.planet}
+                </span>
+                <span className="text-sm text-foreground">
+                  <span className="mr-1">{p.glyph}</span>
+                  {p.sign}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Live Sky Position hero */}
       <section className="relative py-24 overflow-hidden border-b border-border">
         <div className="absolute inset-0 star-field pointer-events-none" />
