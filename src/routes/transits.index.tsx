@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { transits, featuredTransit } from "@/data/transits";
 import { TransitCard } from "@/components/TransitCard";
 import { PlanetOrb } from "@/components/PlanetOrb";
+import { computeChart, SIGN_GLYPH_MAP, PLANET_GLYPH_MAP } from "@/lib/chart";
 
 export const Route = createFileRoute("/transits/")({
   head: () => ({
@@ -31,18 +32,27 @@ function TransitsPage() {
     day: "numeric",
     year: "numeric",
   });
-  const skyNow: { planet: string; sign: string; glyph: string }[] = [
-    { planet: "Sun", sign: "Gemini", glyph: "♊" },
-    { planet: "Moon", sign: "Scorpio", glyph: "♏" },
-    { planet: "Mercury", sign: "Gemini", glyph: "♊" },
-    { planet: "Venus", sign: "Cancer", glyph: "♋" },
-    { planet: "Mars", sign: "Taurus", glyph: "♉" },
-    { planet: "Jupiter", sign: "Cancer", glyph: "♋" },
-    { planet: "Saturn", sign: "Aries", glyph: "♈" },
-    { planet: "Uranus", sign: "Gemini", glyph: "♊" },
-    { planet: "Neptune", sign: "Aries", glyph: "♈" },
-    { planet: "Pluto", sign: "Aquarius ℞", glyph: "♒" },
-  ];
+  const PLANET_ORDER = [
+    "sun","moon","mercury","venus","mars",
+    "jupiter","saturn","uranus","neptune","pluto",
+  ] as const;
+  const chart = computeChart({
+    year: today.getUTCFullYear(),
+    month: today.getUTCMonth() + 1,
+    date: today.getUTCDate(),
+    hour: today.getUTCHours(),
+    minute: today.getUTCMinutes(),
+    latitude: 0,
+    longitude: 0,
+  });
+  const skyNow = PLANET_ORDER.map((key) => {
+    const p = chart.placements.find((pl) => pl.key === key)!;
+    return {
+      planet: p.label,
+      sign: `${p.sign}${p.retrograde ? " ℞" : ""}`,
+      glyph: p.signGlyph || SIGN_GLYPH_MAP[p.sign.toLowerCase()] || PLANET_GLYPH_MAP[key],
+    };
+  });
   return (
     <>
       {/* Today's date + current sky snapshot */}
