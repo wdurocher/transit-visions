@@ -3,6 +3,43 @@ import { useEffect, useState } from "react";
 import { transits, featuredTransit } from "@/data/transits";
 import { TransitCard } from "@/components/TransitCard";
 import { PlanetOrb } from "@/components/PlanetOrb";
+import { EclipticLongitude, Body } from "astronomy-engine";
+
+const SIGNS = [
+  { name: "Aries", glyph: "♈" },
+  { name: "Taurus", glyph: "♉" },
+  { name: "Gemini", glyph: "♊" },
+  { name: "Cancer", glyph: "♋" },
+  { name: "Leo", glyph: "♌" },
+  { name: "Virgo", glyph: "♍" },
+  { name: "Libra", glyph: "♎" },
+  { name: "Scorpio", glyph: "♏" },
+  { name: "Sagittarius", glyph: "♐" },
+  { name: "Capricorn", glyph: "♑" },
+  { name: "Aquarius", glyph: "♒" },
+  { name: "Pisces", glyph: "♓" },
+];
+
+const PLANETS: { label: string; body: Body }[] = [
+  { label: "Sun", body: Body.Sun },
+  { label: "Moon", body: Body.Moon },
+  { label: "Mercury", body: Body.Mercury },
+  { label: "Venus", body: Body.Venus },
+  { label: "Mars", body: Body.Mars },
+  { label: "Jupiter", body: Body.Jupiter },
+  { label: "Saturn", body: Body.Saturn },
+  { label: "Uranus", body: Body.Uranus },
+  { label: "Neptune", body: Body.Neptune },
+  { label: "Pluto", body: Body.Pluto },
+];
+
+function computeSkyNow(date: Date) {
+  return PLANETS.map(({ label, body }) => {
+    const lon = EclipticLongitude(body, date);
+    const idx = Math.floor(((lon % 360) + 360) % 360 / 30);
+    return { planet: label, sign: SIGNS[idx].name, glyph: SIGNS[idx].glyph };
+  });
+}
 
 export const Route = createFileRoute("/transits/")({
   head: () => ({
@@ -32,40 +69,9 @@ function TransitsPage() {
     day: "numeric",
     year: "numeric",
   });
-  const PLANET_ORDER = [
-    "sun","moon","mercury","venus","mars",
-    "jupiter","saturn","uranus","neptune","pluto",
-  ] as const;
-  const [skyNow, setSkyNow] = useState<{ planet: string; sign: string; glyph: string }[]>(
-    PLANET_ORDER.map((k) => ({ planet: k[0].toUpperCase() + k.slice(1), sign: "—", glyph: "·" })),
-  );
+  const [skyNow, setSkyNow] = useState(() => computeSkyNow(today));
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const { computeChart, SIGN_GLYPH_MAP, PLANET_GLYPH_MAP } = await import("@/lib/chart");
-      const now = new Date();
-      const chart = computeChart({
-        year: now.getUTCFullYear(),
-        month: now.getUTCMonth() + 1,
-        date: now.getUTCDate(),
-        hour: now.getUTCHours(),
-        minute: now.getUTCMinutes(),
-        latitude: 0,
-        longitude: 0,
-      });
-      if (cancelled) return;
-      setSkyNow(
-        PLANET_ORDER.map((key) => {
-          const p = chart.placements.find((pl) => pl.key === key)!;
-          return {
-            planet: p.label,
-            sign: `${p.sign}${p.retrograde ? " ℞" : ""}`,
-            glyph: p.signGlyph || SIGN_GLYPH_MAP[p.sign.toLowerCase()] || PLANET_GLYPH_MAP[key],
-          };
-        }),
-      );
-    })();
-    return () => { cancelled = true; };
+    setSkyNow(computeSkyNow(new Date()));
   }, []);
   return (
     <>
