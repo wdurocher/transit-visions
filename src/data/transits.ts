@@ -234,5 +234,22 @@ export const transits: Transit[] = [
   },
 ];
 
+// Featured transit rotates with the calendar — pick the one whose peak
+// window actually contains today, falling back to the closest upcoming one.
+const FEATURED_SCHEDULE: { slug: string; from: string; to: string }[] = [
+  { slug: "sun-conjunct-mercury-taurus", from: "2026-05-14", to: "2026-05-25" },
+  { slug: "mars-in-aries", from: "2026-05-26", to: "2026-06-08" },
+  { slug: "jupiter-in-gemini", from: "2026-06-09", to: "2026-06-15" },
+  { slug: "saturn-in-pisces", from: "2026-06-16", to: "2026-09-30" },
+];
+
+function pickFeaturedSlug(): string {
+  const today = new Date().toISOString().slice(0, 10);
+  const hit = FEATURED_SCHEDULE.find((s) => today >= s.from && today <= s.to);
+  return hit?.slug ?? "mars-in-aries";
+}
+
 export const featuredTransit =
-  transits.find((t) => t.slug === "sun-conjunct-mercury-taurus") ?? transits[0];
+  transits.find((t) => t.slug === pickFeaturedSlug()) ??
+  transits.find((t) => t.slug === "mars-in-aries") ??
+  transits[0];
