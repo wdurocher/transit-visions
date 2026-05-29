@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { transits, featuredTransit } from "@/data/transits";
 import { TransitCard } from "@/components/TransitCard";
 import { PlanetOrb } from "@/components/PlanetOrb";
-import { computeChart, SIGN_GLYPH_MAP, PLANET_GLYPH_MAP } from "@/lib/chart";
 
 export const Route = createFileRoute("/transits/")({
   head: () => ({
@@ -36,23 +36,37 @@ function TransitsPage() {
     "sun","moon","mercury","venus","mars",
     "jupiter","saturn","uranus","neptune","pluto",
   ] as const;
-  const chart = computeChart({
-    year: today.getUTCFullYear(),
-    month: today.getUTCMonth() + 1,
-    date: today.getUTCDate(),
-    hour: today.getUTCHours(),
-    minute: today.getUTCMinutes(),
-    latitude: 0,
-    longitude: 0,
-  });
-  const skyNow = PLANET_ORDER.map((key) => {
-    const p = chart.placements.find((pl) => pl.key === key)!;
-    return {
-      planet: p.label,
-      sign: `${p.sign}${p.retrograde ? " ℞" : ""}`,
-      glyph: p.signGlyph || SIGN_GLYPH_MAP[p.sign.toLowerCase()] || PLANET_GLYPH_MAP[key],
-    };
-  });
+  const [skyNow, setSkyNow] = useState<{ planet: string; sign: string; glyph: string }[]>(
+    PLANET_ORDER.map((k) => ({ planet: k[0].toUpperCase() + k.slice(1), sign: "—", glyph: "·" })),
+  );
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { computeChart, SIGN_GLYPH_MAP, PLANET_GLYPH_MAP } = await import("@/lib/chart");
+      const now = new Date();
+      const chart = computeChart({
+        year: now.getUTCFullYear(),
+        month: now.getUTCMonth() + 1,
+        date: now.getUTCDate(),
+        hour: now.getUTCHours(),
+        minute: now.getUTCMinutes(),
+        latitude: 0,
+        longitude: 0,
+      });
+      if (cancelled) return;
+      setSkyNow(
+        PLANET_ORDER.map((key) => {
+          const p = chart.placements.find((pl) => pl.key === key)!;
+          return {
+            planet: p.label,
+            sign: `${p.sign}${p.retrograde ? " ℞" : ""}`,
+            glyph: p.signGlyph || SIGN_GLYPH_MAP[p.sign.toLowerCase()] || PLANET_GLYPH_MAP[key],
+          };
+        }),
+      );
+    })();
+    return () => { cancelled = true; };
+  }, []);
   return (
     <>
       {/* Today's date + current sky snapshot */}
