@@ -34,9 +34,13 @@ const PLANETS: { label: string; body: Body }[] = [
 ];
 
 function computeSkyNow(date: Date) {
+  // True Sky sidereal: subtract the Lahiri-style ayanamsa (~24.2° in 2026)
+  // so this panel matches the sidereal positions used across the site.
+  const AYANAMSA = 24.2;
   return PLANETS.map(({ label, body }) => {
-    const lon = Ecliptic(GeoVector(body, date, true)).elon;
-    const idx = Math.floor(((lon % 360) + 360) % 360 / 30);
+    const trop = Ecliptic(GeoVector(body, date, true)).elon;
+    const sid = (((trop - AYANAMSA) % 360) + 360) % 360;
+    const idx = Math.floor(sid / 30);
     return { planet: label, sign: SIGNS[idx].name, glyph: SIGNS[idx].glyph };
   });
 }
