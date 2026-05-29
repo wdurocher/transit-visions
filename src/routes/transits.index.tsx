@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { transits, featuredTransit } from "@/data/transits";
 import { TransitCard } from "@/components/TransitCard";
 import { PlanetOrb } from "@/components/PlanetOrb";
-import { EclipticLongitude, Body } from "astronomy-engine";
+import { EclipticLongitude, Body, SunPosition } from "astronomy-engine";
 
 const SIGNS = [
   { name: "Aries", glyph: "♈" },
@@ -35,7 +35,8 @@ const PLANETS: { label: string; body: Body }[] = [
 
 function computeSkyNow(date: Date) {
   return PLANETS.map(({ label, body }) => {
-    const lon = EclipticLongitude(body, date);
+    const lon =
+      body === Body.Sun ? SunPosition(date).elon : EclipticLongitude(body, date);
     const idx = Math.floor(((lon % 360) + 360) % 360 / 30);
     return { planet: label, sign: SIGNS[idx].name, glyph: SIGNS[idx].glyph };
   });
