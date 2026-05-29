@@ -33,15 +33,15 @@ function TransitsPage() {
   });
   const skyNow: { planet: string; sign: string; glyph: string }[] = [
     { planet: "Sun", sign: "Gemini", glyph: "♊" },
-    { planet: "Moon", sign: "Libra", glyph: "♎" },
+    { planet: "Moon", sign: "Scorpio", glyph: "♏" },
     { planet: "Mercury", sign: "Gemini", glyph: "♊" },
-    { planet: "Venus", sign: "Taurus", glyph: "♉" },
-    { planet: "Mars", sign: "Cancer", glyph: "♋" },
+    { planet: "Venus", sign: "Cancer", glyph: "♋" },
+    { planet: "Mars", sign: "Taurus", glyph: "♉" },
     { planet: "Jupiter", sign: "Cancer", glyph: "♋" },
     { planet: "Saturn", sign: "Aries", glyph: "♈" },
     { planet: "Uranus", sign: "Gemini", glyph: "♊" },
     { planet: "Neptune", sign: "Aries", glyph: "♈" },
-    { planet: "Pluto", sign: "Aquarius", glyph: "♒" },
+    { planet: "Pluto", sign: "Aquarius ℞", glyph: "♒" },
   ];
   return (
     <>
