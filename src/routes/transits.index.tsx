@@ -99,7 +99,7 @@ function TransitsPage() {
             {skyNow.map((p) => (
               <div
                 key={p.planet}
-                className="rounded-md border-2 border-deep-orange bg-card/40 px-3 py-2 flex items-center justify-between"
+                className="rounded-md border-2 border-deep-orange/40 bg-card/40 px-3 py-2 flex items-center justify-between"
               >
                 <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   {p.planet}
