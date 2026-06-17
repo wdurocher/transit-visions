@@ -66,16 +66,19 @@ export const Route = createFileRoute("/transits/")({
 
 function TransitsPage() {
   const featured = featuredTransit;
-  const today = new Date();
-  const dateLabel = today.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-  const [skyNow, setSkyNow] = useState(() => computeSkyNow(today));
+  const [dateLabel, setDateLabel] = useState<string>("");
+  const [skyNow, setSkyNow] = useState<{ planet: string; sign: string; glyph: string }[]>([]);
   useEffect(() => {
-    setSkyNow(computeSkyNow(new Date()));
+    const today = new Date();
+    setDateLabel(
+      today.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
+    );
+    setSkyNow(computeSkyNow(today));
   }, []);
   return (
     <>
