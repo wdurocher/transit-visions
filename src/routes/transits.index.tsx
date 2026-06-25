@@ -1,49 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { transits, featuredTransit } from "@/data/transits";
+import { transits, featuredTransit, type Transit } from "@/data/transits";
 import { TransitCard } from "@/components/TransitCard";
 import { PlanetOrb } from "@/components/PlanetOrb";
-import { Ecliptic, GeoVector, Body } from "astronomy-engine";
-
-const SIGNS = [
-  { name: "Aries", glyph: "♈" },
-  { name: "Taurus", glyph: "♉" },
-  { name: "Gemini", glyph: "♊" },
-  { name: "Cancer", glyph: "♋" },
-  { name: "Leo", glyph: "♌" },
-  { name: "Virgo", glyph: "♍" },
-  { name: "Libra", glyph: "♎" },
-  { name: "Scorpio", glyph: "♏" },
-  { name: "Sagittarius", glyph: "♐" },
-  { name: "Capricorn", glyph: "♑" },
-  { name: "Aquarius", glyph: "♒" },
-  { name: "Pisces", glyph: "♓" },
-];
-
-const PLANETS: { label: string; body: Body }[] = [
-  { label: "Sun", body: Body.Sun },
-  { label: "Moon", body: Body.Moon },
-  { label: "Mercury", body: Body.Mercury },
-  { label: "Venus", body: Body.Venus },
-  { label: "Mars", body: Body.Mars },
-  { label: "Jupiter", body: Body.Jupiter },
-  { label: "Saturn", body: Body.Saturn },
-  { label: "Uranus", body: Body.Uranus },
-  { label: "Neptune", body: Body.Neptune },
-  { label: "Pluto", body: Body.Pluto },
-];
-
-function computeSkyNow(date: Date) {
-  // True Sky sidereal: subtract the Lahiri-style ayanamsa (~24.2° in 2026)
-  // so this panel matches the sidereal positions used across the site.
-  const AYANAMSA = 24.2;
-  return PLANETS.map(({ label, body }) => {
-    const trop = Ecliptic(GeoVector(body, date, true)).elon;
-    const sid = (((trop - AYANAMSA) % 360) + 360) % 360;
-    const idx = Math.floor(sid / 30);
-    return { planet: label, sign: SIGNS[idx].name, glyph: SIGNS[idx].glyph };
-  });
-}
+import { computeAllPositions, formatWindow, formatDegree, type PlanetPosition } from "@/lib/sky";
+import { applyLivePosition, pickFeaturedTransit } from "@/data/transits";
 
 export const Route = createFileRoute("/transits/")({
   head: () => ({
@@ -65,9 +26,10 @@ export const Route = createFileRoute("/transits/")({
 });
 
 function TransitsPage() {
-  const featured = featuredTransit;
   const [dateLabel, setDateLabel] = useState<string>("");
-  const [skyNow, setSkyNow] = useState<{ planet: string; sign: string; glyph: string }[]>([]);
+  const [positions, setPositions] = useState<PlanetPosition[]>([]);
+  const [liveTransits, setLiveTransits] = useState<Transit[]>(transits);
+  const [featured, setFeatured] = useState<Transit>(featuredTransit);
   useEffect(() => {
     const today = new Date();
     setDateLabel(
@@ -78,7 +40,11 @@ function TransitsPage() {
         year: "numeric",
       })
     );
-    setSkyNow(computeSkyNow(today));
+    const pos = computeAllPositions(today);
+    setPositions(pos);
+    const updated = transits.map((t) => applyLivePosition(t, pos));
+    setLiveTransits(updated);
+    setFeatured(pickFeaturedTransit(updated, pos));
   }, []);
   return (
     <>
@@ -99,7 +65,7 @@ function TransitsPage() {
             </p>
           </div>
           <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-            {skyNow.map((p) => (
+            {positions.map((p) => (
               <div
                 key={p.planet}
                 className="rounded-md border-2 border-deep-orange/40 bg-card/40 px-3 py-2 flex items-center justify-between"
@@ -110,10 +76,16 @@ function TransitsPage() {
                 <span className="text-sm text-foreground">
                   <span className="mr-1">{p.glyph}</span>
                   {p.sign}
+                  {p.retrograde ? <span className="ml-1 text-amber-500 text-xs">℞</span> : null}
                 </span>
               </div>
             ))}
           </div>
+          {positions.length > 0 ? (
+            <p className="mt-3 text-[10px] font-mono uppercase tracking-widest text-muted-foreground/70">
+              True Sky sidereal · positions computed live for your local time
+            </p>
+          ) : null}
         </div>
       </section>
 
@@ -171,7 +143,7 @@ function TransitsPage() {
         </header>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-border rounded-lg overflow-hidden ring-1 ring-border">
-          {transits.map((t) => (
+          {liveTransits.map((t) => (
             <TransitCard key={t.slug} t={t} />
           ))}
         </div>
