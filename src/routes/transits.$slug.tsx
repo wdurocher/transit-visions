@@ -1,7 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { transits, type Transit } from "@/data/transits";
+import { transits, applyLivePosition, type Transit } from "@/data/transits";
 import { PlanetOrb } from "@/components/PlanetOrb";
 import { TransitCard } from "@/components/TransitCard";
+import { useEffect, useState } from "react";
+import { computeAllPositions } from "@/lib/sky";
 
 export const Route = createFileRoute("/transits/$slug")({
   loader: ({ params }): { transit: Transit } => {
@@ -45,8 +47,21 @@ export const Route = createFileRoute("/transits/$slug")({
 
 function TransitDetail() {
   const data = Route.useLoaderData() as { transit: Transit };
-  const t = data.transit;
-  const related = transits.filter((x) => x.slug !== t.slug).slice(0, 3);
+  const base = data.transit;
+  const [t, setT] = useState<Transit>(base);
+  const [related, setRelated] = useState<Transit[]>(
+    transits.filter((x) => x.slug !== base.slug).slice(0, 3)
+  );
+  useEffect(() => {
+    const positions = computeAllPositions(new Date());
+    setT(applyLivePosition(base, positions));
+    setRelated(
+      transits
+        .filter((x) => x.slug !== base.slug)
+        .slice(0, 3)
+        .map((r) => applyLivePosition(r, positions))
+    );
+  }, [base]);
 
   return (
     <>

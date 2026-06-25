@@ -1,3 +1,5 @@
+import type { PlanetPosition } from "@/lib/sky";
+import { formatWindow, formatDegree } from "@/lib/sky";
 import saturnImg from "@/assets/saturn.jpg";
 import jupiterImg from "@/assets/jupiter.jpg";
 import uranusImg from "@/assets/uranus.jpg";
@@ -253,3 +255,45 @@ export const featuredTransit =
   transits.find((t) => t.slug === pickFeaturedSlug()) ??
   transits.find((t) => t.slug === "mars-in-aries") ??
   transits[0];
+
+// ---------------------------------------------------------------------------
+// Live overlay: take a Transit (which holds the interpretive text we wrote)
+// and overwrite its sign / title / window / status with TODAY's actual sky.
+// The deep copy still describes the planet's character in that sign; the
+// header always reflects the real current placement so the site never lies
+// about where a planet is.
+// ---------------------------------------------------------------------------
+export function applyLivePosition(t: Transit, positions: PlanetPosition[]): Transit {
+  const live = positions.find((p) => p.planet === t.planet);
+  if (!live) return t;
+  const status: Transit["status"] = live.retrograde ? "Retrograde" : "Direct";
+  return {
+    ...t,
+    sign: live.sign,
+    title: `${t.planet} in ${live.sign}${live.retrograde ? " (Retrograde)" : ""}`,
+    window: formatWindow(live),
+    status,
+    short:
+      `Currently ${formatDegree(live)}${live.retrograde ? " ℞" : ""}. ` +
+      t.short,
+  };
+}
+
+// Featured: prefer the slowest-moving planet whose hardcoded sign still
+// matches the live sky (so the long-form reading is on-target). Fall back
+// to the Sun's current placement, then to the existing schedule.
+export function pickFeaturedTransit(
+  liveTransits: Transit[],
+  positions: PlanetPosition[]
+): Transit {
+  const order = ["Pluto", "Neptune", "Uranus", "Saturn", "Jupiter", "Mars", "Sun"];
+  for (const planet of order) {
+    const live = positions.find((p) => p.planet === planet);
+    const original = transits.find((t) => t.planet === planet);
+    if (live && original && original.sign === live.sign) {
+      return liveTransits.find((t) => t.planet === planet) ?? original;
+    }
+  }
+  const sun = liveTransits.find((t) => t.planet === "Sun");
+  return sun ?? featuredTransit;
+}
