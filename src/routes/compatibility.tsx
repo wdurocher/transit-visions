@@ -11,6 +11,9 @@ import {
   type Place,
   companies,
   type Company,
+  banks,
+  assetManagers,
+  lifePathNumber,
 } from "@/data/places";
 
 export const Route = createFileRoute("/compatibility")({
@@ -80,14 +83,21 @@ function CompatibilityPage() {
   const companyResults = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
-    return companies
+    const pool = [...companies, ...banks, ...assetManagers];
+    const seen = new Set<string>();
+    return pool
+      .filter((c) => {
+        if (seen.has(c.name)) return false;
+        seen.add(c.name);
+        return true;
+      })
       .filter(
         (c) =>
           c.name.toLowerCase().includes(q) ||
           c.industry.toLowerCase().includes(q) ||
           c.headquarters.toLowerCase().includes(q),
       )
-      .slice(0, 20);
+      .slice(0, 30);
   }, [query]);
 
   return (
@@ -208,6 +218,38 @@ function CompatibilityPage() {
             </div>
           </div>
         )}
+
+        {/* Top 30 U.S. banks */}
+        {!query && (
+          <div className="mt-16">
+            <h2 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-5">
+              Top 30 U.S. Banks
+            </h2>
+            <div className="grid md:grid-cols-2 gap-5">
+              {banks.map((c) => (
+                <CompanyCard key={`bank-${c.name}`} company={c} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Top 30 U.S. asset managers */}
+        {!query && (
+          <div className="mt-16">
+            <h2 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-5">
+              Top 30 U.S. Asset Managers
+            </h2>
+            <p className="max-w-[62ch] text-sm text-muted-foreground mb-6">
+              Mutual funds, ETF issuers, private equity, and hedge funds — including
+              BlackRock, Vanguard, and Blackstone.
+            </p>
+            <div className="grid md:grid-cols-2 gap-5">
+              {assetManagers.map((c) => (
+                <CompanyCard key={`am-${c.name}`} company={c} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -276,6 +318,7 @@ function PlaceCard({ place }: { place: Place }) {
 function CompanyCard({ company }: { company: Company }) {
   const chinese = chineseZodiacForYear(yearOf(company.foundedOn));
   const western = westernSignForDate(company.foundedOn);
+  const lifePath = lifePathNumber(company.foundedOn);
   return (
     <article className="bg-background p-6 border-2 border-deep-orange rounded-lg">
       <div className="flex items-baseline justify-between mb-4 gap-4">
@@ -306,6 +349,16 @@ function CompanyCard({ company }: { company: Company }) {
             <span className="inline-flex items-center gap-1 text-xs bg-primary/10 rounded px-1.5 py-0.5">
               <span>{chinese.emoji}</span>
               <span className="text-primary">{western.glyph}</span>
+            </span>
+          </dd>
+        </div>
+        <div className="flex justify-between items-center gap-4">
+          <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+            Life Path
+          </dt>
+          <dd className="text-foreground">
+            <span className="inline-flex items-center justify-center min-w-7 px-2 py-0.5 text-xs font-mono bg-primary/10 text-primary rounded">
+              {lifePath}
             </span>
           </dd>
         </div>
