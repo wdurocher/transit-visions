@@ -412,3 +412,43 @@ function CompanyCard({ company }: { company: Company }) {
     </article>
   );
 }
+
+function PersonCard({ person }: { person: Person }) {
+  const chinese = chineseZodiacForYear(yearOf(person.birthOn));
+  const western = westernSignForDate(person.birthOn);
+  const lifePath = lifePathNumber(person.birthOn);
+  return (
+    <article className="bg-background p-6 border-2 border-deep-orange rounded-lg">
+      <div className="flex items-baseline justify-between mb-4 gap-4">
+        <h3 className="text-2xl font-serif italic">{person.name}</h3>
+        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground shrink-0">
+          {person.role}
+        </span>
+      </div>
+      <dl className="space-y-2 text-sm">
+        <div className="flex justify-between items-center gap-4">
+          <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+            Born
+          </dt>
+          <dd className="text-foreground flex items-center gap-2 flex-wrap justify-end">
+            {person.birthLabel}
+            <span className="inline-flex items-center gap-1 text-xs bg-primary/10 rounded px-1.5 py-0.5">
+              <span>{chinese.emoji}</span>
+              <span className="text-primary">{western.glyph}</span>
+            </span>
+          </dd>
+        </div>
+        <div className="flex justify-between items-center gap-4">
+          <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+            Life Path
+          </dt>
+          <dd className="text-foreground">
+            <span className="inline-flex items-center justify-center min-w-7 px-2 py-0.5 text-xs font-mono bg-primary/10 text-primary rounded">
+              {lifePath}
+            </span>
+          </dd>
+        </div>
+      </dl>
+    </article>
+  );
+}
