@@ -144,7 +144,7 @@ function TransitDetail() {
 
           <aside className="space-y-5 h-fit">
             {t.affects.map((a) => (
-              <div key={a.area} className="bg-background p-6 border-2 border-deep-orange rounded-lg">
+              <div key={a.area} className="bg-background p-6 border border-border rounded-lg">
                 <h3 className="text-xs font-mono uppercase tracking-widest text-primary mb-2">
                   {a.area}
                 </h3>
@@ -161,7 +161,7 @@ function TransitDetail() {
           <h2 className="text-2xl font-serif italic mb-10">Other active transits</h2>
           <div className="grid md:grid-cols-3 gap-5">
             {related.map((r) => (
-              <div key={r.slug} className="border-2 border-deep-orange rounded-lg overflow-hidden">
+              <div key={r.slug} className="border border-border rounded-lg overflow-hidden">
                 <TransitCard t={r} />
               </div>
             ))}
