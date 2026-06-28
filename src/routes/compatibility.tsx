@@ -109,7 +109,7 @@ function CompatibilityPage() {
   const personResults = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
-    const pool = [...presidents, ...celebrities, ...singers, ...influencers];
+    const pool = [...presidents, ...celebrities, ...singers, ...influencers, ...historicalFigures];
     const seen = new Set<string>();
     return pool
       .filter((p) => {
