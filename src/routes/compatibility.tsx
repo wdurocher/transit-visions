@@ -25,16 +25,16 @@ import {
 export const Route = createFileRoute("/compatibility")({
   head: () => ({
     meta: [
-      { title: "State & City Compatibility — Zodiac17" },
+      { title: "Compatibility — Zodiac17" },
       {
         name: "description",
         content:
-          "Every U.S. state and major city by founding date, capital, Chinese zodiac year, and Western zodiac sign.",
+          "States, companies, celebrities, and cities — each tagged with Chinese zodiac year, Western sign, and life-path number.",
       },
-      { property: "og:title", content: "State & City Compatibility — Zodiac17" },
+      { property: "og:title", content: "Compatibility — Zodiac17" },
       {
         property: "og:description",
-        content: "Founding dates, capitals, and zodiac signs for every U.S. state and city.",
+        content: "States, companies, celebrities, and cities — each tagged with Chinese zodiac year, Western sign, and life-path number.",
       },
     ],
   }),
@@ -136,10 +136,8 @@ function CompatibilityPage() {
             Compatibility
           </h1>
           <p className="max-w-[62ch] text-lg text-muted-foreground text-pretty">
-            States, cities, companies, banks, asset managers, presidents, celebrities,
-            singers, influencers, and historical power — each tagged with the Chinese
-            zodiac year, the Western sign of the day, and (for people and companies) a
-            life-path number.
+            States, companies, celebrities, and cities — each tagged with Chinese
+            zodiac year, Western sign, and life-path number.
           </p>
         </header>
 
