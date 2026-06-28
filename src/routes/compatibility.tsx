@@ -18,6 +18,7 @@ import {
   celebrities,
   singers,
   influencers,
+  historicalFigures,
   type Person,
 } from "@/data/places";
 
