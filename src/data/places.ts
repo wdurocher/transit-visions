@@ -688,6 +688,17 @@ export function yearOf(iso: string): number {
   return Number(iso.slice(0, 4));
 }
 
+// Numerology life path number from an ISO date (YYYY-MM-DD).
+// Reduces all digits to a single digit, preserving master numbers 11, 22, 33.
+export function lifePathNumber(iso: string): number {
+  const digits = iso.replace(/-/g, "").split("").map(Number);
+  let sum = digits.reduce((a, b) => a + b, 0);
+  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
+    sum = String(sum).split("").map(Number).reduce((a, b) => a + b, 0);
+  }
+  return sum;
+}
+
 export type Company = {
   name: string;
   industry: string;
