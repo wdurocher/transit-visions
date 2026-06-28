@@ -1105,3 +1105,126 @@ export const influencers: Person[] = [
   { name: "Kyle Forgeard", role: "Influencer", birthOn: "1994-07-12", birthLabel: "July 12, 1994" },
   { name: "Jesse Sebastiani", role: "Influencer", birthOn: "1991-07-27", birthLabel: "July 27, 1991" },
 ];
+
+// Monarchs, royal family members, ruling/banking dynasties, and other
+// historically powerful figures. Birth dates are documented; for very old
+// figures with calendar ambiguity (Julian vs Gregorian) the commonly cited
+// Gregorian-adjusted date is used.
+export const historicalFigures: Person[] = [
+  // British royal family (current and recent)
+  { name: "King Charles III", role: "King of the United Kingdom", birthOn: "1948-11-14", birthLabel: "November 14, 1948" },
+  { name: "Queen Camilla", role: "Queen Consort of the UK", birthOn: "1947-07-17", birthLabel: "July 17, 1947" },
+  { name: "Queen Elizabeth II", role: "Queen of the United Kingdom (1952–2022)", birthOn: "1926-04-21", birthLabel: "April 21, 1926" },
+  { name: "Prince Philip", role: "Duke of Edinburgh", birthOn: "1921-06-10", birthLabel: "June 10, 1921" },
+  { name: "Prince William", role: "Prince of Wales, heir apparent", birthOn: "1982-06-21", birthLabel: "June 21, 1982" },
+  { name: "Catherine, Princess of Wales", role: "Princess of Wales", birthOn: "1982-01-09", birthLabel: "January 9, 1982" },
+  { name: "Prince George of Wales", role: "British royal, 2nd in line", birthOn: "2013-07-22", birthLabel: "July 22, 2013" },
+  { name: "Princess Charlotte of Wales", role: "British royal", birthOn: "2015-05-02", birthLabel: "May 2, 2015" },
+  { name: "Prince Louis of Wales", role: "British royal", birthOn: "2018-04-23", birthLabel: "April 23, 2018" },
+  { name: "Prince Harry", role: "Duke of Sussex", birthOn: "1984-09-15", birthLabel: "September 15, 1984" },
+  { name: "Meghan, Duchess of Sussex", role: "Duchess of Sussex", birthOn: "1981-08-04", birthLabel: "August 4, 1981" },
+  { name: "Prince Andrew", role: "Duke of York", birthOn: "1960-02-19", birthLabel: "February 19, 1960" },
+  { name: "Prince Edward", role: "Duke of Edinburgh", birthOn: "1964-03-10", birthLabel: "March 10, 1964" },
+  { name: "Princess Anne", role: "Princess Royal", birthOn: "1950-08-15", birthLabel: "August 15, 1950" },
+  { name: "Princess Diana", role: "Princess of Wales (1981–1996)", birthOn: "1961-07-01", birthLabel: "July 1, 1961" },
+
+  // Historic British monarchs
+  { name: "Queen Victoria", role: "Queen of the United Kingdom (1837–1901)", birthOn: "1819-05-24", birthLabel: "May 24, 1819" },
+  { name: "King George VI", role: "King of the United Kingdom (1936–1952)", birthOn: "1895-12-14", birthLabel: "December 14, 1895" },
+  { name: "King George V", role: "King of the United Kingdom (1910–1936)", birthOn: "1865-06-03", birthLabel: "June 3, 1865" },
+  { name: "King Edward VIII", role: "King of the United Kingdom (1936)", birthOn: "1894-06-23", birthLabel: "June 23, 1894" },
+  { name: "King Edward VII", role: "King of the United Kingdom (1901–1910)", birthOn: "1841-11-09", birthLabel: "November 9, 1841" },
+  { name: "King Henry VIII", role: "King of England (1509–1547)", birthOn: "1491-06-28", birthLabel: "June 28, 1491" },
+  { name: "Queen Elizabeth I", role: "Queen of England (1558–1603)", birthOn: "1533-09-07", birthLabel: "September 7, 1533" },
+  { name: "Mary, Queen of Scots", role: "Queen of Scotland (1542–1567)", birthOn: "1542-12-08", birthLabel: "December 8, 1542" },
+
+  // European monarchs — current
+  { name: "King Felipe VI", role: "King of Spain", birthOn: "1968-01-30", birthLabel: "January 30, 1968" },
+  { name: "Queen Letizia", role: "Queen of Spain", birthOn: "1972-09-15", birthLabel: "September 15, 1972" },
+  { name: "King Juan Carlos I", role: "King of Spain (1975–2014)", birthOn: "1938-01-05", birthLabel: "January 5, 1938" },
+  { name: "King Willem-Alexander", role: "King of the Netherlands", birthOn: "1967-04-27", birthLabel: "April 27, 1967" },
+  { name: "Queen Máxima", role: "Queen of the Netherlands", birthOn: "1971-05-17", birthLabel: "May 17, 1971" },
+  { name: "King Philippe", role: "King of the Belgians", birthOn: "1960-04-15", birthLabel: "April 15, 1960" },
+  { name: "King Frederik X", role: "King of Denmark", birthOn: "1968-05-26", birthLabel: "May 26, 1968" },
+  { name: "Queen Margrethe II", role: "Queen of Denmark (1972–2024)", birthOn: "1940-04-16", birthLabel: "April 16, 1940" },
+  { name: "King Carl XVI Gustaf", role: "King of Sweden", birthOn: "1946-04-30", birthLabel: "April 30, 1946" },
+  { name: "King Harald V", role: "King of Norway", birthOn: "1937-02-21", birthLabel: "February 21, 1937" },
+  { name: "Grand Duke Henri", role: "Grand Duke of Luxembourg", birthOn: "1955-04-16", birthLabel: "April 16, 1955" },
+  { name: "Prince Albert II", role: "Sovereign Prince of Monaco", birthOn: "1958-03-14", birthLabel: "March 14, 1958" },
+  { name: "Princess Grace of Monaco", role: "Princess of Monaco", birthOn: "1929-11-12", birthLabel: "November 12, 1929" },
+  { name: "Prince Rainier III", role: "Prince of Monaco (1949–2005)", birthOn: "1923-05-31", birthLabel: "May 31, 1923" },
+
+  // Other European royal & ruling figures
+  { name: "Napoleon Bonaparte", role: "Emperor of the French (1804–1814)", birthOn: "1769-08-15", birthLabel: "August 15, 1769" },
+  { name: "Napoleon III", role: "Emperor of the French (1852–1870)", birthOn: "1808-04-20", birthLabel: "April 20, 1808" },
+  { name: "Empress Joséphine", role: "Empress of the French", birthOn: "1763-06-23", birthLabel: "June 23, 1763" },
+  { name: "King Louis XIV", role: "King of France (1643–1715)", birthOn: "1638-09-05", birthLabel: "September 5, 1638" },
+  { name: "King Louis XVI", role: "King of France (1774–1792)", birthOn: "1754-08-23", birthLabel: "August 23, 1754" },
+  { name: "Marie Antoinette", role: "Queen of France", birthOn: "1755-11-02", birthLabel: "November 2, 1755" },
+  { name: "Catherine the Great", role: "Empress of Russia (1762–1796)", birthOn: "1729-05-02", birthLabel: "May 2, 1729" },
+  { name: "Tsar Nicholas II", role: "Last Emperor of Russia", birthOn: "1868-05-18", birthLabel: "May 18, 1868" },
+  { name: "Tsar Peter the Great", role: "Tsar of Russia (1682–1725)", birthOn: "1672-06-09", birthLabel: "June 9, 1672" },
+  { name: "Kaiser Wilhelm II", role: "German Emperor (1888–1918)", birthOn: "1859-01-27", birthLabel: "January 27, 1859" },
+  { name: "Otto von Bismarck", role: "Chancellor of the German Empire", birthOn: "1815-04-01", birthLabel: "April 1, 1815" },
+
+  // Middle East / Asia ruling families
+  { name: "King Salman bin Abdulaziz", role: "King of Saudi Arabia", birthOn: "1935-12-31", birthLabel: "December 31, 1935" },
+  { name: "Crown Prince Mohammed bin Salman", role: "Crown Prince of Saudi Arabia", birthOn: "1985-08-31", birthLabel: "August 31, 1985" },
+  { name: "Sheikh Mohammed bin Rashid Al Maktoum", role: "Ruler of Dubai", birthOn: "1949-07-15", birthLabel: "July 15, 1949" },
+  { name: "Sheikh Mohamed bin Zayed Al Nahyan", role: "President of the UAE", birthOn: "1961-03-11", birthLabel: "March 11, 1961" },
+  { name: "Emir Tamim bin Hamad Al Thani", role: "Emir of Qatar", birthOn: "1980-06-03", birthLabel: "June 3, 1980" },
+  { name: "King Abdullah II", role: "King of Jordan", birthOn: "1962-01-30", birthLabel: "January 30, 1962" },
+  { name: "King Mohammed VI", role: "King of Morocco", birthOn: "1963-08-21", birthLabel: "August 21, 1963" },
+  { name: "Emperor Naruhito", role: "Emperor of Japan", birthOn: "1960-02-23", birthLabel: "February 23, 1960" },
+  { name: "Empress Masako", role: "Empress of Japan", birthOn: "1963-12-09", birthLabel: "December 9, 1963" },
+  { name: "Emperor Akihito", role: "Emperor Emeritus of Japan", birthOn: "1933-12-23", birthLabel: "December 23, 1933" },
+  { name: "King Maha Vajiralongkorn", role: "King of Thailand (Rama X)", birthOn: "1952-07-28", birthLabel: "July 28, 1952" },
+  { name: "King Jigme Khesar Namgyel Wangchuck", role: "King of Bhutan", birthOn: "1980-02-21", birthLabel: "February 21, 1980" },
+
+  // Rothschild banking dynasty
+  { name: "Mayer Amschel Rothschild", role: "Founder, House of Rothschild", birthOn: "1744-02-23", birthLabel: "February 23, 1744" },
+  { name: "Nathan Mayer Rothschild", role: "Rothschild, London branch founder", birthOn: "1777-09-16", birthLabel: "September 16, 1777" },
+  { name: "James Mayer de Rothschild", role: "Rothschild, Paris branch founder", birthOn: "1792-05-15", birthLabel: "May 15, 1792" },
+  { name: "Salomon Mayer Rothschild", role: "Rothschild, Vienna branch founder", birthOn: "1774-09-09", birthLabel: "September 9, 1774" },
+  { name: "Carl Mayer Rothschild", role: "Rothschild, Naples branch founder", birthOn: "1788-04-24", birthLabel: "April 24, 1788" },
+  { name: "Amschel Mayer Rothschild", role: "Rothschild, Frankfurt branch", birthOn: "1773-06-12", birthLabel: "June 12, 1773" },
+  { name: "Lionel de Rothschild", role: "Rothschild, British banker & MP", birthOn: "1808-11-22", birthLabel: "November 22, 1808" },
+  { name: "Baron Edmond de Rothschild", role: "Rothschild, philanthropist", birthOn: "1845-08-19", birthLabel: "August 19, 1845" },
+  { name: "Walter Rothschild, 2nd Baron Rothschild", role: "Rothschild, of Balfour Declaration", birthOn: "1868-02-08", birthLabel: "February 8, 1868" },
+  { name: "Jacob Rothschild, 4th Baron Rothschild", role: "Rothschild, financier", birthOn: "1936-04-29", birthLabel: "April 29, 1936" },
+  { name: "David René de Rothschild", role: "Rothschild & Co chairman", birthOn: "1942-12-15", birthLabel: "December 15, 1942" },
+  { name: "Nathaniel Philip Rothschild", role: "Rothschild, financier", birthOn: "1971-07-12", birthLabel: "July 12, 1971" },
+  { name: "Evelyn de Rothschild", role: "Rothschild, banker", birthOn: "1931-08-29", birthLabel: "August 29, 1931" },
+  { name: "Lynn Forester de Rothschild", role: "Rothschild, businesswoman", birthOn: "1954-07-02", birthLabel: "July 2, 1954" },
+
+  // Rockefeller dynasty
+  { name: "John D. Rockefeller", role: "Founder, Standard Oil / Rockefeller dynasty", birthOn: "1839-07-08", birthLabel: "July 8, 1839" },
+  { name: "William Rockefeller", role: "Standard Oil co-founder", birthOn: "1841-05-31", birthLabel: "May 31, 1841" },
+  { name: "John D. Rockefeller Jr.", role: "Rockefeller philanthropist", birthOn: "1874-01-29", birthLabel: "January 29, 1874" },
+  { name: "Nelson Rockefeller", role: "41st U.S. Vice President", birthOn: "1908-07-08", birthLabel: "July 8, 1908" },
+  { name: "David Rockefeller", role: "Chase Manhattan chairman", birthOn: "1915-06-12", birthLabel: "June 12, 1915" },
+  { name: "Laurance Rockefeller", role: "Rockefeller financier", birthOn: "1910-05-26", birthLabel: "May 26, 1910" },
+  { name: "Winthrop Rockefeller", role: "37th Governor of Arkansas", birthOn: "1912-05-01", birthLabel: "May 1, 1912" },
+  { name: "John D. Rockefeller III", role: "Rockefeller philanthropist", birthOn: "1906-03-21", birthLabel: "March 21, 1906" },
+  { name: "Jay Rockefeller", role: "U.S. Senator from West Virginia", birthOn: "1937-06-18", birthLabel: "June 18, 1937" },
+  { name: "David Rockefeller Jr.", role: "Rockefeller heir & businessman", birthOn: "1941-07-24", birthLabel: "July 24, 1941" },
+
+  // 20th-century dictators & infamous rulers
+  { name: "Adolf Hitler", role: "Führer of Nazi Germany (1934–1945)", birthOn: "1889-04-20", birthLabel: "April 20, 1889" },
+  { name: "Joseph Stalin", role: "Leader of the Soviet Union (1924–1953)", birthOn: "1878-12-18", birthLabel: "December 18, 1878" },
+  { name: "Vladimir Lenin", role: "Founder of the Soviet state", birthOn: "1870-04-22", birthLabel: "April 22, 1870" },
+  { name: "Benito Mussolini", role: "Prime Minister of Italy (1922–1943)", birthOn: "1883-07-29", birthLabel: "July 29, 1883" },
+  { name: "Mao Zedong", role: "Chairman of the People's Republic of China", birthOn: "1893-12-26", birthLabel: "December 26, 1893" },
+  { name: "Francisco Franco", role: "Dictator of Spain (1939–1975)", birthOn: "1892-12-04", birthLabel: "December 4, 1892" },
+  { name: "Winston Churchill", role: "Prime Minister of the United Kingdom", birthOn: "1874-11-30", birthLabel: "November 30, 1874" },
+  { name: "Charles de Gaulle", role: "President of France", birthOn: "1890-11-22", birthLabel: "November 22, 1890" },
+  { name: "Margaret Thatcher", role: "Prime Minister of the United Kingdom", birthOn: "1925-10-13", birthLabel: "October 13, 1925" },
+  { name: "Mikhail Gorbachev", role: "Last leader of the Soviet Union", birthOn: "1931-03-02", birthLabel: "March 2, 1931" },
+
+  // Other powerful banking / industrial dynasties
+  { name: "J.P. Morgan", role: "Founder, J.P. Morgan & Co.", birthOn: "1837-04-17", birthLabel: "April 17, 1837" },
+  { name: "Andrew Carnegie", role: "Steel magnate", birthOn: "1835-11-25", birthLabel: "November 25, 1835" },
+  { name: "Henry Ford", role: "Founder of Ford Motor Company", birthOn: "1863-07-30", birthLabel: "July 30, 1863" },
+  { name: "Cornelius Vanderbilt", role: "Railroad & shipping magnate", birthOn: "1794-05-27", birthLabel: "May 27, 1794" },
+  { name: "Henry Kissinger", role: "U.S. Secretary of State", birthOn: "1923-05-27", birthLabel: "May 27, 1923" },
+];

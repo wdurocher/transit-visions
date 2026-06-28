@@ -18,6 +18,7 @@ import {
   celebrities,
   singers,
   influencers,
+  historicalFigures,
   type Person,
 } from "@/data/places";
 
@@ -108,7 +109,7 @@ function CompatibilityPage() {
   const personResults = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
-    const pool = [...presidents, ...celebrities, ...singers, ...influencers];
+    const pool = [...presidents, ...celebrities, ...singers, ...influencers, ...historicalFigures];
     const seen = new Set<string>();
     return pool
       .filter((p) => {
@@ -329,6 +330,20 @@ function CompatibilityPage() {
             <div className="grid md:grid-cols-2 gap-5">
               {influencers.map((p) => (
                 <PersonCard key={`influencer-${p.name}`} person={p} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Royalty, Ruling Families & Historical Power */}
+        {!query && (
+          <div className="mt-16">
+            <h2 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-5">
+              Royalty, Ruling Families & Historical Power
+            </h2>
+            <div className="grid md:grid-cols-2 gap-5">
+              {historicalFigures.map((p) => (
+                <PersonCard key={`hist-${p.name}`} person={p} />
               ))}
             </div>
           </div>
