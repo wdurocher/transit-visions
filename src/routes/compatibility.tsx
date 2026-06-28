@@ -136,9 +136,10 @@ function CompatibilityPage() {
             Compatibility
           </h1>
           <p className="max-w-[62ch] text-lg text-muted-foreground text-pretty">
-            Every U.S. state and a selection of its largest cities — by the date they were
-            founded, the Chinese zodiac year that ruled that year, and the Western sign that
-            ruled that day.
+            States, cities, companies, banks, asset managers, presidents, celebrities,
+            singers, influencers, and historical power — each tagged with the Chinese
+            zodiac year, the Western sign of the day, and (for people and companies) a
+            life-path number.
           </p>
         </header>
 
@@ -362,10 +363,10 @@ function PlaceCard({ place }: { place: Place }) {
   const incWestern = place.kind === "city" && place.incorporatedOn ? westernSignForDate(place.incorporatedOn) : null;
 
   return (
-    <article className="bg-background p-6 border border-border rounded-lg">
-      <div className="flex items-baseline justify-between mb-4 gap-4">
-        <h3 className="text-2xl font-serif italic">{place.name}</h3>
-        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground shrink-0">
+    <article className="bg-background p-6 border border-border rounded-lg min-w-0">
+      <div className="flex items-baseline justify-between mb-4 gap-4 min-w-0">
+        <h3 className="text-2xl font-serif italic min-w-0 break-words">{place.name}</h3>
+        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground text-right break-words">
           {place.kind === "state" ? "State" : place.state}
         </span>
       </div>
@@ -418,10 +419,10 @@ function CompanyCard({ company }: { company: Company }) {
   const western = westernSignForDate(company.foundedOn);
   const lifePath = lifePathNumber(company.foundedOn);
   return (
-    <article className="bg-background p-6 border border-border rounded-lg">
-      <div className="flex items-baseline justify-between mb-4 gap-4">
-        <h3 className="text-2xl font-serif italic">{company.name}</h3>
-        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground shrink-0">
+    <article className="bg-background p-6 border border-border rounded-lg min-w-0">
+      <div className="flex items-baseline justify-between mb-4 gap-4 min-w-0">
+        <h3 className="text-2xl font-serif italic min-w-0 break-words">{company.name}</h3>
+        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground text-right break-words">
           Company
         </span>
       </div>
@@ -470,10 +471,10 @@ function PersonCard({ person }: { person: Person }) {
   const western = westernSignForDate(person.birthOn);
   const lifePath = lifePathNumber(person.birthOn);
   return (
-    <article className="bg-background p-6 border border-border rounded-lg">
-      <div className="flex items-baseline justify-between mb-4 gap-4">
-        <h3 className="text-2xl font-serif italic">{person.name}</h3>
-        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground shrink-0">
+    <article className="bg-background p-6 border border-border rounded-lg min-w-0">
+      <div className="flex items-baseline justify-between mb-4 gap-4 min-w-0">
+        <h3 className="text-2xl font-serif italic min-w-0 break-words">{person.name}</h3>
+        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground text-right break-words max-w-[55%]">
           {person.role}
         </span>
       </div>
