@@ -63,7 +63,7 @@ function SignsPage() {
         {/* Element / modality legend */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           {(Object.keys(elementMeaning) as Array<keyof typeof elementMeaning>).map((el) => (
-            <div key={el} className="bg-background p-5 border-2 border-deep-orange rounded-lg">
+            <div key={el} className="bg-background p-5 border border-border rounded-lg">
               <p
                 className={`text-[10px] font-mono uppercase tracking-[0.25em] mb-1 ${elementClass[el]}`}
               >
@@ -76,7 +76,7 @@ function SignsPage() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {signs.map((s, i) => (
-            <article key={s.name} className="bg-background p-8 flex flex-col h-full border-2 border-deep-orange rounded-lg">
+            <article key={s.name} className="bg-background p-8 flex flex-col h-full border border-border rounded-lg">
               <div className="flex items-start justify-between mb-6">
                 <div>
                   <div className="flex items-end gap-3 mb-3">
@@ -199,7 +199,7 @@ function SignsPage() {
           </header>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
             {chineseZodiac.map((c) => (
-              <div key={c.animal} className="bg-background p-5 flex items-center gap-4 border-2 border-deep-orange rounded-lg">
+              <div key={c.animal} className="bg-background p-5 flex items-center gap-4 border border-border rounded-lg">
                 <span className="text-3xl" aria-hidden>
                   {c.emoji}
                 </span>
