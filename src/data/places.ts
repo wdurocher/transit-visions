@@ -692,15 +692,20 @@ export function yearOf(iso: string): number {
 // Master numbers preserved: 11, 22, 28, 33. There is no "2" life path —
 // if a reduction would land on 2, the previous two-digit total is kept.
 const MASTERS = new Set([11, 22, 28, 33]);
-export function lifePathNumber(iso: string): number {
+// Returns a display string. Master numbers (11, 22, 28, 33) are preserved.
+// There is no "2" life path — a reduction landing on 2 keeps the two-digit
+// form. A 20 is shown as "20/11" because 20 is treated as a hidden 11.
+export function lifePathNumber(iso: string): string {
   const digits = iso.replace(/-/g, "").split("").map(Number);
   let sum = digits.reduce((a, b) => a + b, 0);
   while (sum > 9 && !MASTERS.has(sum)) {
     const next = String(sum).split("").map(Number).reduce((a, b) => a + b, 0);
-    if (next === 2) return sum; // no 2 life path — keep the two-digit form
+    if (next === 2) {
+      return sum === 20 ? "20/11" : String(sum);
+    }
     sum = next;
   }
-  return sum;
+  return sum === 20 ? "20/11" : String(sum);
 }
 
 export type Company = {
