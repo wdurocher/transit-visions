@@ -17,6 +17,8 @@ import {
   presidents,
   celebrities,
   singers,
+  singers,
+  influencers,
   type Person,
 } from "@/data/places";
 
