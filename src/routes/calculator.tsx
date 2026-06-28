@@ -15,7 +15,6 @@ const elementClass: Record<string, string> = {
   Water: "text-indigo-400",
 };
 
-const lifePathMeanings: Record<string, string> = {
 // The numbers follow the alphabet — 1 is A, 2 is B, 3 is C, and so on.
 // Each number carries the archetype of the letter it sits on.
 const lifePathMeanings: Record<string, string> = {
