@@ -136,9 +136,10 @@ function CompatibilityPage() {
             Compatibility
           </h1>
           <p className="max-w-[62ch] text-lg text-muted-foreground text-pretty">
-            Every U.S. state and a selection of its largest cities — by the date they were
-            founded, the Chinese zodiac year that ruled that year, and the Western sign that
-            ruled that day.
+            States, cities, companies, banks, asset managers, presidents, celebrities,
+            singers, influencers, and historical power — each tagged with the Chinese
+            zodiac year, the Western sign of the day, and (for people and companies) a
+            life-path number.
           </p>
         </header>
 
