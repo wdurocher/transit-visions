@@ -11,6 +11,7 @@ import {
 type NavLink = { to: string; label: string; exact?: boolean };
 const primaryLinks: NavLink[] = [];
 const moreLinks: NavLink[] = [
+  { to: "/calculator", label: "Calculator" },
   { to: "/compatibility", label: "Compatibility" },
   { to: "/signs", label: "Signs" },
   { to: "/library", label: "Planets" },
