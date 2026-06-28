@@ -688,6 +688,17 @@ export function yearOf(iso: string): number {
   return Number(iso.slice(0, 4));
 }
 
+// Numerology life path number from an ISO date (YYYY-MM-DD).
+// Reduces all digits to a single digit, preserving master numbers 11, 22, 33.
+export function lifePathNumber(iso: string): number {
+  const digits = iso.replace(/-/g, "").split("").map(Number);
+  let sum = digits.reduce((a, b) => a + b, 0);
+  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
+    sum = String(sum).split("").map(Number).reduce((a, b) => a + b, 0);
+  }
+  return sum;
+}
+
 export type Company = {
   name: string;
   industry: string;
@@ -802,4 +813,73 @@ export const companies: Company[] = [
   { name: "Allstate", industry: "Insurance", headquarters: "Northbrook, Illinois", foundedOn: "1931-04-17", foundedLabel: "April 17, 1931" },
   { name: "Progressive", industry: "Insurance", headquarters: "Mayfield Village, Ohio", foundedOn: "1937-03-10", foundedLabel: "March 10, 1937" },
   { name: "State Farm", industry: "Insurance", headquarters: "Bloomington, Illinois", foundedOn: "1922-06-07", foundedLabel: "June 7, 1922" },
+];
+
+// Top 30 U.S. banks by assets / footprint.
+export const banks: Company[] = [
+  { name: "JPMorgan Chase", industry: "Banking", headquarters: "New York City, New York", foundedOn: "2000-12-01", foundedLabel: "December 1, 2000" },
+  { name: "Bank of America", industry: "Banking", headquarters: "Charlotte, North Carolina", foundedOn: "1904-10-17", foundedLabel: "October 17, 1904" },
+  { name: "Citigroup", industry: "Banking", headquarters: "New York City, New York", foundedOn: "1998-10-08", foundedLabel: "October 8, 1998" },
+  { name: "Wells Fargo", industry: "Banking", headquarters: "San Francisco, California", foundedOn: "1852-03-18", foundedLabel: "March 18, 1852" },
+  { name: "Goldman Sachs", industry: "Investment Banking", headquarters: "New York City, New York", foundedOn: "1869-01-01", foundedLabel: "1869" },
+  { name: "Morgan Stanley", industry: "Investment Banking", headquarters: "New York City, New York", foundedOn: "1935-09-16", foundedLabel: "September 16, 1935" },
+  { name: "U.S. Bancorp", industry: "Banking", headquarters: "Minneapolis, Minnesota", foundedOn: "1863-07-13", foundedLabel: "July 13, 1863" },
+  { name: "PNC Financial Services", industry: "Banking", headquarters: "Pittsburgh, Pennsylvania", foundedOn: "1845-04-10", foundedLabel: "April 10, 1845" },
+  { name: "Truist Financial", industry: "Banking", headquarters: "Charlotte, North Carolina", foundedOn: "2019-12-06", foundedLabel: "December 6, 2019" },
+  { name: "Capital One", industry: "Banking", headquarters: "McLean, Virginia", foundedOn: "1994-07-21", foundedLabel: "July 21, 1994" },
+  { name: "TD Bank, N.A.", industry: "Banking", headquarters: "Cherry Hill, New Jersey", foundedOn: "1852-01-01", foundedLabel: "1852" },
+  { name: "Bank of New York Mellon", industry: "Custody Banking", headquarters: "New York City, New York", foundedOn: "2007-07-01", foundedLabel: "July 1, 2007" },
+  { name: "State Street", industry: "Custody Banking", headquarters: "Boston, Massachusetts", foundedOn: "1792-01-01", foundedLabel: "1792" },
+  { name: "Charles Schwab Bank", industry: "Banking / Brokerage", headquarters: "Westlake, Texas", foundedOn: "1971-04-01", foundedLabel: "April 1, 1971" },
+  { name: "Fifth Third Bank", industry: "Banking", headquarters: "Cincinnati, Ohio", foundedOn: "1858-06-17", foundedLabel: "June 17, 1858" },
+  { name: "Citizens Financial Group", industry: "Banking", headquarters: "Providence, Rhode Island", foundedOn: "1828-01-01", foundedLabel: "1828" },
+  { name: "First Citizens BancShares", industry: "Banking", headquarters: "Raleigh, North Carolina", foundedOn: "1898-03-01", foundedLabel: "March 1, 1898" },
+  { name: "M&T Bank", industry: "Banking", headquarters: "Buffalo, New York", foundedOn: "1856-01-01", foundedLabel: "1856" },
+  { name: "KeyBank", industry: "Banking", headquarters: "Cleveland, Ohio", foundedOn: "1825-01-01", foundedLabel: "1825" },
+  { name: "Huntington Bancshares", industry: "Banking", headquarters: "Columbus, Ohio", foundedOn: "1866-01-01", foundedLabel: "1866" },
+  { name: "Ally Financial", industry: "Banking", headquarters: "Detroit, Michigan", foundedOn: "1919-08-15", foundedLabel: "August 15, 1919" },
+  { name: "American Express National Bank", industry: "Banking", headquarters: "Salt Lake City, Utah", foundedOn: "1989-01-01", foundedLabel: "1989" },
+  { name: "Discover Financial", industry: "Banking", headquarters: "Riverwoods, Illinois", foundedOn: "1985-01-01", foundedLabel: "1985" },
+  { name: "Regions Financial", industry: "Banking", headquarters: "Birmingham, Alabama", foundedOn: "1971-07-13", foundedLabel: "July 13, 1971" },
+  { name: "Northern Trust", industry: "Custody Banking", headquarters: "Chicago, Illinois", foundedOn: "1889-08-12", foundedLabel: "August 12, 1889" },
+  { name: "Synchrony Financial", industry: "Banking", headquarters: "Stamford, Connecticut", foundedOn: "2003-06-01", foundedLabel: "June 1, 2003" },
+  { name: "Comerica", industry: "Banking", headquarters: "Dallas, Texas", foundedOn: "1849-08-17", foundedLabel: "August 17, 1849" },
+  { name: "Zions Bancorporation", industry: "Banking", headquarters: "Salt Lake City, Utah", foundedOn: "1873-10-01", foundedLabel: "October 1, 1873" },
+  { name: "First Horizon", industry: "Banking", headquarters: "Memphis, Tennessee", foundedOn: "1864-03-25", foundedLabel: "March 25, 1864" },
+  { name: "Western Alliance Bancorporation", industry: "Banking", headquarters: "Phoenix, Arizona", foundedOn: "1994-01-01", foundedLabel: "1994" },
+];
+
+// Top 30 U.S. asset managers (mutual funds, ETFs, private equity, hedge funds).
+export const assetManagers: Company[] = [
+  { name: "BlackRock", industry: "Asset Management", headquarters: "New York City, New York", foundedOn: "1988-01-01", foundedLabel: "1988" },
+  { name: "Vanguard Group", industry: "Asset Management", headquarters: "Malvern, Pennsylvania", foundedOn: "1975-05-01", foundedLabel: "May 1, 1975" },
+  { name: "Fidelity Investments", industry: "Asset Management", headquarters: "Boston, Massachusetts", foundedOn: "1946-01-01", foundedLabel: "1946" },
+  { name: "State Street Global Advisors", industry: "Asset Management", headquarters: "Boston, Massachusetts", foundedOn: "1978-01-01", foundedLabel: "1978" },
+  { name: "JPMorgan Asset Management", industry: "Asset Management", headquarters: "New York City, New York", foundedOn: "1984-01-01", foundedLabel: "1984" },
+  { name: "Goldman Sachs Asset Management", industry: "Asset Management", headquarters: "New York City, New York", foundedOn: "1988-01-01", foundedLabel: "1988" },
+  { name: "Capital Group", industry: "Asset Management", headquarters: "Los Angeles, California", foundedOn: "1931-01-01", foundedLabel: "1931" },
+  { name: "T. Rowe Price", industry: "Asset Management", headquarters: "Baltimore, Maryland", foundedOn: "1937-01-01", foundedLabel: "1937" },
+  { name: "Invesco", industry: "Asset Management", headquarters: "Atlanta, Georgia", foundedOn: "1935-01-01", foundedLabel: "1935" },
+  { name: "Franklin Templeton", industry: "Asset Management", headquarters: "San Mateo, California", foundedOn: "1947-01-01", foundedLabel: "1947" },
+  { name: "PIMCO", industry: "Asset Management", headquarters: "Newport Beach, California", foundedOn: "1971-01-01", foundedLabel: "1971" },
+  { name: "Northern Trust Asset Management", industry: "Asset Management", headquarters: "Chicago, Illinois", foundedOn: "1889-08-12", foundedLabel: "August 12, 1889" },
+  { name: "Bank of New York Mellon IM", industry: "Asset Management", headquarters: "New York City, New York", foundedOn: "2007-07-01", foundedLabel: "July 1, 2007" },
+  { name: "Charles Schwab Investment Mgmt", industry: "Asset Management", headquarters: "Westlake, Texas", foundedOn: "1989-01-01", foundedLabel: "1989" },
+  { name: "Nuveen (TIAA)", industry: "Asset Management", headquarters: "Chicago, Illinois", foundedOn: "1898-01-01", foundedLabel: "1898" },
+  { name: "MFS Investment Management", industry: "Asset Management", headquarters: "Boston, Massachusetts", foundedOn: "1924-03-21", foundedLabel: "March 21, 1924" },
+  { name: "Dimensional Fund Advisors", industry: "Asset Management", headquarters: "Austin, Texas", foundedOn: "1981-01-01", foundedLabel: "1981" },
+  { name: "Wellington Management", industry: "Asset Management", headquarters: "Boston, Massachusetts", foundedOn: "1928-12-28", foundedLabel: "December 28, 1928" },
+  { name: "Lord Abbett", industry: "Asset Management", headquarters: "Jersey City, New Jersey", foundedOn: "1929-01-01", foundedLabel: "1929" },
+  { name: "Janus Henderson", industry: "Asset Management", headquarters: "Denver, Colorado", foundedOn: "2017-05-30", foundedLabel: "May 30, 2017" },
+  { name: "AllianceBernstein", industry: "Asset Management", headquarters: "Nashville, Tennessee", foundedOn: "1967-01-01", foundedLabel: "1967" },
+  // Private equity / alternatives
+  { name: "Blackstone", industry: "Private Equity / Alternatives", headquarters: "New York City, New York", foundedOn: "1985-10-01", foundedLabel: "October 1, 1985" },
+  { name: "KKR", industry: "Private Equity", headquarters: "New York City, New York", foundedOn: "1976-05-01", foundedLabel: "May 1, 1976" },
+  { name: "Apollo Global Management", industry: "Private Equity", headquarters: "New York City, New York", foundedOn: "1990-01-01", foundedLabel: "1990" },
+  { name: "Carlyle Group", industry: "Private Equity", headquarters: "Washington, D.C.", foundedOn: "1987-01-01", foundedLabel: "1987" },
+  { name: "Ares Management", industry: "Alternatives / Credit", headquarters: "Los Angeles, California", foundedOn: "1997-01-01", foundedLabel: "1997" },
+  { name: "TPG", industry: "Private Equity", headquarters: "Fort Worth, Texas", foundedOn: "1992-01-01", foundedLabel: "1992" },
+  { name: "Brookfield Asset Management", industry: "Alternatives / Real Assets", headquarters: "New York City, New York", foundedOn: "1899-01-01", foundedLabel: "1899" },
+  { name: "Bridgewater Associates", industry: "Hedge Fund", headquarters: "Westport, Connecticut", foundedOn: "1975-01-01", foundedLabel: "1975" },
+  { name: "Citadel", industry: "Hedge Fund", headquarters: "Miami, Florida", foundedOn: "1990-11-01", foundedLabel: "November 1, 1990" },
 ];
