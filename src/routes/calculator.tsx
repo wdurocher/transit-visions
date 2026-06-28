@@ -16,35 +16,58 @@ const elementClass: Record<string, string> = {
 };
 
 const lifePathMeanings: Record<string, string> = {
-  "1": "Independent, driven, and built to lead. You learn by doing and tend to carve your own path.",
-  "2": "Sensitive, cooperative, and naturally tuned to relationships. You bring people together.",
-  "3": "Creative, expressive, and social. Communication and inspiration are your main tools.",
-  "4": "Steady, practical, and detail-oriented. You build things that last through patience and discipline.",
-  "5": "Free, curious, and adaptable. Change and variety are part of your growth.",
-  "6": "Caring, responsible, and drawn to home and service. You nurture the people and places you love.",
-  "7": "Analytical, introspective, and spiritual. You seek meaning beneath the surface.",
-  "8": "Ambitious, capable, and focused on achievement. Power and resources are your teachers.",
-  "9": "Compassionate, broad-minded, and idealistic. You’re here to understand and serve the bigger picture.",
-  "11": "Intuitive and visionary, with a spiritual charge. You sense things before they’re spoken.",
-  "22": "The master builder — big dreams made real through discipline and practical action.",
-  "28": "A rare combination of leadership and intuition. You can inspire and organize at scale.",
-  "33": "The master teacher and healer. Love, guidance, and creative service are your path.",
-  "20/11": "A hidden 11 — sensitive and intuitive, with the potential to become a guide for others.",
+// The numbers follow the alphabet — 1 is A, 2 is B, 3 is C, and so on.
+// Each number carries the archetype of the letter it sits on.
+const lifePathMeanings: Record<string, string> = {
+  "1": "Alpha. The athlete, the leader, the first one through the door. 1 is the letter A — the beginning, the self, the will to go first. Independent, driven, and built to initiate.",
+  "2": "Beta. The feminine, the peacemaker, the diplomat. 2 is the letter B — the second voice, the partner, the mirror. Sensitive, cooperative, and tuned to relationships.",
+  "3": "Communication and child-like energy. 3 is the letter C — the creative voice, the storyteller, the playful spark. Expressive, social, and quick to inspire.",
+  "4": "Law and order. 4 is the letter D — the foundation, the structure, the rules. Steady, disciplined, and built to make things last.",
+  "5": "The entertainer. Travel, sex, the model, the performer. 5 is the letter E — energy in motion, the senses wide open. Free, curious, magnetic, and always changing.",
+  "6": "Home, family, loyalty, love. 6 is the letter F — the heart, the caretaker, the protector of the people and places it belongs to. Responsible and deeply devoted.",
+  "7": "Genius, gambler, deep thinker. 7 is the letter G — the seeker, the analyst, the mystic. Introspective, spiritual, and drawn to what's beneath the surface.",
+  "8": "Money, the hustler, karma. 8 is the letter H — power, resources, and the exact return of what you put out. Ambitious, capable, and tested by what you build.",
+  "9": "Infant. Adaptable, compassionate, and broad-minded. 9 is the letter I — the open hand, the humanitarian, the soul that takes in everything around it.",
+  "11": "Charisma, the athlete, the old soul. 11 is a master number — two 1s standing side by side. Intuitive, visionary, and built to lead with presence rather than force.",
+  "22": "The master builder. 22 is two 2s — partnership and structure doubled. Big visions made real through discipline and patient, practical action.",
+  "28": "Master number. Leadership (2) and authority (8) combined. Rare ability to inspire people and organize resources at the same scale.",
+  "33": "The master teacher. 33 is three 3s — communication, creativity, and love amplified. Here to guide, heal, and serve through what you express.",
+  "20/11": "A hidden 11. On the surface a 2 (peacemaker, partner), but 20 carries the charge of an 11 underneath — intuitive, charismatic, and built to eventually guide others.",
+};
+
+// Secondary number — the "underneath" or "reduced" energy that still influences you.
+const secondaryLifePath = (lp: string): { number: string; description: string } | null => {
+  if (lp.includes("/")) {
+    const [, second] = lp.split("/");
+    return {
+      number: second,
+      description: `Underneath the ${lp.split("/")[0]} sits a ${second} — ${lifePathMeanings[second] ?? ""}`,
+    };
+  }
+  const masterMap: Record<string, string> = { "11": "2", "22": "4", "28": "1", "33": "6" };
+  if (masterMap[lp]) {
+    const reduced = masterMap[lp];
+    return {
+      number: reduced,
+      description: `As a master number, ${lp} also carries the everyday energy of a ${reduced}. ${lifePathMeanings[reduced] ?? ""}`,
+    };
+  }
+  return null;
 };
 
 const chineseMeanings: Record<string, string> = {
-  Rat: "Quick, resourceful, and adaptable. Rats are good at spotting opportunity and making the most of it.",
-  Ox: "Steady, reliable, and patient. The Ox builds slowly and finishes what it starts.",
-  Tiger: "Bold, confident, and magnetic. Tigers charge forward and protect what they love.",
-  Rabbit: "Gentle, clever, and diplomatic. Rabbits move gracefully and value harmony.",
-  Dragon: "Charismatic, powerful, and lucky. Dragons tend to stand out and inspire others.",
-  Snake: "Intuitive, private, and wise. Snakes see beneath the surface and plan carefully.",
-  Horse: "Energetic, independent, and warm. Horses need freedom and thrive in motion.",
-  Goat: "Creative, gentle, and cooperative. Goats are drawn to beauty and emotional connection.",
-  Monkey: "Clever, playful, and inventive. Monkeys solve problems and keep people laughing.",
-  Rooster: "Observant, hardworking, and honest. Roosters show up prepared and value precision.",
-  Dog: "Loyal, fair, and protective. Dogs are dependable friends who stand by their principles.",
-  Pig: "Generous, sincere, and easygoing. Pigs enjoy life and treat people with kindness.",
+  Rat: "Quick, resourceful, and sharp. Rats notice opportunity before anyone else and know how to move on it. Charming in social settings, careful with money, and quietly ambitious — they often build wealth and influence by being the first to act.",
+  Ox: "Steady, reliable, and patient. The Ox doesn't rush — it works the long game. Strong-willed and hard to push around, the Ox finishes what it starts and earns trust through consistency rather than charm.",
+  Tiger: "Bold, confident, and magnetic. Tigers lead with courage and protect the people they love fiercely. They're emotional, expressive, and unafraid of conflict — natural-born leaders who'd rather act than wait for permission.",
+  Rabbit: "Gentle, clever, and diplomatic. Rabbits move through the world with grace and avoid unnecessary drama. Behind the softness is a sharp mind — they pick up on what others miss and value beauty, harmony, and peace.",
+  Dragon: "Charismatic, powerful, and lucky. Dragons tend to stand out without trying. Confident, ambitious, and naturally inspiring, they think big and aren't afraid to chase it — though pride can be the lesson.",
+  Snake: "Intuitive, private, and wise. Snakes see beneath the surface and plan several steps ahead. They're elegant, observant, and slow to trust — but deeply loyal once they do. Often drawn to mystery, strategy, and the unseen.",
+  Horse: "Energetic, independent, and warm. Horses need freedom and movement to thrive. Optimistic, social, and a little restless, they fall in love with adventure and don't do well in cages — even gilded ones.",
+  Goat: "Creative, gentle, and cooperative. Goats are drawn to beauty, art, and emotional connection. Sensitive and imaginative, they thrive in supportive environments and bring softness and depth wherever they go.",
+  Monkey: "Clever, playful, and inventive. Monkeys solve problems no one else can crack and keep the people around them laughing. Curious and adaptable, they get bored easily and need mental stimulation to stay grounded.",
+  Rooster: "Observant, hardworking, and honest. Roosters show up prepared and notice every detail. They value precision, order, and integrity — and they're not afraid to speak up when something's off.",
+  Dog: "Loyal, fair, and protective. Dogs are the friends who stand by you when it counts. Honest, principled, and quick to defend the underdog, they care more about doing right than looking right.",
+  Pig: "Generous, sincere, and easygoing. Pigs enjoy life and treat people with genuine kindness. They're warm, indulgent in the best way, and surprisingly resilient — soft on the outside, steady on the inside.",
 };
 
 export const Route = createFileRoute("/calculator")({
@@ -146,6 +169,20 @@ function CalculatorPage() {
                 {lifePathMeanings[results.lifePath] ??
                   "A unique path with its own rhythm. Look at the full birth chart for the full picture."}
               </p>
+              {(() => {
+                const sec = secondaryLifePath(results.lifePath);
+                if (!sec) return null;
+                return (
+                  <div className="mt-5 pt-5 border-t border-border">
+                    <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground mb-2">
+                      Secondary · {sec.number}
+                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {sec.description}
+                    </p>
+                  </div>
+                );
+              })()}
             </article>
 
             {/* Chinese Zodiac */}
