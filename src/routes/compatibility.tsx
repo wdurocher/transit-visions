@@ -9,6 +9,8 @@ import {
   westernSignForDate,
   yearOf,
   type Place,
+  companies,
+  type Company,
 } from "@/data/places";
 
 export const Route = createFileRoute("/compatibility")({
@@ -75,6 +77,19 @@ function CompatibilityPage() {
       .slice(0, 20);
   }, [all, query]);
 
+  const companyResults = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    return companies
+      .filter(
+        (c) =>
+          c.name.toLowerCase().includes(q) ||
+          c.industry.toLowerCase().includes(q) ||
+          c.headquarters.toLowerCase().includes(q),
+      )
+      .slice(0, 20);
+  }, [query]);
+
   return (
     <section className="py-24">
       <div className="max-w-6xl mx-auto px-6">
@@ -108,12 +123,17 @@ function CompatibilityPage() {
           {query && (
             <div className="mt-4 grid gap-5">
               {results.length === 0 ? (
-                <p className="text-sm text-muted-foreground px-2">No matches.</p>
+                companyResults.length === 0 ? (
+                  <p className="text-sm text-muted-foreground px-2">No matches.</p>
+                ) : null
               ) : (
                 results.map((p) => (
                   <PlaceCard key={`${p.kind}-${p.state ?? ""}-${p.name}`} place={p} />
                 ))
               )}
+              {companyResults.map((c) => (
+                <CompanyCard key={`company-${c.name}`} company={c} />
+              ))}
             </div>
           )}
         </div>
@@ -167,6 +187,24 @@ function CompatibilityPage() {
                   </div>
                 );
               })}
+            </div>
+          </div>
+        )}
+
+        {/* Top 100 U.S. companies */}
+        {!query && (
+          <div className="mt-16">
+            <h2 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-5">
+              Top 100 U.S. Companies
+            </h2>
+            <p className="max-w-[62ch] text-sm text-muted-foreground mb-6">
+              Founding date, industry, headquarters, and the zodiac signs that ruled the day
+              each was founded.
+            </p>
+            <div className="grid md:grid-cols-2 gap-5">
+              {companies.map((c) => (
+                <CompanyCard key={c.name} company={c} />
+              ))}
             </div>
           </div>
         )}
@@ -230,6 +268,47 @@ function PlaceCard({ place }: { place: Place }) {
             </dd>
           </div>
         )}
+      </dl>
+    </article>
+  );
+}
+
+function CompanyCard({ company }: { company: Company }) {
+  const chinese = chineseZodiacForYear(yearOf(company.foundedOn));
+  const western = westernSignForDate(company.foundedOn);
+  return (
+    <article className="bg-background p-6 border-2 border-deep-orange rounded-lg">
+      <div className="flex items-baseline justify-between mb-4 gap-4">
+        <h3 className="text-2xl font-serif italic">{company.name}</h3>
+        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground shrink-0">
+          Company
+        </span>
+      </div>
+      <dl className="space-y-2 text-sm">
+        <div className="flex justify-between items-center gap-4">
+          <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+            Industry
+          </dt>
+          <dd className="text-foreground text-right">{company.industry}</dd>
+        </div>
+        <div className="flex justify-between items-center gap-4">
+          <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+            HQ
+          </dt>
+          <dd className="text-foreground text-right">{company.headquarters}</dd>
+        </div>
+        <div className="flex justify-between items-center gap-4">
+          <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+            Founded
+          </dt>
+          <dd className="text-foreground flex items-center gap-2 flex-wrap justify-end">
+            {company.foundedLabel}
+            <span className="inline-flex items-center gap-1 text-xs bg-primary/10 rounded px-1.5 py-0.5">
+              <span>{chinese.emoji}</span>
+              <span className="text-primary">{western.glyph}</span>
+            </span>
+          </dd>
+        </div>
       </dl>
     </article>
   );
