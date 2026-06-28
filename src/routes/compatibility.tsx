@@ -17,6 +17,7 @@ import {
   presidents,
   celebrities,
   singers,
+  influencers,
   type Person,
 } from "@/data/places";
 
@@ -107,7 +108,7 @@ function CompatibilityPage() {
   const personResults = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
-    const pool = [...presidents, ...celebrities, ...singers];
+    const pool = [...presidents, ...celebrities, ...singers, ...influencers];
     const seen = new Set<string>();
     return pool
       .filter((p) => {
@@ -314,6 +315,20 @@ function CompatibilityPage() {
             <div className="grid md:grid-cols-2 gap-5">
               {singers.map((p) => (
                 <PersonCard key={`singer-${p.name}`} person={p} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Influencers */}
+        {!query && (
+          <div className="mt-16">
+            <h2 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-5">
+              Top Influencers
+            </h2>
+            <div className="grid md:grid-cols-2 gap-5">
+              {influencers.map((p) => (
+                <PersonCard key={`influencer-${p.name}`} person={p} />
               ))}
             </div>
           </div>
