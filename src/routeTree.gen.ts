@@ -14,6 +14,7 @@ import { Route as SignsRouteImport } from './routes/signs'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as HousesRouteImport } from './routes/houses'
 import { Route as CompatibilityRouteImport } from './routes/compatibility'
+import { Route as CalculatorRouteImport } from './routes/calculator'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TransitsIndexRouteImport } from './routes/transits.index'
@@ -44,6 +45,11 @@ const HousesRoute = HousesRouteImport.update({
 const CompatibilityRoute = CompatibilityRouteImport.update({
   id: '/compatibility',
   path: '/compatibility',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalculatorRoute = CalculatorRouteImport.update({
+  id: '/calculator',
+  path: '/calculator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -80,6 +86,7 @@ const CyclesSaturnTaurusRoute = CyclesSaturnTaurusRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/calculator': typeof CalculatorRoute
   '/compatibility': typeof CompatibilityRoute
   '/houses': typeof HousesRoute
   '/library': typeof LibraryRoute
@@ -93,6 +100,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/calculator': typeof CalculatorRoute
   '/compatibility': typeof CompatibilityRoute
   '/houses': typeof HousesRoute
   '/library': typeof LibraryRoute
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/calculator': typeof CalculatorRoute
   '/compatibility': typeof CompatibilityRoute
   '/houses': typeof HousesRoute
   '/library': typeof LibraryRoute
@@ -122,6 +131,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/calculator'
     | '/compatibility'
     | '/houses'
     | '/library'
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/calculator'
     | '/compatibility'
     | '/houses'
     | '/library'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/calculator'
     | '/compatibility'
     | '/houses'
     | '/library'
@@ -162,6 +174,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  CalculatorRoute: typeof CalculatorRoute
   CompatibilityRoute: typeof CompatibilityRoute
   HousesRoute: typeof HousesRoute
   LibraryRoute: typeof LibraryRoute
@@ -208,6 +221,13 @@ declare module '@tanstack/react-router' {
       path: '/compatibility'
       fullPath: '/compatibility'
       preLoaderRoute: typeof CompatibilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calculator': {
+      id: '/calculator'
+      path: '/calculator'
+      fullPath: '/calculator'
+      preLoaderRoute: typeof CalculatorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -258,6 +278,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  CalculatorRoute: CalculatorRoute,
   CompatibilityRoute: CompatibilityRoute,
   HousesRoute: HousesRoute,
   LibraryRoute: LibraryRoute,
