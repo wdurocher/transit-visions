@@ -689,12 +689,16 @@ export function yearOf(iso: string): number {
 }
 
 // Numerology life path number from an ISO date (YYYY-MM-DD).
-// Reduces all digits to a single digit, preserving master numbers 11, 22, 33.
+// Master numbers preserved: 11, 22, 28, 33. There is no "2" life path —
+// if a reduction would land on 2, the previous two-digit total is kept.
+const MASTERS = new Set([11, 22, 28, 33]);
 export function lifePathNumber(iso: string): number {
   const digits = iso.replace(/-/g, "").split("").map(Number);
   let sum = digits.reduce((a, b) => a + b, 0);
-  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
-    sum = String(sum).split("").map(Number).reduce((a, b) => a + b, 0);
+  while (sum > 9 && !MASTERS.has(sum)) {
+    const next = String(sum).split("").map(Number).reduce((a, b) => a + b, 0);
+    if (next === 2) return sum; // no 2 life path — keep the two-digit form
+    sum = next;
   }
   return sum;
 }
@@ -882,4 +886,114 @@ export const assetManagers: Company[] = [
   { name: "Brookfield Asset Management", industry: "Alternatives / Real Assets", headquarters: "New York City, New York", foundedOn: "1899-01-01", foundedLabel: "1899" },
   { name: "Bridgewater Associates", industry: "Hedge Fund", headquarters: "Westport, Connecticut", foundedOn: "1975-01-01", foundedLabel: "1975" },
   { name: "Citadel", industry: "Hedge Fund", headquarters: "Miami, Florida", foundedOn: "1990-11-01", foundedLabel: "November 1, 1990" },
+];
+
+export type Person = {
+  name: string;
+  role: string;
+  birthOn: string; // YYYY-MM-DD
+  birthLabel: string;
+};
+
+// All U.S. Presidents (1–47), in order, with date of birth.
+export const presidents: Person[] = [
+  { name: "George Washington", role: "1st President", birthOn: "1732-02-22", birthLabel: "February 22, 1732" },
+  { name: "John Adams", role: "2nd President", birthOn: "1735-10-30", birthLabel: "October 30, 1735" },
+  { name: "Thomas Jefferson", role: "3rd President", birthOn: "1743-04-13", birthLabel: "April 13, 1743" },
+  { name: "James Madison", role: "4th President", birthOn: "1751-03-16", birthLabel: "March 16, 1751" },
+  { name: "James Monroe", role: "5th President", birthOn: "1758-04-28", birthLabel: "April 28, 1758" },
+  { name: "John Quincy Adams", role: "6th President", birthOn: "1767-07-11", birthLabel: "July 11, 1767" },
+  { name: "Andrew Jackson", role: "7th President", birthOn: "1767-03-15", birthLabel: "March 15, 1767" },
+  { name: "Martin Van Buren", role: "8th President", birthOn: "1782-12-05", birthLabel: "December 5, 1782" },
+  { name: "William Henry Harrison", role: "9th President", birthOn: "1773-02-09", birthLabel: "February 9, 1773" },
+  { name: "John Tyler", role: "10th President", birthOn: "1790-03-29", birthLabel: "March 29, 1790" },
+  { name: "James K. Polk", role: "11th President", birthOn: "1795-11-02", birthLabel: "November 2, 1795" },
+  { name: "Zachary Taylor", role: "12th President", birthOn: "1784-11-24", birthLabel: "November 24, 1784" },
+  { name: "Millard Fillmore", role: "13th President", birthOn: "1800-01-07", birthLabel: "January 7, 1800" },
+  { name: "Franklin Pierce", role: "14th President", birthOn: "1804-11-23", birthLabel: "November 23, 1804" },
+  { name: "James Buchanan", role: "15th President", birthOn: "1791-04-23", birthLabel: "April 23, 1791" },
+  { name: "Abraham Lincoln", role: "16th President", birthOn: "1809-02-12", birthLabel: "February 12, 1809" },
+  { name: "Andrew Johnson", role: "17th President", birthOn: "1808-12-29", birthLabel: "December 29, 1808" },
+  { name: "Ulysses S. Grant", role: "18th President", birthOn: "1822-04-27", birthLabel: "April 27, 1822" },
+  { name: "Rutherford B. Hayes", role: "19th President", birthOn: "1822-10-04", birthLabel: "October 4, 1822" },
+  { name: "James A. Garfield", role: "20th President", birthOn: "1831-11-19", birthLabel: "November 19, 1831" },
+  { name: "Chester A. Arthur", role: "21st President", birthOn: "1829-10-05", birthLabel: "October 5, 1829" },
+  { name: "Grover Cleveland", role: "22nd & 24th President", birthOn: "1837-03-18", birthLabel: "March 18, 1837" },
+  { name: "Benjamin Harrison", role: "23rd President", birthOn: "1833-08-20", birthLabel: "August 20, 1833" },
+  { name: "William McKinley", role: "25th President", birthOn: "1843-01-29", birthLabel: "January 29, 1843" },
+  { name: "Theodore Roosevelt", role: "26th President", birthOn: "1858-10-27", birthLabel: "October 27, 1858" },
+  { name: "William Howard Taft", role: "27th President", birthOn: "1857-09-15", birthLabel: "September 15, 1857" },
+  { name: "Woodrow Wilson", role: "28th President", birthOn: "1856-12-28", birthLabel: "December 28, 1856" },
+  { name: "Warren G. Harding", role: "29th President", birthOn: "1865-11-02", birthLabel: "November 2, 1865" },
+  { name: "Calvin Coolidge", role: "30th President", birthOn: "1872-07-04", birthLabel: "July 4, 1872" },
+  { name: "Herbert Hoover", role: "31st President", birthOn: "1874-08-10", birthLabel: "August 10, 1874" },
+  { name: "Franklin D. Roosevelt", role: "32nd President", birthOn: "1882-01-30", birthLabel: "January 30, 1882" },
+  { name: "Harry S. Truman", role: "33rd President", birthOn: "1884-05-08", birthLabel: "May 8, 1884" },
+  { name: "Dwight D. Eisenhower", role: "34th President", birthOn: "1890-10-14", birthLabel: "October 14, 1890" },
+  { name: "John F. Kennedy", role: "35th President", birthOn: "1917-05-29", birthLabel: "May 29, 1917" },
+  { name: "Lyndon B. Johnson", role: "36th President", birthOn: "1908-08-27", birthLabel: "August 27, 1908" },
+  { name: "Richard Nixon", role: "37th President", birthOn: "1913-01-09", birthLabel: "January 9, 1913" },
+  { name: "Gerald Ford", role: "38th President", birthOn: "1913-07-14", birthLabel: "July 14, 1913" },
+  { name: "Jimmy Carter", role: "39th President", birthOn: "1924-10-01", birthLabel: "October 1, 1924" },
+  { name: "Ronald Reagan", role: "40th President", birthOn: "1911-02-06", birthLabel: "February 6, 1911" },
+  { name: "George H. W. Bush", role: "41st President", birthOn: "1924-06-12", birthLabel: "June 12, 1924" },
+  { name: "Bill Clinton", role: "42nd President", birthOn: "1946-08-19", birthLabel: "August 19, 1946" },
+  { name: "George W. Bush", role: "43rd President", birthOn: "1946-07-06", birthLabel: "July 6, 1946" },
+  { name: "Barack Obama", role: "44th President", birthOn: "1961-08-04", birthLabel: "August 4, 1961" },
+  { name: "Donald Trump", role: "45th & 47th President", birthOn: "1946-06-14", birthLabel: "June 14, 1946" },
+  { name: "Joe Biden", role: "46th President", birthOn: "1942-11-20", birthLabel: "November 20, 1942" },
+];
+
+// Top global celebrities (actors, musicians, athletes, cultural figures).
+export const celebrities: Person[] = [
+  { name: "Taylor Swift", role: "Musician", birthOn: "1989-12-13", birthLabel: "December 13, 1989" },
+  { name: "Beyoncé", role: "Musician", birthOn: "1981-09-04", birthLabel: "September 4, 1981" },
+  { name: "Rihanna", role: "Musician / Mogul", birthOn: "1988-02-20", birthLabel: "February 20, 1988" },
+  { name: "Drake", role: "Musician", birthOn: "1986-10-24", birthLabel: "October 24, 1986" },
+  { name: "Kanye West", role: "Musician", birthOn: "1977-06-08", birthLabel: "June 8, 1977" },
+  { name: "Jay-Z", role: "Musician / Mogul", birthOn: "1969-12-04", birthLabel: "December 4, 1969" },
+  { name: "Eminem", role: "Musician", birthOn: "1972-10-17", birthLabel: "October 17, 1972" },
+  { name: "Bad Bunny", role: "Musician", birthOn: "1994-03-10", birthLabel: "March 10, 1994" },
+  { name: "Billie Eilish", role: "Musician", birthOn: "2001-12-18", birthLabel: "December 18, 2001" },
+  { name: "Ariana Grande", role: "Musician", birthOn: "1993-06-26", birthLabel: "June 26, 1993" },
+  { name: "Lady Gaga", role: "Musician", birthOn: "1986-03-28", birthLabel: "March 28, 1986" },
+  { name: "Bruno Mars", role: "Musician", birthOn: "1985-10-08", birthLabel: "October 8, 1985" },
+  { name: "Adele", role: "Musician", birthOn: "1988-05-05", birthLabel: "May 5, 1988" },
+  { name: "Justin Bieber", role: "Musician", birthOn: "1994-03-01", birthLabel: "March 1, 1994" },
+  { name: "Selena Gomez", role: "Musician / Actor", birthOn: "1992-07-22", birthLabel: "July 22, 1992" },
+  { name: "Dwayne Johnson", role: "Actor", birthOn: "1972-05-02", birthLabel: "May 2, 1972" },
+  { name: "Tom Cruise", role: "Actor", birthOn: "1962-07-03", birthLabel: "July 3, 1962" },
+  { name: "Leonardo DiCaprio", role: "Actor", birthOn: "1974-11-11", birthLabel: "November 11, 1974" },
+  { name: "Brad Pitt", role: "Actor", birthOn: "1963-12-18", birthLabel: "December 18, 1963" },
+  { name: "Angelina Jolie", role: "Actor", birthOn: "1975-06-04", birthLabel: "June 4, 1975" },
+  { name: "Jennifer Lawrence", role: "Actor", birthOn: "1990-08-15", birthLabel: "August 15, 1990" },
+  { name: "Margot Robbie", role: "Actor", birthOn: "1990-07-02", birthLabel: "July 2, 1990" },
+  { name: "Zendaya", role: "Actor", birthOn: "1996-09-01", birthLabel: "September 1, 1996" },
+  { name: "Timothée Chalamet", role: "Actor", birthOn: "1995-12-27", birthLabel: "December 27, 1995" },
+  { name: "Robert Downey Jr.", role: "Actor", birthOn: "1965-04-04", birthLabel: "April 4, 1965" },
+  { name: "Chris Hemsworth", role: "Actor", birthOn: "1983-08-11", birthLabel: "August 11, 1983" },
+  { name: "Will Smith", role: "Actor", birthOn: "1968-09-25", birthLabel: "September 25, 1968" },
+  { name: "Denzel Washington", role: "Actor", birthOn: "1954-12-28", birthLabel: "December 28, 1954" },
+  { name: "Meryl Streep", role: "Actor", birthOn: "1949-06-22", birthLabel: "June 22, 1949" },
+  { name: "Oprah Winfrey", role: "Media", birthOn: "1954-01-29", birthLabel: "January 29, 1954" },
+  { name: "Elon Musk", role: "Entrepreneur", birthOn: "1971-06-28", birthLabel: "June 28, 1971" },
+  { name: "Jeff Bezos", role: "Entrepreneur", birthOn: "1964-01-12", birthLabel: "January 12, 1964" },
+  { name: "Mark Zuckerberg", role: "Entrepreneur", birthOn: "1984-05-14", birthLabel: "May 14, 1984" },
+  { name: "Bill Gates", role: "Entrepreneur", birthOn: "1955-10-28", birthLabel: "October 28, 1955" },
+  { name: "Steve Jobs", role: "Entrepreneur", birthOn: "1955-02-24", birthLabel: "February 24, 1955" },
+  { name: "Warren Buffett", role: "Investor", birthOn: "1930-08-30", birthLabel: "August 30, 1930" },
+  { name: "LeBron James", role: "Athlete", birthOn: "1984-12-30", birthLabel: "December 30, 1984" },
+  { name: "Michael Jordan", role: "Athlete", birthOn: "1963-02-17", birthLabel: "February 17, 1963" },
+  { name: "Kobe Bryant", role: "Athlete", birthOn: "1978-08-23", birthLabel: "August 23, 1978" },
+  { name: "Stephen Curry", role: "Athlete", birthOn: "1988-03-14", birthLabel: "March 14, 1988" },
+  { name: "Serena Williams", role: "Athlete", birthOn: "1981-09-26", birthLabel: "September 26, 1981" },
+  { name: "Tiger Woods", role: "Athlete", birthOn: "1975-12-30", birthLabel: "December 30, 1975" },
+  { name: "Tom Brady", role: "Athlete", birthOn: "1977-08-03", birthLabel: "August 3, 1977" },
+  { name: "Cristiano Ronaldo", role: "Athlete", birthOn: "1985-02-05", birthLabel: "February 5, 1985" },
+  { name: "Lionel Messi", role: "Athlete", birthOn: "1987-06-24", birthLabel: "June 24, 1987" },
+  { name: "Kim Kardashian", role: "Media / Mogul", birthOn: "1980-10-21", birthLabel: "October 21, 1980" },
+  { name: "Kylie Jenner", role: "Media / Mogul", birthOn: "1997-08-10", birthLabel: "August 10, 1997" },
+  { name: "Michael Jackson", role: "Musician", birthOn: "1958-08-29", birthLabel: "August 29, 1958" },
+  { name: "Madonna", role: "Musician", birthOn: "1958-08-16", birthLabel: "August 16, 1958" },
+  { name: "Prince", role: "Musician", birthOn: "1958-06-07", birthLabel: "June 7, 1958" },
 ];

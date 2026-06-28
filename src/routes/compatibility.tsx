@@ -14,6 +14,9 @@ import {
   banks,
   assetManagers,
   lifePathNumber,
+  presidents,
+  celebrities,
+  type Person,
 } from "@/data/places";
 
 export const Route = createFileRoute("/compatibility")({
@@ -100,6 +103,18 @@ function CompatibilityPage() {
       .slice(0, 30);
   }, [query]);
 
+  const personResults = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    return [...presidents, ...celebrities]
+      .filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.role.toLowerCase().includes(q),
+      )
+      .slice(0, 30);
+  }, [query]);
+
   return (
     <section className="py-24">
       <div className="max-w-6xl mx-auto px-6">
@@ -132,18 +147,21 @@ function CompatibilityPage() {
 
           {query && (
             <div className="mt-4 grid gap-5">
-              {results.length === 0 ? (
-                companyResults.length === 0 ? (
+              {results.length === 0 && companyResults.length === 0 && personResults.length === 0 ? (
                   <p className="text-sm text-muted-foreground px-2">No matches.</p>
-                ) : null
               ) : (
-                results.map((p) => (
-                  <PlaceCard key={`${p.kind}-${p.state ?? ""}-${p.name}`} place={p} />
-                ))
+                <>
+                  {results.map((p) => (
+                    <PlaceCard key={`${p.kind}-${p.state ?? ""}-${p.name}`} place={p} />
+                  ))}
+                  {companyResults.map((c) => (
+                    <CompanyCard key={`company-${c.name}`} company={c} />
+                  ))}
+                  {personResults.map((p) => (
+                    <PersonCard key={`person-${p.name}`} person={p} />
+                  ))}
+                </>
               )}
-              {companyResults.map((c) => (
-                <CompanyCard key={`company-${c.name}`} company={c} />
-              ))}
             </div>
           )}
         </div>
@@ -250,6 +268,34 @@ function CompatibilityPage() {
             </div>
           </div>
         )}
+
+        {/* U.S. Presidents */}
+        {!query && (
+          <div className="mt-16">
+            <h2 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-5">
+              U.S. Presidents
+            </h2>
+            <div className="grid md:grid-cols-2 gap-5">
+              {presidents.map((p) => (
+                <PersonCard key={`pres-${p.name}`} person={p} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Top Celebrities */}
+        {!query && (
+          <div className="mt-16">
+            <h2 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-5">
+              Top Celebrities
+            </h2>
+            <div className="grid md:grid-cols-2 gap-5">
+              {celebrities.map((p) => (
+                <PersonCard key={`celeb-${p.name}`} person={p} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -346,6 +392,46 @@ function CompanyCard({ company }: { company: Company }) {
           </dt>
           <dd className="text-foreground flex items-center gap-2 flex-wrap justify-end">
             {company.foundedLabel}
+            <span className="inline-flex items-center gap-1 text-xs bg-primary/10 rounded px-1.5 py-0.5">
+              <span>{chinese.emoji}</span>
+              <span className="text-primary">{western.glyph}</span>
+            </span>
+          </dd>
+        </div>
+        <div className="flex justify-between items-center gap-4">
+          <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+            Life Path
+          </dt>
+          <dd className="text-foreground">
+            <span className="inline-flex items-center justify-center min-w-7 px-2 py-0.5 text-xs font-mono bg-primary/10 text-primary rounded">
+              {lifePath}
+            </span>
+          </dd>
+        </div>
+      </dl>
+    </article>
+  );
+}
+
+function PersonCard({ person }: { person: Person }) {
+  const chinese = chineseZodiacForYear(yearOf(person.birthOn));
+  const western = westernSignForDate(person.birthOn);
+  const lifePath = lifePathNumber(person.birthOn);
+  return (
+    <article className="bg-background p-6 border-2 border-deep-orange rounded-lg">
+      <div className="flex items-baseline justify-between mb-4 gap-4">
+        <h3 className="text-2xl font-serif italic">{person.name}</h3>
+        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground shrink-0">
+          {person.role}
+        </span>
+      </div>
+      <dl className="space-y-2 text-sm">
+        <div className="flex justify-between items-center gap-4">
+          <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+            Born
+          </dt>
+          <dd className="text-foreground flex items-center gap-2 flex-wrap justify-end">
+            {person.birthLabel}
             <span className="inline-flex items-center gap-1 text-xs bg-primary/10 rounded px-1.5 py-0.5">
               <span>{chinese.emoji}</span>
               <span className="text-primary">{western.glyph}</span>
