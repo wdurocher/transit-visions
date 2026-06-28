@@ -334,6 +334,20 @@ function CompatibilityPage() {
             </div>
           </div>
         )}
+
+        {/* Royalty, Ruling Families & Historical Power */}
+        {!query && (
+          <div className="mt-16">
+            <h2 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-5">
+              Royalty, Ruling Families & Historical Power
+            </h2>
+            <div className="grid md:grid-cols-2 gap-5">
+              {historicalFigures.map((p) => (
+                <PersonCard key={`hist-${p.name}`} person={p} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
