@@ -16,6 +16,7 @@ import {
   lifePathNumber,
   presidents,
   celebrities,
+  singers,
   type Person,
 } from "@/data/places";
 
@@ -106,7 +107,14 @@ function CompatibilityPage() {
   const personResults = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
-    return [...presidents, ...celebrities]
+    const pool = [...presidents, ...celebrities, ...singers];
+    const seen = new Set<string>();
+    return pool
+      .filter((p) => {
+        if (seen.has(p.name)) return false;
+        seen.add(p.name);
+        return true;
+      })
       .filter(
         (p) =>
           p.name.toLowerCase().includes(q) ||
@@ -292,6 +300,20 @@ function CompatibilityPage() {
             <div className="grid md:grid-cols-2 gap-5">
               {celebrities.map((p) => (
                 <PersonCard key={`celeb-${p.name}`} person={p} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Top Singing Artists */}
+        {!query && (
+          <div className="mt-16">
+            <h2 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-5">
+              Top 50 Singing Artists
+            </h2>
+            <div className="grid md:grid-cols-2 gap-5">
+              {singers.map((p) => (
+                <PersonCard key={`singer-${p.name}`} person={p} />
               ))}
             </div>
           </div>
