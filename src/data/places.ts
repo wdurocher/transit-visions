@@ -689,12 +689,16 @@ export function yearOf(iso: string): number {
 }
 
 // Numerology life path number from an ISO date (YYYY-MM-DD).
-// Reduces all digits to a single digit, preserving master numbers 11, 22, 33.
+// Master numbers preserved: 11, 22, 28, 33. There is no "2" life path —
+// if a reduction would land on 2, the previous two-digit total is kept.
+const MASTERS = new Set([11, 22, 28, 33]);
 export function lifePathNumber(iso: string): number {
   const digits = iso.replace(/-/g, "").split("").map(Number);
   let sum = digits.reduce((a, b) => a + b, 0);
-  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
-    sum = String(sum).split("").map(Number).reduce((a, b) => a + b, 0);
+  while (sum > 9 && !MASTERS.has(sum)) {
+    const next = String(sum).split("").map(Number).reduce((a, b) => a + b, 0);
+    if (next === 2) return sum; // no 2 life path — keep the two-digit form
+    sum = next;
   }
   return sum;
 }
