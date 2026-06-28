@@ -213,25 +213,28 @@ function CalculatorPage() {
         {/* Legend */}
         {results && results.sign && (
           <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {(Object.keys(elementMeaning) as Array<keyof typeof elementMeaning>).map(
-              (el) => (
-                <div
-                  key={el}
-                  className={`bg-background p-5 border border-border rounded-lg ${
-                    results.sign.element === el ? "ring-1 ring-primary/40" : ""
-                  }`}
-                >
-                  <p
-                    className={`text-[10px] font-mono uppercase tracking-[0.25em] mb-1 ${elementClass[el]}`}
+            {(() => {
+              const sign = results.sign;
+              return (Object.keys(elementMeaning) as Array<keyof typeof elementMeaning>).map(
+                (el) => (
+                  <div
+                    key={el}
+                    className={`bg-background p-5 border border-border rounded-lg ${
+                      sign.element === el ? "ring-1 ring-primary/40" : ""
+                    }`}
                   >
-                    {el} {results.sign.element === el ? "• Your element" : ""}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {elementMeaning[el]}
-                  </p>
-                </div>
-              ),
-            )}
+                    <p
+                      className={`text-[10px] font-mono uppercase tracking-[0.25em] mb-1 ${elementClass[el]}`}
+                    >
+                      {el} {sign.element === el ? "• Your element" : ""}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {elementMeaning[el]}
+                    </p>
+                  </div>
+                ),
+              );
+            })()}
           </div>
         )}
       </div>
