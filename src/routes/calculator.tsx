@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Hash, Sparkles, Star, Pencil } from "lucide-react";
+import { Hash, Sparkles, Star, Pencil, ChevronUp, ChevronDown } from "lucide-react";
 import {
   chineseZodiacForDate,
   westernSignForDate,
