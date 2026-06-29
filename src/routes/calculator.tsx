@@ -319,3 +319,142 @@ function CalculatorPage() {
     </section>
   );
 }
+
+// ---------- Scrolling wheel date picker ----------
+const MONTHS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+const ITEM_H = 36; // px per item
+const VISIBLE = 5; // odd number; middle row is selected
+
+function daysInMonth(year: number, month1: number) {
+  return new Date(year, month1, 0).getDate();
+}
+
+function WheelDatePicker({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (iso: string) => void;
+}) {
+  const [y, m, d] = value.split("-").map(Number);
+  const thisYear = new Date().getFullYear();
+  const years = useMemo(
+    () => Array.from({ length: thisYear - 1900 + 1 }, (_, i) => 1900 + i),
+    [thisYear],
+  );
+  const months = useMemo(() => MONTHS.map((label, i) => ({ label, value: i + 1 })), []);
+  const days = useMemo(
+    () => Array.from({ length: daysInMonth(y, m) }, (_, i) => i + 1),
+    [y, m],
+  );
+
+  const update = (ny: number, nm: number, nd: number) => {
+    const maxD = daysInMonth(ny, nm);
+    const safeD = Math.min(nd, maxD);
+    onChange(
+      `${ny}-${String(nm).padStart(2, "0")}-${String(safeD).padStart(2, "0")}`,
+    );
+  };
+
+  return (
+    <div className="relative max-w-md bg-background border border-border rounded-lg overflow-hidden">
+      {/* selection highlight */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 border-y border-primary/40 bg-primary/5"
+        style={{ height: ITEM_H }}
+      />
+      <div className="grid grid-cols-3">
+        <WheelColumn
+          items={months.map((mm) => ({ key: mm.value, label: mm.label }))}
+          selected={m}
+          onSelect={(v) => update(y, v, d)}
+        />
+        <WheelColumn
+          items={days.map((dd) => ({ key: dd, label: String(dd) }))}
+          selected={d}
+          onSelect={(v) => update(y, m, v)}
+        />
+        <WheelColumn
+          items={years.map((yy) => ({ key: yy, label: String(yy) }))}
+          selected={y}
+          onSelect={(v) => update(v, m, d)}
+        />
+      </div>
+    </div>
+  );
+}
+
+function WheelColumn({
+  items,
+  selected,
+  onSelect,
+}: {
+  items: Array<{ key: number; label: string }>;
+  selected: number;
+  onSelect: (v: number) => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const settleRef = useRef<number | null>(null);
+  const programmaticRef = useRef(false);
+
+  // Scroll selected into view when prop changes (and on mount).
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const idx = items.findIndex((it) => it.key === selected);
+    if (idx < 0) return;
+    programmaticRef.current = true;
+    el.scrollTo({ top: idx * ITEM_H, behavior: "auto" });
+    // release flag next frame
+    requestAnimationFrame(() => {
+      programmaticRef.current = false;
+    });
+  }, [selected, items]);
+
+  const onScroll = () => {
+    if (programmaticRef.current) return;
+    const el = ref.current;
+    if (!el) return;
+    if (settleRef.current) window.clearTimeout(settleRef.current);
+    settleRef.current = window.setTimeout(() => {
+      const idx = Math.round(el.scrollTop / ITEM_H);
+      const clamped = Math.max(0, Math.min(items.length - 1, idx));
+      const item = items[clamped];
+      if (item && item.key !== selected) onSelect(item.key);
+      // snap precisely
+      el.scrollTo({ top: clamped * ITEM_H, behavior: "smooth" });
+    }, 90);
+  };
+
+  const pad = ((VISIBLE - 1) / 2) * ITEM_H;
+
+  return (
+    <div
+      ref={ref}
+      onScroll={onScroll}
+      className="overflow-y-scroll snap-y snap-mandatory no-scrollbar"
+      style={{ height: VISIBLE * ITEM_H, scrollbarWidth: "none" }}
+    >
+      <div style={{ paddingTop: pad, paddingBottom: pad }}>
+        {items.map((it) => (
+          <button
+            key={it.key}
+            type="button"
+            onClick={() => onSelect(it.key)}
+            className={`block w-full snap-center text-center tabular-nums transition-colors ${
+              it.key === selected
+                ? "text-foreground font-medium"
+                : "text-muted-foreground/60"
+            }`}
+            style={{ height: ITEM_H, lineHeight: `${ITEM_H}px` }}
+          >
+            {it.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
