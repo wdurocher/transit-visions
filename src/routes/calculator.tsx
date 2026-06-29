@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Hash, Sparkles, Star } from "lucide-react";
+import { Hash, Sparkles, Star, Pencil } from "lucide-react";
 import {
   chineseZodiacForYear,
   westernSignForDate,
@@ -93,6 +93,7 @@ function CalculatorPage() {
   // Initialize on the client only to avoid SSR/CSR hydration mismatch.
   const [date, setDate] = useState<string | null>(null);
   const [today, setToday] = useState<string | null>(null);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     const t = new Date();
@@ -137,6 +138,48 @@ function CalculatorPage() {
   return (
     <section className="py-24">
       <div className="max-w-6xl mx-auto px-6">
+        {/* Date selector — collapsed by default, opens via edit button */}
+        {date && (
+          <div className="mb-10 bg-background p-5 border border-border rounded-lg">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground mb-1">
+                  Selected date
+                </p>
+                <p className="text-2xl font-serif italic text-foreground">
+                  {(() => {
+                    const [yy, mm, dd] = date.split("-").map(Number);
+                    return new Date(yy, mm - 1, dd).toLocaleDateString(undefined, {
+                      weekday: "long",
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    });
+                  })()}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEditing((v) => !v)}
+                className="shrink-0 inline-flex items-center gap-2 px-3 py-2 rounded-md border border-border text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
+                aria-expanded={editing}
+                aria-label={editing ? "Close date editor" : "Edit date"}
+              >
+                <Pencil className="size-3.5" />
+                {editing ? "Done" : "Edit"}
+              </button>
+            </div>
+            {editing && (
+              <div className="mt-5 pt-5 border-t border-border">
+                <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-3">
+                  Scroll each column
+                </p>
+                <WheelDatePicker value={date} onChange={setDate} />
+              </div>
+            )}
+          </div>
+        )}
+
         <header className="mb-12 border-b border-border pb-10">
           <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-6">
             Birth Date
@@ -179,30 +222,6 @@ function CalculatorPage() {
             )}
           </div>
         )}
-
-        <div className="mb-12">
-          <label className="block text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-3">
-            Select a date — scroll each column
-          </label>
-          {date ? (
-            <>
-              <p className="text-2xl font-serif italic text-foreground mb-3">
-                {(() => {
-                  const [yy, mm, dd] = date.split("-").map(Number);
-                  return new Date(yy, mm - 1, dd).toLocaleDateString(undefined, {
-                    weekday: "long",
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                  });
-                })()}
-              </p>
-              <WheelDatePicker value={date} onChange={setDate} />
-            </>
-          ) : (
-            <div className="h-[200px] border border-border rounded-lg" />
-          )}
-        </div>
 
         {results && (
           <div className="grid md:grid-cols-3 gap-5">
