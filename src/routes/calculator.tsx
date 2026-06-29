@@ -5,6 +5,7 @@ import {
   chineseZodiacForYear,
   westernSignForDate,
   lifePathNumber,
+  dayNumber,
 } from "@/data/places";
 import { signs, elementMeaning, modalityMeaning } from "@/data/signs";
 
@@ -34,24 +35,15 @@ const lifePathMeanings: Record<string, string> = {
   "20/11": "A hidden 11. On the surface a 2 (peacemaker, partner), but 20 carries the charge of an 11 underneath — intuitive, charismatic, and built to eventually guide others.",
 };
 
-// Secondary number — the "underneath" or "reduced" energy that still influences you.
-const secondaryLifePath = (lp: string): { number: string; description: string } | null => {
-  if (lp.includes("/")) {
-    const [, second] = lp.split("/");
-    return {
-      number: second,
-      description: `Underneath the ${lp.split("/")[0]} sits a ${second} — ${lifePathMeanings[second] ?? ""}`,
-    };
-  }
-  const masterMap: Record<string, string> = { "11": "2", "22": "4", "28": "1", "33": "6" };
-  if (masterMap[lp]) {
-    const reduced = masterMap[lp];
-    return {
-      number: reduced,
-      description: `As a master number, ${lp} also carries the everyday energy of a ${reduced}. ${lifePathMeanings[reduced] ?? ""}`,
-    };
-  }
-  return null;
+// Secondary number — the day of the date. It adds a second layer to the
+// life-path reading and uses the same alphabet-driven meanings.
+const secondaryForDayNumber = (dayNum: string): { number: string; description: string } | null => {
+  const meaning = lifePathMeanings[dayNum];
+  if (!meaning) return null;
+  return {
+    number: dayNum,
+    description: `The day of the date adds a second layer to the reading. ${meaning}`,
+  };
 };
 
 const chineseMeanings: Record<string, string> = {
@@ -142,6 +134,7 @@ function CalculatorPage() {
     const chinese = chineseZodiacForYear(year);
     const western = westernSignForDate(date);
     const lifePath = lifePathNumber(date);
+    const dayNum = dayNumber(date);
     const sign = signs.find((s) => s.name === western.name);
     const chineseMonth = chineseMonthFor(date);
 
@@ -149,6 +142,7 @@ function CalculatorPage() {
       chinese,
       western,
       lifePath,
+      dayNum,
       sign,
       year,
       chineseMonth,
@@ -253,12 +247,12 @@ function CalculatorPage() {
               </article>
 
               {(() => {
-                const sec = secondaryLifePath(results.lifePath);
+                const sec = secondaryForDayNumber(results.dayNum);
                 if (!sec) return null;
                 return (
                   <article className="bg-background p-6 border border-border rounded-lg min-w-0">
                     <div className="flex items-center gap-3 mb-4">
-                      <span className="text-primary font-serif italic text-lg">2×</span>
+                      <span className="text-primary font-serif italic text-lg">D</span>
                       <h2 className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">
                         Secondary Number
                       </h2>
@@ -476,7 +470,7 @@ function WheelColumn({
       if (item && item.key !== selected) onSelect(item.key);
       // snap precisely and smoothly
       el.scrollTo({ top: clamped * ITEM_H, behavior: "smooth" });
-    }, 60);
+    }, 180);
   };
 
   const pad = ((VISIBLE - 1) / 2) * ITEM_H;
@@ -485,7 +479,7 @@ function WheelColumn({
     <div
       ref={ref}
       onScroll={onScroll}
-      className="overflow-y-scroll snap-y snap-mandatory no-scrollbar"
+      className="overflow-y-scroll snap-y snap-proximity no-scrollbar"
       style={{ height: VISIBLE * ITEM_H, scrollbarWidth: "none" }}
     >
       <div style={{ paddingTop: pad, paddingBottom: pad }}>
