@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { Calendar, Hash, Sparkles, Star } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Hash, Sparkles, Star } from "lucide-react";
 import {
   chineseZodiacForYear,
   westernSignForDate,
@@ -90,13 +90,30 @@ export const Route = createFileRoute("/calculator")({
 });
 
 function CalculatorPage() {
-  const [date, setDate] = useState<string>(() => {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const dd = String(today.getDate()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}`;
-  });
+  // Initialize on the client only to avoid SSR/CSR hydration mismatch.
+  const [date, setDate] = useState<string | null>(null);
+  const [today, setToday] = useState<string | null>(null);
+
+  useEffect(() => {
+    const t = new Date();
+    const iso = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
+    setDate(iso);
+    setToday(iso);
+  }, []);
+
+  const todayInfo = useMemo(() => {
+    if (!today) return null;
+    const lp = lifePathNumber(today);
+    const sec = secondaryLifePath(lp);
+    const [y, m, d] = today.split("-").map(Number);
+    const label = new Date(y, m - 1, d).toLocaleDateString(undefined, {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+    return { lp, sec, label };
+  }, [today]);
 
   const results = useMemo(() => {
     if (!date) return null;
@@ -134,19 +151,44 @@ function CalculatorPage() {
           </p>
         </header>
 
-        <div className="mb-12 max-w-md">
-          <label className="block text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-3">
-            Select a date
-          </label>
-          <div className="relative">
-            <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="w-full bg-background border border-border rounded-lg pl-11 pr-4 py-3 text-base outline-none focus:border-primary transition-colors"
-            />
+        {todayInfo && (
+          <div className="mb-10 bg-background p-6 border border-border rounded-lg">
+            <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-primary mb-2">
+              Today · {todayInfo.label}
+            </p>
+            <div className="flex items-baseline gap-4 mb-3">
+              <span className="text-5xl font-serif italic">{todayInfo.lp}</span>
+              {todayInfo.sec && (
+                <span className="text-sm text-muted-foreground">
+                  secondary · {todayInfo.sec.number}
+                </span>
+              )}
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {lifePathMeanings[todayInfo.lp] ?? ""}
+            </p>
+            {todayInfo.sec && (
+              <div className="mt-4 pt-4 border-t border-border">
+                <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground mb-2">
+                  Secondary energy · {todayInfo.sec.number}
+                </p>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {todayInfo.sec.description}
+                </p>
+              </div>
+            )}
           </div>
+        )}
+
+        <div className="mb-12">
+          <label className="block text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-3">
+            Select a date — scroll each column
+          </label>
+          {date ? (
+            <WheelDatePicker value={date} onChange={setDate} />
+          ) : (
+            <div className="h-[200px] border border-border rounded-lg" />
+          )}
         </div>
 
         {results && (
