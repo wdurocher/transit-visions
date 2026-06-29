@@ -470,7 +470,7 @@ function WheelColumn({
       if (item && item.key !== selected) onSelect(item.key);
       // snap precisely and smoothly
       el.scrollTo({ top: clamped * ITEM_H, behavior: "smooth" });
-    }, 60);
+    }, 180);
   };
 
   const pad = ((VISIBLE - 1) / 2) * ITEM_H;
