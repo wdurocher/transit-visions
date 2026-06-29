@@ -185,7 +185,20 @@ function CalculatorPage() {
             Select a date — scroll each column
           </label>
           {date ? (
-            <WheelDatePicker value={date} onChange={setDate} />
+            <>
+              <p className="text-2xl font-serif italic text-foreground mb-3">
+                {(() => {
+                  const [yy, mm, dd] = date.split("-").map(Number);
+                  return new Date(yy, mm - 1, dd).toLocaleDateString(undefined, {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  });
+                })()}
+              </p>
+              <WheelDatePicker value={date} onChange={setDate} />
+            </>
           ) : (
             <div className="h-[200px] border border-border rounded-lg" />
           )}
