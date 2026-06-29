@@ -5,6 +5,7 @@ import {
   chineseZodiacForYear,
   westernSignForDate,
   lifePathNumber,
+  dayNumber,
 } from "@/data/places";
 import { signs, elementMeaning, modalityMeaning } from "@/data/signs";
 
@@ -142,6 +143,7 @@ function CalculatorPage() {
     const chinese = chineseZodiacForYear(year);
     const western = westernSignForDate(date);
     const lifePath = lifePathNumber(date);
+    const dayNum = dayNumber(date);
     const sign = signs.find((s) => s.name === western.name);
     const chineseMonth = chineseMonthFor(date);
 
@@ -149,6 +151,7 @@ function CalculatorPage() {
       chinese,
       western,
       lifePath,
+      dayNum,
       sign,
       year,
       chineseMonth,
