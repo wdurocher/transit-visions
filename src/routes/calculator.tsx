@@ -119,6 +119,8 @@ export const Route = createFileRoute("/calculator")({
 function CalculatorPage() {
   // Initialize on the client only to avoid SSR/CSR hydration mismatch.
   const [date, setDate] = useState<string | null>(null);
+  // Draft date is used while the wheel editor is open; it only commits when Done is pressed.
+  const [draftDate, setDraftDate] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
 
   useEffect(() => {
@@ -126,6 +128,11 @@ function CalculatorPage() {
     const iso = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
     setDate(iso);
   }, []);
+
+  // Reset draft to the current committed date whenever the editor opens.
+  useEffect(() => {
+    if (editing && date) setDraftDate(date);
+  }, [editing, date]);
 
   const results = useMemo(() => {
     if (!date) return null;
@@ -195,21 +202,29 @@ function CalculatorPage() {
               </div>
               <button
                 type="button"
-                onClick={() => setEditing((v) => !v)}
+                onClick={() => {
+                  if (editing) {
+                    // Commit the draft date and close the editor.
+                    if (draftDate) setDate(draftDate);
+                    setEditing(false);
+                  } else {
+                    setEditing(true);
+                  }
+                }}
                 className="shrink-0 inline-flex items-center gap-2 px-3 py-2 rounded-md border border-border text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
                 aria-expanded={editing}
-                aria-label={editing ? "Close date editor" : "Edit date"}
+                aria-label={editing ? "Done editing date" : "Edit date"}
               >
                 <Pencil className="size-3.5" />
                 {editing ? "Done" : "Edit"}
               </button>
             </div>
-            {editing && (
+            {editing && draftDate && (
               <div className="mt-5 pt-5 border-t border-border">
                 <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-3">
                   Scroll each column
                 </p>
-                <WheelDatePicker value={date} onChange={setDate} />
+                <WheelDatePicker value={draftDate} onChange={setDraftDate} />
               </div>
             )}
           </div>
