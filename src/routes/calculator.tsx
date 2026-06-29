@@ -35,24 +35,15 @@ const lifePathMeanings: Record<string, string> = {
   "20/11": "A hidden 11. On the surface a 2 (peacemaker, partner), but 20 carries the charge of an 11 underneath — intuitive, charismatic, and built to eventually guide others.",
 };
 
-// Secondary number — the "underneath" or "reduced" energy that still influences you.
-const secondaryLifePath = (lp: string): { number: string; description: string } | null => {
-  if (lp.includes("/")) {
-    const [, second] = lp.split("/");
-    return {
-      number: second,
-      description: `Underneath the ${lp.split("/")[0]} sits a ${second} — ${lifePathMeanings[second] ?? ""}`,
-    };
-  }
-  const masterMap: Record<string, string> = { "11": "2", "22": "4", "28": "1", "33": "6" };
-  if (masterMap[lp]) {
-    const reduced = masterMap[lp];
-    return {
-      number: reduced,
-      description: `As a master number, ${lp} also carries the everyday energy of a ${reduced}. ${lifePathMeanings[reduced] ?? ""}`,
-    };
-  }
-  return null;
+// Secondary number — the day of the date. It adds a second layer to the
+// life-path reading and uses the same alphabet-driven meanings.
+const secondaryForDayNumber = (dayNum: string): { number: string; description: string } | null => {
+  const meaning = lifePathMeanings[dayNum];
+  if (!meaning) return null;
+  return {
+    number: dayNum,
+    description: `The day of the date adds a second layer to the reading. ${meaning}`,
+  };
 };
 
 const chineseMeanings: Record<string, string> = {
