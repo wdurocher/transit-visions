@@ -232,38 +232,49 @@ function CalculatorPage() {
 
         {results && (
           <div className="grid md:grid-cols-3 gap-5">
-            {/* Life Path */}
-            <article className="bg-background p-6 border border-border rounded-lg min-w-0">
-              <div className="flex items-center gap-3 mb-4">
-                <Hash className="size-5 text-primary" />
-                <h2 className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">
-                  Life Path
-                </h2>
-              </div>
-              <div className="mb-4">
-                <span className="text-5xl font-serif italic text-foreground">
-                  {results.lifePath}
-                </span>
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {lifePathMeanings[results.lifePath] ??
-                  "A unique path with its own rhythm. Look at the full birth chart for the full picture."}
-              </p>
+            {/* Life Path + Secondary stacked */}
+            <div className="space-y-5">
+              <article className="bg-background p-6 border border-border rounded-lg min-w-0">
+                <div className="flex items-center gap-3 mb-4">
+                  <Hash className="size-5 text-primary" />
+                  <h2 className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">
+                    Life Path
+                  </h2>
+                </div>
+                <div className="mb-4">
+                  <span className="text-5xl font-serif italic text-foreground">
+                    {results.lifePath}
+                  </span>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {lifePathMeanings[results.lifePath] ??
+                    "A unique path with its own rhythm. Look at the full birth chart for the full picture."}
+                </p>
+              </article>
+
               {(() => {
                 const sec = secondaryLifePath(results.lifePath);
                 if (!sec) return null;
                 return (
-                  <div className="mt-5 pt-5 border-t border-border">
-                    <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground mb-2">
-                      Secondary · {sec.number}
-                    </p>
+                  <article className="bg-background p-6 border border-border rounded-lg min-w-0">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="text-primary font-serif italic text-lg">2×</span>
+                      <h2 className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">
+                        Secondary Number
+                      </h2>
+                    </div>
+                    <div className="mb-4">
+                      <span className="text-4xl font-serif italic text-foreground">
+                        {sec.number}
+                      </span>
+                    </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       {sec.description}
                     </p>
-                  </div>
+                  </article>
                 );
               })()}
-            </article>
+            </div>
 
             {/* Chinese Zodiac */}
             <article className="bg-background p-6 border border-border rounded-lg min-w-0">
