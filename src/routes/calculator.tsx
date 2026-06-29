@@ -384,10 +384,9 @@ function WheelDatePicker({
   onChange: (iso: string) => void;
 }) {
   const [y, m, d] = value.split("-").map(Number);
-  const thisYear = new Date().getFullYear();
   const years = useMemo(
-    () => Array.from({ length: thisYear - 1800 + 1 }, (_, i) => 1800 + i),
-    [thisYear],
+    () => Array.from({ length: 2100 - 1800 + 1 }, (_, i) => 1800 + i),
+    [],
   );
   const months = useMemo(() => MONTHS.map((label, i) => ({ label, value: i + 1 })), []);
   const days = useMemo(
