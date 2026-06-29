@@ -69,6 +69,33 @@ const chineseMeanings: Record<string, string> = {
   Pig: "Generous, sincere, and easygoing. Pigs enjoy life and treat people with genuine kindness. They're warm, indulgent in the best way, and surprisingly resilient — soft on the outside, steady on the inside.",
 };
 
+// Chinese zodiac solar months (approximate solar-term boundaries).
+const CHINESE_MONTHS: Array<{ animal: string; emoji: string; startM: number; startD: number; endM: number; endD: number }> = [
+  { animal: "Tiger",   emoji: "🐯", startM: 2,  startD: 4,  endM: 3,  endD: 5 },
+  { animal: "Rabbit",  emoji: "🐰", startM: 3,  startD: 6,  endM: 4,  endD: 4 },
+  { animal: "Dragon",  emoji: "🐲", startM: 4,  startD: 5,  endM: 5,  endD: 5 },
+  { animal: "Snake",   emoji: "🐍", startM: 5,  startD: 6,  endM: 6,  endD: 5 },
+  { animal: "Horse",   emoji: "🐴", startM: 6,  startD: 6,  endM: 7,  endD: 6 },
+  { animal: "Goat",    emoji: "🐐", startM: 7,  startD: 7,  endM: 8,  endD: 7 },
+  { animal: "Monkey",  emoji: "🐵", startM: 8,  startD: 8,  endM: 9,  endD: 7 },
+  { animal: "Rooster", emoji: "🐓", startM: 9,  startD: 8,  endM: 10, endD: 7 },
+  { animal: "Dog",     emoji: "🐶", startM: 10, startD: 8,  endM: 11, endD: 6 },
+  { animal: "Pig",     emoji: "🐷", startM: 11, startD: 7,  endM: 12, endD: 6 },
+  { animal: "Rat",     emoji: "🐭", startM: 12, startD: 7,  endM: 1,  endD: 5 },
+  { animal: "Ox",      emoji: "🐂", startM: 1,  startD: 6,  endM: 2,  endD: 3 },
+];
+
+function chineseMonthFor(isoDate: string) {
+  const [, m, d] = isoDate.split("-").map(Number);
+  const key = m * 100 + d;
+  for (const cm of CHINESE_MONTHS) {
+    const s = cm.startM * 100 + cm.startD;
+    const e = cm.endM * 100 + cm.endD;
+    if (s <= e ? key >= s && key <= e : key >= s || key <= e) return cm;
+  }
+  return CHINESE_MONTHS[0];
+}
+
 export const Route = createFileRoute("/calculator")({
   head: () => ({
     meta: [
@@ -92,29 +119,13 @@ export const Route = createFileRoute("/calculator")({
 function CalculatorPage() {
   // Initialize on the client only to avoid SSR/CSR hydration mismatch.
   const [date, setDate] = useState<string | null>(null);
-  const [today, setToday] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     const t = new Date();
     const iso = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
     setDate(iso);
-    setToday(iso);
   }, []);
-
-  const todayInfo = useMemo(() => {
-    if (!today) return null;
-    const lp = lifePathNumber(today);
-    const sec = secondaryLifePath(lp);
-    const [y, m, d] = today.split("-").map(Number);
-    const label = new Date(y, m - 1, d).toLocaleDateString(undefined, {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-    return { lp, sec, label };
-  }, [today]);
 
   const results = useMemo(() => {
     if (!date) return null;
@@ -125,6 +136,7 @@ function CalculatorPage() {
     const western = westernSignForDate(date);
     const lifePath = lifePathNumber(date);
     const sign = signs.find((s) => s.name === western.name);
+    const chineseMonth = chineseMonthFor(date);
 
     return {
       chinese,
@@ -132,13 +144,28 @@ function CalculatorPage() {
       lifePath,
       sign,
       year,
+      chineseMonth,
     };
   }, [date]);
 
   return (
     <section className="py-24">
       <div className="max-w-6xl mx-auto px-6">
-        {/* Date selector — collapsed by default, opens via edit button */}
+        <header className="mb-8 border-b border-border pb-10">
+          <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-6">
+            Birth Date
+          </p>
+          <h1 className="text-5xl md:text-6xl font-serif italic text-balance leading-none mb-6">
+            Calculator
+          </h1>
+          <p className="max-w-[62ch] text-lg text-muted-foreground text-pretty">
+            Enter a birth date to get the life path number, Chinese zodiac
+            animal, and Western zodiac sign — plus a quick reading of what each
+            one points to.
+          </p>
+        </header>
+
+        {/* Date selector — directly under the description */}
         {date && (
           <div className="mb-10 bg-background p-5 border border-border rounded-lg">
             <div className="flex items-center justify-between gap-4">
@@ -157,6 +184,14 @@ function CalculatorPage() {
                     });
                   })()}
                 </p>
+                {results?.chineseMonth && (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Chinese zodiac month:{" "}
+                    <span className="text-foreground">
+                      {results.chineseMonth.emoji} {results.chineseMonth.animal}
+                    </span>
+                  </p>
+                )}
               </div>
               <button
                 type="button"
@@ -175,49 +210,6 @@ function CalculatorPage() {
                   Scroll each column
                 </p>
                 <WheelDatePicker value={date} onChange={setDate} />
-              </div>
-            )}
-          </div>
-        )}
-
-        <header className="mb-12 border-b border-border pb-10">
-          <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-6">
-            Birth Date
-          </p>
-          <h1 className="text-5xl md:text-6xl font-serif italic text-balance leading-none mb-6">
-            Calculator
-          </h1>
-          <p className="max-w-[62ch] text-lg text-muted-foreground text-pretty">
-            Enter a birth date to get the life path number, Chinese zodiac
-            animal, and Western zodiac sign — plus a quick reading of what each
-            one points to.
-          </p>
-        </header>
-
-        {todayInfo && (
-          <div className="mb-10 bg-background p-6 border border-border rounded-lg">
-            <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-primary mb-2">
-              Today · {todayInfo.label}
-            </p>
-            <div className="flex items-baseline gap-4 mb-3">
-              <span className="text-5xl font-serif italic">{todayInfo.lp}</span>
-              {todayInfo.sec && (
-                <span className="text-sm text-muted-foreground">
-                  secondary · {todayInfo.sec.number}
-                </span>
-              )}
-            </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {lifePathMeanings[todayInfo.lp] ?? ""}
-            </p>
-            {todayInfo.sec && (
-              <div className="mt-4 pt-4 border-t border-border">
-                <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground mb-2">
-                  Secondary energy · {todayInfo.sec.number}
-                </p>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {todayInfo.sec.description}
-                </p>
               </div>
             )}
           </div>
