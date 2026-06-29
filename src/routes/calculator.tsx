@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Hash, Sparkles, Star, Pencil } from "lucide-react";
 import {
-  chineseZodiacForYear,
+  chineseZodiacForDate,
   westernSignForDate,
   lifePathNumber,
   dayNumber,
@@ -131,7 +131,7 @@ function CalculatorPage() {
     const [year, month, day] = date.split("-").map(Number);
     if (!year || !month || !day) return null;
 
-    const chinese = chineseZodiacForYear(year);
+    const chinese = chineseZodiacForDate(date);
     const western = westernSignForDate(date);
     const lifePath = lifePathNumber(date);
     const dayNum = dayNumber(date);
