@@ -358,8 +358,90 @@ function CompatibilityPage() {
             </div>
           </div>
         )}
+
+        {/* Top Global Tech Companies */}
+        {!query && (
+          <div className="mt-16">
+            <h2 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-5">
+              Top Global Technology Companies
+            </h2>
+            <p className="max-w-[62ch] text-sm text-muted-foreground mb-6">
+              Semiconductors, software, AI, gaming, and platforms — beyond the
+              U.S. Fortune list above.
+            </p>
+            <div className="grid md:grid-cols-2 gap-5">
+              {techCompanies.map((c) => (
+                <CompanyCard key={`tech-${c.name}`} company={c} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* All Countries */}
+        {!query && (
+          <div className="mt-16">
+            <h2 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary mb-5">
+              Every Country
+            </h2>
+            <p className="max-w-[62ch] text-sm text-muted-foreground mb-6">
+              Sovereign nations with their capital and national / independence
+              day — tagged with the zodiac signs that ruled the date.
+            </p>
+            <div className="grid md:grid-cols-2 gap-5">
+              {countries.map((c) => (
+                <CountryCard key={`country-${c.name}`} country={c} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
+  );
+}
+
+function CountryCard({ country }: { country: Country }) {
+  const chinese = chineseZodiacForDate(country.foundedOn);
+  const western = westernSignForDate(country.foundedOn);
+  const lifePath = lifePathNumber(country.foundedOn);
+  return (
+    <article className="bg-background p-6 border border-border rounded-lg min-w-0">
+      <div className="flex items-baseline justify-between mb-4 gap-4 min-w-0">
+        <h3 className="text-2xl font-serif italic min-w-0 break-words">{country.name}</h3>
+        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground text-right break-words">
+          Country
+        </span>
+      </div>
+      <dl className="space-y-2 text-sm">
+        <div className="flex justify-between items-center gap-4">
+          <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+            Capital
+          </dt>
+          <dd className="text-foreground text-right">{country.capital}</dd>
+        </div>
+        <div className="flex justify-between items-center gap-4">
+          <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+            Founded
+          </dt>
+          <dd className="text-foreground flex items-center gap-2 flex-wrap justify-end">
+            {country.foundedLabel}
+            <span className="inline-flex items-center gap-1 text-xs bg-primary/10 rounded px-1.5 py-0.5">
+              <span>{chinese.emoji}</span>
+              <span className="text-primary">{western.glyph}</span>
+            </span>
+          </dd>
+        </div>
+        <div className="flex justify-between items-center gap-4">
+          <dt className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
+            Life Path
+          </dt>
+          <dd className="text-foreground">
+            <span className="inline-flex items-center justify-center min-w-7 px-2 py-0.5 text-xs font-mono bg-primary/10 text-primary rounded">
+              {lifePath}
+            </span>
+          </dd>
+        </div>
+      </dl>
+    </article>
   );
 }
 
