@@ -708,6 +708,25 @@ export function lifePathNumber(iso: string): string {
   return sum === 20 ? "20/11" : String(sum);
 }
 
+// Numerology "birth day" or secondary number from the day of an ISO date.
+// Uses the same master-number logic as lifePathNumber: 11, 22, 28, 33 are
+// preserved; 20 is shown as "20/11" because it hides an 11 underneath.
+export function dayNumber(iso: string): string {
+  const day = Number(iso.split("-")[2]);
+  if (MASTERS.has(day)) return String(day);
+  if (day === 20) return "20/11";
+  let sum = day;
+  while (sum > 9 && !MASTERS.has(sum)) {
+    const next = String(sum).split("").map(Number).reduce((a, b) => a + b, 0);
+    if (next === 2) {
+      return sum === 20 ? "20/11" : String(sum);
+    }
+    sum = next;
+  }
+  return sum === 20 ? "20/11" : String(sum);
+}
+
+
 export type Company = {
   name: string;
   industry: string;
