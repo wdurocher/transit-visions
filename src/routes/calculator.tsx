@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { Calendar, Hash, Sparkles, Star } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Hash, Sparkles, Star } from "lucide-react";
 import {
   chineseZodiacForYear,
   westernSignForDate,
@@ -90,13 +90,30 @@ export const Route = createFileRoute("/calculator")({
 });
 
 function CalculatorPage() {
-  const [date, setDate] = useState<string>(() => {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const dd = String(today.getDate()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}`;
-  });
+  // Initialize on the client only to avoid SSR/CSR hydration mismatch.
+  const [date, setDate] = useState<string | null>(null);
+  const [today, setToday] = useState<string | null>(null);
+
+  useEffect(() => {
+    const t = new Date();
+    const iso = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
+    setDate(iso);
+    setToday(iso);
+  }, []);
+
+  const todayInfo = useMemo(() => {
+    if (!today) return null;
+    const lp = lifePathNumber(today);
+    const sec = secondaryLifePath(lp);
+    const [y, m, d] = today.split("-").map(Number);
+    const label = new Date(y, m - 1, d).toLocaleDateString(undefined, {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+    return { lp, sec, label };
+  }, [today]);
 
   const results = useMemo(() => {
     if (!date) return null;
@@ -134,19 +151,44 @@ function CalculatorPage() {
           </p>
         </header>
 
-        <div className="mb-12 max-w-md">
-          <label className="block text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-3">
-            Select a date
-          </label>
-          <div className="relative">
-            <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="w-full bg-background border border-border rounded-lg pl-11 pr-4 py-3 text-base outline-none focus:border-primary transition-colors"
-            />
+        {todayInfo && (
+          <div className="mb-10 bg-background p-6 border border-border rounded-lg">
+            <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-primary mb-2">
+              Today · {todayInfo.label}
+            </p>
+            <div className="flex items-baseline gap-4 mb-3">
+              <span className="text-5xl font-serif italic">{todayInfo.lp}</span>
+              {todayInfo.sec && (
+                <span className="text-sm text-muted-foreground">
+                  secondary · {todayInfo.sec.number}
+                </span>
+              )}
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {lifePathMeanings[todayInfo.lp] ?? ""}
+            </p>
+            {todayInfo.sec && (
+              <div className="mt-4 pt-4 border-t border-border">
+                <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground mb-2">
+                  Secondary energy · {todayInfo.sec.number}
+                </p>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {todayInfo.sec.description}
+                </p>
+              </div>
+            )}
           </div>
+        )}
+
+        <div className="mb-12">
+          <label className="block text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground mb-3">
+            Select a date — scroll each column
+          </label>
+          {date ? (
+            <WheelDatePicker value={date} onChange={setDate} />
+          ) : (
+            <div className="h-[200px] border border-border rounded-lg" />
+          )}
         </div>
 
         {results && (
@@ -275,5 +317,144 @@ function CalculatorPage() {
         )}
       </div>
     </section>
+  );
+}
+
+// ---------- Scrolling wheel date picker ----------
+const MONTHS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+const ITEM_H = 36; // px per item
+const VISIBLE = 5; // odd number; middle row is selected
+
+function daysInMonth(year: number, month1: number) {
+  return new Date(year, month1, 0).getDate();
+}
+
+function WheelDatePicker({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (iso: string) => void;
+}) {
+  const [y, m, d] = value.split("-").map(Number);
+  const thisYear = new Date().getFullYear();
+  const years = useMemo(
+    () => Array.from({ length: thisYear - 1900 + 1 }, (_, i) => 1900 + i),
+    [thisYear],
+  );
+  const months = useMemo(() => MONTHS.map((label, i) => ({ label, value: i + 1 })), []);
+  const days = useMemo(
+    () => Array.from({ length: daysInMonth(y, m) }, (_, i) => i + 1),
+    [y, m],
+  );
+
+  const update = (ny: number, nm: number, nd: number) => {
+    const maxD = daysInMonth(ny, nm);
+    const safeD = Math.min(nd, maxD);
+    onChange(
+      `${ny}-${String(nm).padStart(2, "0")}-${String(safeD).padStart(2, "0")}`,
+    );
+  };
+
+  return (
+    <div className="relative max-w-md bg-background border border-border rounded-lg overflow-hidden">
+      {/* selection highlight */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 border-y border-primary/40 bg-primary/5"
+        style={{ height: ITEM_H }}
+      />
+      <div className="grid grid-cols-3">
+        <WheelColumn
+          items={months.map((mm) => ({ key: mm.value, label: mm.label }))}
+          selected={m}
+          onSelect={(v) => update(y, v, d)}
+        />
+        <WheelColumn
+          items={days.map((dd) => ({ key: dd, label: String(dd) }))}
+          selected={d}
+          onSelect={(v) => update(y, m, v)}
+        />
+        <WheelColumn
+          items={years.map((yy) => ({ key: yy, label: String(yy) }))}
+          selected={y}
+          onSelect={(v) => update(v, m, d)}
+        />
+      </div>
+    </div>
+  );
+}
+
+function WheelColumn({
+  items,
+  selected,
+  onSelect,
+}: {
+  items: Array<{ key: number; label: string }>;
+  selected: number;
+  onSelect: (v: number) => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const settleRef = useRef<number | null>(null);
+  const programmaticRef = useRef(false);
+
+  // Scroll selected into view when prop changes (and on mount).
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const idx = items.findIndex((it) => it.key === selected);
+    if (idx < 0) return;
+    programmaticRef.current = true;
+    el.scrollTo({ top: idx * ITEM_H, behavior: "auto" });
+    // release flag next frame
+    requestAnimationFrame(() => {
+      programmaticRef.current = false;
+    });
+  }, [selected, items]);
+
+  const onScroll = () => {
+    if (programmaticRef.current) return;
+    const el = ref.current;
+    if (!el) return;
+    if (settleRef.current) window.clearTimeout(settleRef.current);
+    settleRef.current = window.setTimeout(() => {
+      const idx = Math.round(el.scrollTop / ITEM_H);
+      const clamped = Math.max(0, Math.min(items.length - 1, idx));
+      const item = items[clamped];
+      if (item && item.key !== selected) onSelect(item.key);
+      // snap precisely
+      el.scrollTo({ top: clamped * ITEM_H, behavior: "smooth" });
+    }, 90);
+  };
+
+  const pad = ((VISIBLE - 1) / 2) * ITEM_H;
+
+  return (
+    <div
+      ref={ref}
+      onScroll={onScroll}
+      className="overflow-y-scroll snap-y snap-mandatory no-scrollbar"
+      style={{ height: VISIBLE * ITEM_H, scrollbarWidth: "none" }}
+    >
+      <div style={{ paddingTop: pad, paddingBottom: pad }}>
+        {items.map((it) => (
+          <button
+            key={it.key}
+            type="button"
+            onClick={() => onSelect(it.key)}
+            className={`block w-full snap-center text-center tabular-nums transition-colors ${
+              it.key === selected
+                ? "text-foreground font-medium"
+                : "text-muted-foreground/60"
+            }`}
+            style={{ height: ITEM_H, lineHeight: `${ITEM_H}px` }}
+          >
+            {it.label}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
