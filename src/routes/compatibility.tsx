@@ -12,6 +12,9 @@ import {
   type Company,
   banks,
   assetManagers,
+  techCompanies,
+  countries,
+  type Country,
   lifePathNumber,
   presidents,
   celebrities,
@@ -88,7 +91,7 @@ function CompatibilityPage() {
   const companyResults = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
-    const pool = [...companies, ...banks, ...assetManagers];
+    const pool = [...companies, ...techCompanies, ...banks, ...assetManagers];
     const seen = new Set<string>();
     return pool
       .filter((c) => {
@@ -103,6 +106,12 @@ function CompatibilityPage() {
           c.headquarters.toLowerCase().includes(q),
       )
       .slice(0, 30);
+  }, [query]);
+
+  const countryResults = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    return countries.filter((c) => c.name.toLowerCase().includes(q)).slice(0, 20);
   }, [query]);
 
   const personResults = useMemo(() => {
@@ -155,12 +164,15 @@ function CompatibilityPage() {
 
           {query && (
             <div className="mt-4 grid gap-5">
-              {results.length === 0 && companyResults.length === 0 && personResults.length === 0 ? (
+              {results.length === 0 && companyResults.length === 0 && personResults.length === 0 && countryResults.length === 0 ? (
                   <p className="text-sm text-muted-foreground px-2">No matches.</p>
               ) : (
                 <>
                   {results.map((p) => (
                     <PlaceCard key={`${p.kind}-${p.state ?? ""}-${p.name}`} place={p} />
+                  ))}
+                  {countryResults.map((c) => (
+                    <CountryCard key={`country-${c.name}`} country={c} />
                   ))}
                   {companyResults.map((c) => (
                     <CompanyCard key={`company-${c.name}`} company={c} />
