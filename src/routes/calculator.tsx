@@ -479,7 +479,7 @@ function WheelColumn({
     <div
       ref={ref}
       onScroll={onScroll}
-      className="overflow-y-scroll snap-y snap-mandatory no-scrollbar"
+      className="overflow-y-scroll snap-y snap-proximity no-scrollbar"
       style={{ height: VISIBLE * ITEM_H, scrollbarWidth: "none" }}
     >
       <div style={{ paddingTop: pad, paddingBottom: pad }}>
