@@ -6,6 +6,7 @@ import {
   popularCities,
   topStateCities,
   chineseZodiacForYear,
+  chineseZodiacForDate,
   westernSignForDate,
   yearOf,
   type Place,
@@ -353,11 +354,10 @@ function CompatibilityPage() {
 }
 
 function PlaceCard({ place }: { place: Place }) {
-  const foundedChinese = chineseZodiacForYear(yearOf(place.foundedOn));
+  const foundedChinese = chineseZodiacForDate(place.foundedOn);
   const foundedWestern = westernSignForDate(place.foundedOn);
 
-  const incYear = place.kind === "city" && place.incorporatedOn ? yearOf(place.incorporatedOn) : null;
-  const incChinese = incYear ? chineseZodiacForYear(incYear) : null;
+  const incChinese = place.kind === "city" && place.incorporatedOn ? chineseZodiacForDate(place.incorporatedOn) : null;
   const incWestern = place.kind === "city" && place.incorporatedOn ? westernSignForDate(place.incorporatedOn) : null;
 
   return (
@@ -413,7 +413,7 @@ function PlaceCard({ place }: { place: Place }) {
 }
 
 function CompanyCard({ company }: { company: Company }) {
-  const chinese = chineseZodiacForYear(yearOf(company.foundedOn));
+  const chinese = chineseZodiacForDate(company.foundedOn);
   const western = westernSignForDate(company.foundedOn);
   const lifePath = lifePathNumber(company.foundedOn);
   return (
@@ -465,7 +465,7 @@ function CompanyCard({ company }: { company: Company }) {
 }
 
 function PersonCard({ person }: { person: Person }) {
-  const chinese = chineseZodiacForYear(yearOf(person.birthOn));
+  const chinese = chineseZodiacForDate(person.birthOn);
   const western = westernSignForDate(person.birthOn);
   const lifePath = lifePathNumber(person.birthOn);
   return (
