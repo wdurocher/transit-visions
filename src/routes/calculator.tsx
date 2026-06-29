@@ -415,11 +415,13 @@ function WheelDatePicker({
           items={months.map((mm) => ({ key: mm.value, label: mm.label }))}
           selected={m}
           onSelect={(v) => update(y, v, d)}
+          wrap
         />
         <WheelColumn
           items={days.map((dd) => ({ key: dd, label: String(dd) }))}
           selected={d}
           onSelect={(v) => update(y, m, v)}
+          wrap
         />
         <WheelColumn
           items={years.map((yy) => ({ key: yy, label: String(yy) }))}
@@ -435,28 +437,40 @@ function WheelColumn({
   items,
   selected,
   onSelect,
+  wrap = false,
 }: {
   items: Array<{ key: number; label: string }>;
   selected: number;
   onSelect: (v: number) => void;
+  wrap?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const settleRef = useRef<number | null>(null);
   const programmaticRef = useRef(false);
 
-  // Scroll selected into view when prop changes (and on mount).
-  useEffect(() => {
+  const N = items.length;
+  // For wrapping columns, render items 3x and keep scroll position centered
+  // in the middle copy so the user can scroll past the end in either direction.
+  const rendered = wrap ? [...items, ...items, ...items] : items;
+  const baseOffset = wrap ? N : 0;
+
+  const scrollToSelected = (behavior: ScrollBehavior) => {
     const el = ref.current;
     if (!el) return;
     const idx = items.findIndex((it) => it.key === selected);
     if (idx < 0) return;
     programmaticRef.current = true;
-    el.scrollTo({ top: idx * ITEM_H, behavior: "auto" });
-    // release flag next frame
+    el.scrollTo({ top: (baseOffset + idx) * ITEM_H, behavior });
     requestAnimationFrame(() => {
       programmaticRef.current = false;
     });
-  }, [selected, items]);
+  };
+
+  // Scroll selected into view when prop changes (and on mount).
+  useEffect(() => {
+    scrollToSelected("auto");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected, N]);
 
   const onScroll = () => {
     if (programmaticRef.current) return;
@@ -464,41 +478,86 @@ function WheelColumn({
     if (!el) return;
     if (settleRef.current) window.clearTimeout(settleRef.current);
     settleRef.current = window.setTimeout(() => {
-      const idx = Math.round(el.scrollTop / ITEM_H);
-      const clamped = Math.max(0, Math.min(items.length - 1, idx));
-      const item = items[clamped];
-      if (item && item.key !== selected) onSelect(item.key);
-      // snap precisely and smoothly
-      el.scrollTo({ top: clamped * ITEM_H, behavior: "smooth" });
+      const rawIdx = Math.round(el.scrollTop / ITEM_H);
+      let itemIdx: number;
+      if (wrap) {
+        // map raw index in the tripled list back into the real range
+        itemIdx = ((rawIdx - baseOffset) % N + N) % N;
+      } else {
+        itemIdx = Math.max(0, Math.min(N - 1, rawIdx));
+      }
+      const item = items[itemIdx];
+      if (!item) return;
+      if (item.key !== selected) {
+        onSelect(item.key);
+      } else {
+        // already selected — just recenter to the middle copy
+        programmaticRef.current = true;
+        el.scrollTo({ top: (baseOffset + itemIdx) * ITEM_H, behavior: "auto" });
+        requestAnimationFrame(() => {
+          programmaticRef.current = false;
+        });
+      }
     }, 180);
+  };
+
+  const step = (delta: number) => {
+    const idx = items.findIndex((it) => it.key === selected);
+    if (idx < 0) return;
+    let next: number;
+    if (wrap) {
+      next = (idx + delta + N) % N;
+    } else {
+      next = Math.max(0, Math.min(N - 1, idx + delta));
+    }
+    const item = items[next];
+    if (item) onSelect(item.key);
   };
 
   const pad = ((VISIBLE - 1) / 2) * ITEM_H;
 
   return (
-    <div
-      ref={ref}
-      onScroll={onScroll}
-      className="overflow-y-scroll snap-y snap-proximity no-scrollbar"
-      style={{ height: VISIBLE * ITEM_H, scrollbarWidth: "none" }}
-    >
-      <div style={{ paddingTop: pad, paddingBottom: pad }}>
-        {items.map((it) => (
-          <button
-            key={it.key}
-            type="button"
-            onClick={() => onSelect(it.key)}
-            className={`block w-full snap-center text-center tabular-nums transition-colors ${
-              it.key === selected
-                ? "text-foreground font-medium"
-                : "text-muted-foreground/60"
-            }`}
-            style={{ height: ITEM_H, lineHeight: `${ITEM_H}px` }}
-          >
-            {it.label}
-          </button>
-        ))}
+    <div className="flex flex-col items-stretch">
+      <button
+        type="button"
+        onClick={() => step(-1)}
+        aria-label="Previous"
+        className="flex items-center justify-center h-7 text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ChevronUp className="size-4" />
+      </button>
+      <div
+        ref={ref}
+        onScroll={onScroll}
+        className="overflow-y-scroll snap-y snap-proximity no-scrollbar"
+        style={{ height: VISIBLE * ITEM_H, scrollbarWidth: "none" }}
+      >
+        <div style={{ paddingTop: pad, paddingBottom: pad }}>
+          {rendered.map((it, i) => (
+            <button
+              key={`${it.key}-${i}`}
+              type="button"
+              onClick={() => onSelect(it.key)}
+              className={`block w-full snap-center text-center tabular-nums transition-colors ${
+                it.key === selected
+                  ? "text-foreground font-medium"
+                  : "text-muted-foreground/60"
+              }`}
+              style={{ height: ITEM_H, lineHeight: `${ITEM_H}px` }}
+            >
+              {it.label}
+            </button>
+          ))}
+        </div>
       </div>
+      <button
+        type="button"
+        onClick={() => step(1)}
+        aria-label="Next"
+        className="flex items-center justify-center h-7 text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ChevronDown className="size-4" />
+      </button>
     </div>
   );
 }
