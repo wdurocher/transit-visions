@@ -392,7 +392,7 @@ function WheelDatePicker({
   const [y, m, d] = value.split("-").map(Number);
   const thisYear = new Date().getFullYear();
   const years = useMemo(
-    () => Array.from({ length: thisYear - 1900 + 1 }, (_, i) => 1900 + i),
+    () => Array.from({ length: thisYear - 1800 + 1 }, (_, i) => 1800 + i),
     [thisYear],
   );
   const months = useMemo(() => MONTHS.map((label, i) => ({ label, value: i + 1 })), []);
@@ -474,9 +474,9 @@ function WheelColumn({
       const clamped = Math.max(0, Math.min(items.length - 1, idx));
       const item = items[clamped];
       if (item && item.key !== selected) onSelect(item.key);
-      // snap precisely
+      // snap precisely and smoothly
       el.scrollTo({ top: clamped * ITEM_H, behavior: "smooth" });
-    }, 90);
+    }, 60);
   };
 
   const pad = ((VISIBLE - 1) / 2) * ITEM_H;
