@@ -256,12 +256,12 @@ function CalculatorPage() {
               </article>
 
               {(() => {
-                const sec = secondaryLifePath(results.lifePath);
+                const sec = secondaryForDayNumber(results.dayNum);
                 if (!sec) return null;
                 return (
                   <article className="bg-background p-6 border border-border rounded-lg min-w-0">
                     <div className="flex items-center gap-3 mb-4">
-                      <span className="text-primary font-serif italic text-lg">2×</span>
+                      <span className="text-primary font-serif italic text-lg">D</span>
                       <h2 className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">
                         Secondary Number
                       </h2>
