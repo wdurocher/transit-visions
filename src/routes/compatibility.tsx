@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { Search } from "lucide-react";
 import {
   states,
@@ -68,70 +68,12 @@ function CompatibilityPage() {
     return map;
   }, []);
 
-  const results = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-    // If the query matches a state name, show that state first followed by
-    // its cities. Otherwise show only the cities whose name matches.
-    const stateMatch = states.find((s) => s.name.toLowerCase() === q);
-    const statePrefix = states.find((s) => s.name.toLowerCase().startsWith(q));
-    const targetState = stateMatch ?? statePrefix;
-    if (targetState) {
-      const cities = all.filter(
-        (p) => p.kind === "city" && p.state === targetState.name,
-      );
-      return [targetState, ...cities];
-    }
-    // City-only search: exact or substring match on the city name.
-    return all
-      .filter((p) => p.kind === "city" && p.name.toLowerCase().includes(q))
-      .slice(0, 20);
-  }, [all, query]);
+  const searchIndex = useMemo(() => buildSearchIndex(all), [all]);
 
-  const companyResults = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-    const pool = [...companies, ...techCompanies, ...banks, ...assetManagers];
-    const seen = new Set<string>();
-    return pool
-      .filter((c) => {
-        if (seen.has(c.name)) return false;
-        seen.add(c.name);
-        return true;
-      })
-      .filter(
-        (c) =>
-          c.name.toLowerCase().includes(q) ||
-          c.industry.toLowerCase().includes(q) ||
-          c.headquarters.toLowerCase().includes(q),
-      )
-      .slice(0, 30);
-  }, [query]);
-
-  const countryResults = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-    return countries.filter((c) => c.name.toLowerCase().includes(q)).slice(0, 20);
-  }, [query]);
-
-  const personResults = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-    const pool = [...presidents, ...celebrities, ...singers, ...influencers, ...historicalFigures];
-    const seen = new Set<string>();
-    return pool
-      .filter((p) => {
-        if (seen.has(p.name)) return false;
-        seen.add(p.name);
-        return true;
-      })
-      .filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.role.toLowerCase().includes(q),
-      )
-      .slice(0, 30);
-  }, [query]);
+  const searchResults = useMemo(
+    () => runSearch(query, searchIndex, all),
+    [query, searchIndex, all],
+  );
 
   return (
     <section className="py-24">
@@ -164,23 +106,15 @@ function CompatibilityPage() {
 
           {query && (
             <div className="mt-4 grid gap-5">
-              {results.length === 0 && companyResults.length === 0 && personResults.length === 0 && countryResults.length === 0 ? (
-                  <p className="text-sm text-muted-foreground px-2">No matches.</p>
+              {searchResults.length === 0 ? (
+                <p className="text-sm text-muted-foreground px-2">
+                  No matches. Try a sign + category, e.g. “dog states”, “goat
+                  cities”, “leo presidents”, “dragon companies”.
+                </p>
               ) : (
-                <>
-                  {results.map((p) => (
-                    <PlaceCard key={`${p.kind}-${p.state ?? ""}-${p.name}`} place={p} />
-                  ))}
-                  {countryResults.map((c) => (
-                    <CountryCard key={`country-${c.name}`} country={c} />
-                  ))}
-                  {companyResults.map((c) => (
-                    <CompanyCard key={`company-${c.name}`} company={c} />
-                  ))}
-                  {personResults.map((p) => (
-                    <PersonCard key={`person-${p.name}`} person={p} />
-                  ))}
-                </>
+                searchResults.map((r) => (
+                  <div key={r.key}>{r.node}</div>
+                ))
               )}
             </div>
           )}
