@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { Search } from "lucide-react";
 import {
   states,
@@ -68,70 +68,12 @@ function CompatibilityPage() {
     return map;
   }, []);
 
-  const results = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-    // If the query matches a state name, show that state first followed by
-    // its cities. Otherwise show only the cities whose name matches.
-    const stateMatch = states.find((s) => s.name.toLowerCase() === q);
-    const statePrefix = states.find((s) => s.name.toLowerCase().startsWith(q));
-    const targetState = stateMatch ?? statePrefix;
-    if (targetState) {
-      const cities = all.filter(
-        (p) => p.kind === "city" && p.state === targetState.name,
-      );
-      return [targetState, ...cities];
-    }
-    // City-only search: exact or substring match on the city name.
-    return all
-      .filter((p) => p.kind === "city" && p.name.toLowerCase().includes(q))
-      .slice(0, 20);
-  }, [all, query]);
+  const searchIndex = useMemo(() => buildSearchIndex(all), [all]);
 
-  const companyResults = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-    const pool = [...companies, ...techCompanies, ...banks, ...assetManagers];
-    const seen = new Set<string>();
-    return pool
-      .filter((c) => {
-        if (seen.has(c.name)) return false;
-        seen.add(c.name);
-        return true;
-      })
-      .filter(
-        (c) =>
-          c.name.toLowerCase().includes(q) ||
-          c.industry.toLowerCase().includes(q) ||
-          c.headquarters.toLowerCase().includes(q),
-      )
-      .slice(0, 30);
-  }, [query]);
-
-  const countryResults = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-    return countries.filter((c) => c.name.toLowerCase().includes(q)).slice(0, 20);
-  }, [query]);
-
-  const personResults = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-    const pool = [...presidents, ...celebrities, ...singers, ...influencers, ...historicalFigures];
-    const seen = new Set<string>();
-    return pool
-      .filter((p) => {
-        if (seen.has(p.name)) return false;
-        seen.add(p.name);
-        return true;
-      })
-      .filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.role.toLowerCase().includes(q),
-      )
-      .slice(0, 30);
-  }, [query]);
+  const searchResults = useMemo(
+    () => runSearch(query, searchIndex, all),
+    [query, searchIndex, all],
+  );
 
   return (
     <section className="py-24">
@@ -164,23 +106,15 @@ function CompatibilityPage() {
 
           {query && (
             <div className="mt-4 grid gap-5">
-              {results.length === 0 && companyResults.length === 0 && personResults.length === 0 && countryResults.length === 0 ? (
-                  <p className="text-sm text-muted-foreground px-2">No matches.</p>
+              {searchResults.length === 0 ? (
+                <p className="text-sm text-muted-foreground px-2">
+                  No matches. Try a sign + category, e.g. “dog states”, “goat
+                  cities”, “leo presidents”, “dragon companies”.
+                </p>
               ) : (
-                <>
-                  {results.map((p) => (
-                    <PlaceCard key={`${p.kind}-${p.state ?? ""}-${p.name}`} place={p} />
-                  ))}
-                  {countryResults.map((c) => (
-                    <CountryCard key={`country-${c.name}`} country={c} />
-                  ))}
-                  {companyResults.map((c) => (
-                    <CompanyCard key={`company-${c.name}`} company={c} />
-                  ))}
-                  {personResults.map((p) => (
-                    <PersonCard key={`person-${p.name}`} person={p} />
-                  ))}
-                </>
+                searchResults.map((r) => (
+                  <div key={r.key}>{r.node}</div>
+                ))
               )}
             </div>
           )}
@@ -443,6 +377,187 @@ function CountryCard({ country }: { country: Country }) {
       </dl>
     </article>
   );
+}
+
+// ---------- Unified search with sign + category filters ----------
+
+type Category =
+  | "state"
+  | "city"
+  | "country"
+  | "company"
+  | "bank"
+  | "asset-manager"
+  | "tech"
+  | "president"
+  | "celebrity"
+  | "singer"
+  | "influencer"
+  | "historical";
+
+type SearchItem = {
+  key: string;
+  name: string;
+  category: Category;
+  haystack: string;
+  date: string;
+  node: ReactNode;
+};
+
+const CHINESE_ANIMALS = [
+  "rat","ox","tiger","rabbit","dragon","snake",
+  "horse","goat","monkey","rooster","dog","pig",
+];
+const WESTERN_NAMES = [
+  "aries","taurus","gemini","cancer","leo","virgo",
+  "libra","scorpio","sagittarius","capricorn","aquarius","pisces",
+];
+
+const CATEGORY_KEYWORDS: Record<string, Category> = {
+  state: "state", states: "state",
+  city: "city", cities: "city",
+  country: "country", countries: "country", nation: "country", nations: "country",
+  company: "company", companies: "company", corp: "company", corporation: "company",
+  bank: "bank", banks: "bank",
+  asset: "asset-manager", manager: "asset-manager", managers: "asset-manager", fund: "asset-manager", funds: "asset-manager",
+  tech: "tech", technology: "tech",
+  president: "president", presidents: "president",
+  celeb: "celebrity", celebrity: "celebrity", celebrities: "celebrity",
+  singer: "singer", singers: "singer", artist: "singer", artists: "singer", musician: "singer", musicians: "singer",
+  influencer: "influencer", influencers: "influencer",
+  royal: "historical", royalty: "historical", king: "historical", kings: "historical",
+  queen: "historical", queens: "historical", historical: "historical", history: "historical",
+};
+
+function buildSearchIndex(allPlaces: Place[]): SearchItem[] {
+  const items: SearchItem[] = [];
+  const seen = new Set<string>();
+  const push = (key: string, item: SearchItem) => {
+    if (seen.has(key)) return;
+    seen.add(key);
+    items.push(item);
+  };
+
+  for (const p of allPlaces) {
+    const cat: Category = p.kind === "state" ? "state" : "city";
+    const key = `${cat}-${p.state ?? ""}-${p.name}`;
+    push(key, {
+      key,
+      name: p.name,
+      category: cat,
+      haystack: `${p.name} ${p.state ?? ""} ${p.capital ?? ""}`.toLowerCase(),
+      date: p.foundedOn,
+      node: <PlaceCard place={p} />,
+    });
+  }
+  for (const c of countries) {
+    push(`country-${c.name}`, {
+      key: `country-${c.name}`,
+      name: c.name,
+      category: "country",
+      haystack: `${c.name} ${c.capital}`.toLowerCase(),
+      date: c.foundedOn,
+      node: <CountryCard country={c} />,
+    });
+  }
+  const addCompany = (c: Company, cat: Category, prefix: string) => {
+    push(`${prefix}-${c.name}`, {
+      key: `${prefix}-${c.name}`,
+      name: c.name,
+      category: cat,
+      haystack: `${c.name} ${c.industry} ${c.headquarters}`.toLowerCase(),
+      date: c.foundedOn,
+      node: <CompanyCard company={c} />,
+    });
+  };
+  companies.forEach((c) => addCompany(c, "company", "company"));
+  banks.forEach((c) => addCompany(c, "bank", "bank"));
+  assetManagers.forEach((c) => addCompany(c, "asset-manager", "am"));
+  techCompanies.forEach((c) => addCompany(c, "tech", "tech"));
+
+  const addPerson = (p: Person, cat: Category, prefix: string) => {
+    push(`${prefix}-${p.name}`, {
+      key: `${prefix}-${p.name}`,
+      name: p.name,
+      category: cat,
+      haystack: `${p.name} ${p.role}`.toLowerCase(),
+      date: p.birthOn,
+      node: <PersonCard person={p} />,
+    });
+  };
+  presidents.forEach((p) => addPerson(p, "president", "pres"));
+  celebrities.forEach((p) => addPerson(p, "celebrity", "celeb"));
+  singers.forEach((p) => addPerson(p, "singer", "singer"));
+  influencers.forEach((p) => addPerson(p, "influencer", "inf"));
+  historicalFigures.forEach((p) => addPerson(p, "historical", "hist"));
+
+  return items;
+}
+
+function parseQuery(raw: string) {
+  const tokens = raw.toLowerCase().split(/[\s,]+/).filter(Boolean);
+  const chinese = new Set<string>();
+  const western = new Set<string>();
+  const categories = new Set<Category>();
+  const rest: string[] = [];
+  for (const t of tokens) {
+    if (CHINESE_ANIMALS.includes(t)) chinese.add(t);
+    else if (WESTERN_NAMES.includes(t)) western.add(t);
+    else if (CATEGORY_KEYWORDS[t]) categories.add(CATEGORY_KEYWORDS[t]);
+    else rest.push(t);
+  }
+  return { chinese, western, categories, rest };
+}
+
+function runSearch(
+  raw: string,
+  index: SearchItem[],
+  allPlaces: Place[],
+): SearchItem[] {
+  const q = raw.trim();
+  if (!q) return [];
+  const { chinese, western, categories, rest } = parseQuery(q);
+  const hasFilter = chinese.size + western.size + categories.size > 0;
+  const text = rest.join(" ").trim();
+
+  // Filtered (sign / category) mode
+  if (hasFilter) {
+    const filtered = index.filter((it) => {
+      if (categories.size && !categories.has(it.category)) return false;
+      if (text && !it.haystack.includes(text)) return false;
+      if (chinese.size) {
+        const animal = chineseZodiacForDate(it.date).animal.toLowerCase();
+        if (!chinese.has(animal)) return false;
+      }
+      if (western.size) {
+        const sign = westernSignForDate(it.date).name.toLowerCase();
+        if (!western.has(sign)) return false;
+      }
+      return true;
+    });
+    return filtered.slice(0, 200);
+  }
+
+  // Plain text mode — preserve the old "state name first, then its cities" behavior.
+  const lower = q.toLowerCase();
+  const stateMatch =
+    states.find((s) => s.name.toLowerCase() === lower) ??
+    states.find((s) => s.name.toLowerCase().startsWith(lower));
+  if (stateMatch) {
+    const stateItem = index.find(
+      (it) => it.category === "state" && it.name === stateMatch.name,
+    );
+    const cityItems = index.filter(
+      (it) =>
+        it.category === "city" &&
+        allPlaces.find((p) => p.name === it.name)?.state === stateMatch.name,
+    );
+    return [stateItem, ...cityItems].filter(Boolean) as SearchItem[];
+  }
+
+  return index
+    .filter((it) => it.haystack.includes(lower))
+    .slice(0, 50);
 }
 
 function PlaceCard({ place }: { place: Place }) {
